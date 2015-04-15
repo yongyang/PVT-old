@@ -1,4 +1,4 @@
-package org.jboss.pnc.pvt.endpoints;
+package org.jboss.pnc.pvt.rest.endpoints;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

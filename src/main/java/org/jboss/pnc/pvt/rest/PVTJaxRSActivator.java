@@ -1,4 +1,4 @@
-package org.jboss.pnc.pvt;
+package org.jboss.pnc.pvt.rest;
 
 import java.io.IOException;
 import java.io.InputStream;
