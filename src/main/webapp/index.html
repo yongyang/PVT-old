@@ -1,0 +1,53 @@
+<html ng-app="pnc" class="ng-scope">
+  <head>
+    <meta charset="utf-8">
+    <title>Productization Verification Tool (PVT)</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link media="screen" rel="stylesheet" href="styles/bootstrap.css" />
+    <link media="screen" rel="stylesheet" href="styles/bootstrap-select.css" />
+    <link rel="stylesheet" href="styles/app.css">
+    <script src="js/bootstrap.js"></script>
+    <script src="js/bootstrap-select.js"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-pf" role="navigation">
+      <!-- header -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href ui-sref="/">
+          <img src="images/redhat-logo.png" alt="Red Hat" />Productization Verification Tool</a>
+      </div>
+      <div class="collapse navbar-collapse navbar-collapse-1">
+        <ul class="nav navbar-nav navbar-primary">
+          <li>
+            <a ui-sref="" href="">Dashboard</a>
+          </li>
+          <li>
+            <a ui-sref="rest/api-docs" href="rest/api-docs">REST API Docs</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div class="notification-area"></div>
+    <div class="container-fluid">
+      Hello, PVT!
+    </div>
+    <div class="footer">
+      <div class="container">
+          <p>
+          <a href="https://github.com/project-ncl/pvt">PVT</a>
+          <span>     (Version: 0.0.1-snapshot)</span>
+          <span> | </span>
+          Red Hat, Inc. © 2015
+          </p>
+      </div><!-- /.container -->
+    </div><!-- /.footer -->
+
+  </body>
+</html>
