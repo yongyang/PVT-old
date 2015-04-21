@@ -17,6 +17,7 @@
 
 package org.jboss.pnc.pvt.execution;
 
+import java.util.Map;
 import java.util.concurrent.Future;
 
 
@@ -52,5 +53,29 @@ public interface Executor {
      * @throws ExecutionException on any exception
      */
     Future<Execution> execute(String jobName, Stage stage) throws ExecutionException;
+
+    /**
+     * Executes a job by the job name.
+     * 
+     * Returns immediately after sending execution message.
+     * 
+     * @param jobName name of the execution job. Globally unique.
+     * @param params Parameters send to the job
+     * @return an Execution which contains the execution information.
+     * @throws ExecutionException on any exception
+     */
+    Execution execute(String jobName, Map<String, String> params) throws ExecutionException;
     
+    /**
+     * Executes a job by the job name.
+     * 
+     * Returns the Future instance immediately. This can be used by waiting on a Stage on.
+     * 
+     * @param jobName the job name. Globally unique.
+     * @param params Parameters send to the job
+     * @param stage which stage this should wait for.
+     * @return A Future instance with Execution information
+     * @throws ExecutionException on any exception
+     */
+    Future<Execution> execute(String jobName, Map<String, String> params, Stage stage) throws ExecutionException;
 }

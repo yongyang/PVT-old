@@ -23,6 +23,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.concurrent.Callable;
@@ -54,7 +55,7 @@ class JenkinsExecutor implements Executor {
     private final JenkinsHttpClient jenkinsHttpClient;
     private final JenkinsServer jenkinsServer;
     
-    private transient Boolean crumbFlag = null;
+    private Boolean crumbFlag = null;
     
     private final Properties props;
     
@@ -146,27 +147,37 @@ class JenkinsExecutor implements Executor {
         try {
             return future.get();
         } catch (InterruptedException | java.util.concurrent.ExecutionException e) {
-            throw new ExecutionException("Can't execute jobName: " + jobName, e);
+            throw new ExecutionException("Failed to execute jobName: " + jobName, e);
         }
     }
 
     @Override
-    public Future<Execution> execute(final String jobName, final Stage stage) throws ExecutionException {
+    public Execution execute(String jobName, Map<String, String> params) throws ExecutionException {
+        Future<Execution> future = execute(jobName, params, Stage.Initial);
+        try {
+            return future.get();
+        } catch (InterruptedException | java.util.concurrent.ExecutionException e) {
+            throw new ExecutionException("Failed to execute jobName: " + jobName, e);
+        }
+    }
+
+    @Override
+    public Future<Execution> execute(final String jobName, final Map<String, String> params, final Stage stage) throws ExecutionException {
         Objects.requireNonNull(jobName, "Job Name can not be null");
         Objects.requireNonNull(stage, "stage can not be null");
         try {
+            checkJenkinsCrumbFlag();
             JobWithDetails jenkinsJob = getOrCreateJenkinsJob(jobName);
             if (jenkinsJob == null) {
                 throw new ExecutionException("No Jenkins job: " + jobName + " found.");
             }
             logger.info("Executing Jenkins Job: " + jobName);
-            final int buildNumber = jenkinsJob.getNextBuildNumber();
-            jenkinsJob.build();
+            final int buildNumber = buildJenkinsJob(jenkinsJob, params);
 
             final Execution execution = new Execution();
             execution.setJobName(jobName);
             execution.setNumber(buildNumber);
-            
+
             StringBuilder url = new StringBuilder(getJenkinsURL());
             url.append("/job/");
             url.append(jobName);
@@ -198,6 +209,21 @@ class JenkinsExecutor implements Executor {
         } catch (IOException e) {
             throw new ExecutionException("Can't create/update Jenkins job: " + jobName, e);
         }
+    }
+
+    private int buildJenkinsJob(JobWithDetails jenkinsJob, Map<String, String> params) throws IOException {
+        int buildNumber = jenkinsJob.getNextBuildNumber();
+        if (params != null && !params.isEmpty()) {
+            jenkinsJob.build(params);
+        } else {
+            jenkinsJob.build();
+        }
+        return buildNumber;
+    }
+
+    @Override
+    public Future<Execution> execute(final String jobName, final Stage stage) throws ExecutionException {
+        return execute(jobName, null, stage);
     }
 
     private void waitRunning(String jobName, int buildNumber) throws TimeoutException {
