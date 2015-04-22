@@ -1,4 +1,6 @@
-package org.jboss.pnc.pvt.git.pojo;
+package org.jboss.pnc.pvt.config;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,13 +10,16 @@ import java.util.List;
  *
  * Created by yyang on 4/16/15.
  */
-public class Product {
+@JsonAutoDetect
+public class ProductConfig {
 
     private String name;
     private String version;
     private String release;
 
-    private List<Job> jobs = new ArrayList<>();
+    private List<JobConfig> jobConfigs = new ArrayList<>();
 
 
+    ProductConfig() {
+    }
 }

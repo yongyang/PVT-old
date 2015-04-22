@@ -1,4 +1,7 @@
-package org.jboss.pnc.pvt.git;
+package org.jboss.pnc.pvt.config;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Remote Git configuration
@@ -6,5 +9,6 @@ package org.jboss.pnc.pvt.git;
  * Created by yyang on 4/16/15.
  */
 public class GitConfiguration {
+
 
 }
