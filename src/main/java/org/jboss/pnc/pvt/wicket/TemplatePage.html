@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Summary - RHBA-2014:17953-05 jboss-ec2-eap bug fix and enhancement update - Errata Tool</title>
+  <link href="errata/transitional.css" media="screen" rel="stylesheet" type="text/css">
+  <link href="errata/et-shim.css" media="screen" rel="stylesheet" type="text/css">
+  <link rel="icon" href="https://errata.devel.redhat.com/images/erratatool.ico">
+
+
+  <link href="errata/panels.css" media="screen" rel="stylesheet" type="text/css">
+  <link href="errata/eso-theme.css" media="screen" rel="stylesheet" type="text/css">
+  <link href="errata/bootstrap-scroll-modal.css" media="screen" rel="stylesheet" type="text/css">
+  <!--<script src="errata/piwik.js" async="" defer="defer" type="text/javascript"></script><script src="errata/jquery_004.js" type="text/javascript"></script>-->
+  <!--<script src="errata/jquery-ui.js" type="text/javascript"></script>-->
+  <!--<script src="errata/bootstrap.js" type="text/javascript"></script>-->
+  <!--<script src="errata/bootstrap-scroll-modal.js" type="text/javascript"></script>-->
+  <!--<script src="errata/chosen.js" type="text/javascript"></script>-->
+  <!--<script src="errata/eso-theme.js" type="text/javascript"></script>-->
+
+  <!--<script src="errata/application.js" type="text/javascript"></script>-->
+  <!--<script src="errata/jquery_ujs.js" type="text/javascript"></script>-->
+  <!--<script src="errata/jquery_002.js" type="text/javascript"></script>-->
+  <!--<script src="errata/tablesort_parsers.js" type="text/javascript"></script>-->
+  <link href="errata/master.css" media="screen" rel="stylesheet" type="text/css">
+
+
+  <!--<script src="errata/errata_view.js" type="text/javascript"></script>-->
+  <!--<script src="errata/charcount.js" type="text/javascript"></script>-->
+
+  <!--<script src="errata/flash_notice.js" type="text/javascript"></script>-->
+
+
+<!--
+  <script>
+    $(document).ready(function() {
+      $('table.tablesorter').each(function() {
+        $(this).tablesorter({
+          widgets: ["zebra"],
+          widgetOptions : {
+            zebra : [ "bz_even", "bz_odd" ]
+          }
+        });
+      })
+    });
+  </script>
+
+
+  <script src="errata/jquery_003.js" type="text/javascript"></script>
+  <script src="errata/jquery.js" type="text/javascript"></script>
+  <script src="errata/rss_widget.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    (function(){
+      // if firefox 3.5+, hide content till load (or 3 seconds) to prevent FOUT
+      var d = document, e = d.documentElement, s = d.createElement('style');
+      if (e.style.MozTransform === ''){ // gecko 1.9.1 inference
+        s.textContent = 'body{visibility:hidden}';
+        var r = document.getElementsByTagName('script')[0];
+        r.parentNode.insertBefore(s, r);
+        function f(){ s.parentNode && s.parentNode.removeChild(s); }
+        addEventListener('load',f,false);
+        setTimeout(f,3000);
+      }
+    })();
+  </script>
+-->
+
+</head>
+
+<body class="eso-color-red ">
+
+<div id="eso-topbar">
+  <div class="eso-inner">
+
+    <div class="topbar-left" style="background-image:url(https://errata.devel.redhat.com/assets/images/erratatool18.png?1427843877)">
+      <a class="appname" href="#">Productization Verification Tool</a>
+
+      <span class="env_indicator"></span>
+    </div>
+
+    <div class="topbar-right">
+
+      <ul class="quick-menu unstyled">
+        <li class="dropdown header-help">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+            yyang<b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a href="https://errata.devel.redhat.com/devel/my_requests">Filed Advisories (Devel)</a></li>
+
+            <li><a href="https://errata.devel.redhat.com/user/show_roles">Roles</a></li>
+            <li><a href="https://errata.devel.redhat.com/user/preferences">Preferences</a></li>
+
+          </ul>
+        </li>
+        <li class="dropdown header-help">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+            Help<b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a target="_blank" href="https://docs.engineering.redhat.com/display/HTD/Errata+Tool">About</a></li>
+            <li><a target="_blank" href="https://engineering.redhat.com/docs/en-US/Application_Guide/90.User/html/Errata_Tool/">User Guide</a></li>
+            <li><a target="_blank" href="https://engineering.redhat.com/docs/en-US/Application_Guide/60.Release/html/Errata_Tool/">Release Notes</a></li>
+            <li><a target="_blank" href="https://engineering.redhat.com/docs/en-US/Application_Guide/80.Developer/html/Errata_Tool/">Developer Guide</a></li>
+            <li class="divider"></li>
+
+            <li><a target="_blank" href="https://wiki.test.redhat.com/ErrataWorkflow">Errata Workflow (QE Wiki)</a></li>
+            <li><a href="https://docs.engineering.redhat.com/display/HTD/Errata+Tool">Errata Tool Wiki Page</a></li>
+            <li class="divider"></li>
+
+            <li><a target="_blank" href="https://bugzilla.redhat.com/enter_bug.cgi?product=Errata+Tool&amp;component=webui">Report Issue in Bugzilla</a></li>
+
+            <li><a target="_blank" href="https://engineering.redhat.com/rt/Ticket/Create.html?Queue=76">Create Ticket in RT</a></li>
+
+            <li><a target="_blank" href="mailto:errata-requests@redhat.com">Create Ticket in RT (via email)</a></li>
+
+          </ul>
+        </li>
+      </ul>
+
+      <div id="topbar-search-wrapper">
+        <form id="topbar-search-form" action="/errata"><input name="search" type="text"></form>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+
+<div id="eso-topnav">
+  <div class="eso-inner">
+    <ul>
+      <li id="main_list_errata" class="active"><a title="Releases" wicket:id="link-releases">Releases</a></li><li id="main_list_errata"><a href="https://errata.devel.redhat.com/errata" title="Products">Products</a></li><li id="main_dashboard"><a href="https://errata.devel.redhat.com/reports" title="Overview of All Advisories">Jobs</a></li><li id="main_pkgbrowser"><a href="https://errata.devel.redhat.com/package" title="Package Browser">Packages</a></li><li id="main_bugs"><a href="https://errata.devel.redhat.com/issues" title="Bugs and JIRA Issues">Issues</a></li><li id="main_tps"><a href="https://errata.devel.redhat.com/tps" title="TPS Results">Users</a></li><li id="main_docs"><a href="https://errata.devel.redhat.com/docs/list" title="Documentation Work Queue">PNC</a></li><li id="main_rpmdiff"><a href="https://errata.devel.redhat.com/rpmdiff" title="List Current Rpmdiff Runs">ETT</a></li><li id="main_releng"><a href="https://errata.devel.redhat.com/release_engineering" title="Released Packages">Brew</a></li>
+
+
+    </ul>
+  </div>
+</div>
+
+
+<div id="eso-shadow"></div>
+
+
+<div id="eso-content"><div class="eso-inner">
+  <div class="flash_container fixedTop">
+    <div id="flash_notice" class="alert alert-success"><a href="#" class="close" data-dismiss="alert">×</a> PVT loaded successfully!</div>
+
+    <div id="flash_alert" class="alert alert-warning" style="display: none">
+      <a href="#" class="close" data-dismiss="alert">×</a>
+      Advisory is currently unassigned. Please <a class="link_to_qa_dialog" href="#">assign a QE owner</a>.
+    </div>
+
+    <div id="flash_error" class="alert alert-error" style="display: none"><a href="#" class="close" data-dismiss="alert">×</a> alert-error</div>
+
+  </div>
+
+  <!-- extend point of wicket -->
+  <wicket:child />
+
+</div></div>
+
+
+<div id="eso-footer"><div class="eso-inner">
+  <div class="footer-left">
+    Version 3.11.1.1-0.
+    <a target="_blank" href="https://bugzilla.redhat.com/enter_bug.cgi?product=Errata+Tool&amp;component=webui"> Report an Issue</a>.
+
+    <br>
+    Copyright © 2007-2015 Red Hat, Inc. All rights reserved.<br>INTERNAL USE ONLY
+  </div>
+  <div class="footer-right">
+
+    <div style="float:right;padding-left:0.5em;"><a target="_blank" href="https://analytics.engineering.redhat.com/piwik/index.php?module=CoreHome&amp;action=index&amp;date=today&amp;period=day&amp;idSite=8#module=Dashboard&amp;action=embeddedIndex&amp;date=today&amp;period=day&amp;idSite=8"><img alt="Activetracking" src="errata/activetracking.png"></a></div>
+  </div>
+
+</div></div>
+
+</body></html>
