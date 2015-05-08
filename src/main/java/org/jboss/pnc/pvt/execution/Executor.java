@@ -22,14 +22,41 @@ import java.util.concurrent.Future;
 
 
 /**
- * @author <a href="mailto:lgao@redhat.com">Lin Gao</a>
  *
  * <code>Executor</code> is responsible to start a verification action 
  *
  * Implementation of this interface should be state-less.
  * 
+ * @author <a href="mailto:lgao@redhat.com">Lin Gao</a>
  */
 public interface Executor {
+
+    /**
+     * Executes a tool by the tool name
+     * 
+     * Returns immediately after sending execution message.
+     * 
+     * @param productName the product name
+     * @param version the product version
+     * @param toolName name of the execution tool. Globally unique.
+     * @return an Execution which contains the execution information.
+     * @throws ExecutionException on any exception
+     */
+    Execution execute(String productName, String version, String toolName) throws ExecutionException;
+
+    /**
+     * Executes a tool by the tool name
+     * 
+     * Returns the Future instance immediately. This can be used by waiting on a Stage on.
+     * 
+     * @param the product name
+     * @param the product version
+     * @param toolName the tool name. Globally unique.
+     * @param stage which stage this should wait for.
+     * @return A Future instance with Execution information
+     * @throws ExecutionException on any exception
+     */
+    Future<Execution> execute(String productName, String version, String toolName, Stage stage) throws ExecutionException;
 
     /**
      * Executes a job by the job name.
@@ -41,7 +68,7 @@ public interface Executor {
      * @throws ExecutionException on any exception
      */
     Execution execute(String jobName) throws ExecutionException;
-    
+
     /**
      * Executes a job by the job name.
      * 
@@ -55,6 +82,36 @@ public interface Executor {
     Future<Execution> execute(String jobName, Stage stage) throws ExecutionException;
 
     /**
+     * Executes a tool by the tool name.
+     * 
+     * Returns immediately after sending execution message.
+     * 
+     * @param the product name
+     * @param the product version
+     * @param toolName name of the execution job. Globally unique.
+     * @param params Parameters send to the job
+     * @return an Execution which contains the execution information.
+     * @throws ExecutionException on any exception
+     */
+    Execution execute(String productName, String version, String toolName, Map<String, String> params) throws ExecutionException;
+
+
+    /**
+     * Executes a tool by the tool name
+     * 
+     * Returns the Future instance immediately. This can be used by waiting on a Stage on.
+     * 
+     * @param the product name
+     * @param the product version
+     * @param toolName the tool name. Globally unique.
+     * @param params Parameters send to the job
+     * @param stage which stage this should wait for.
+     * @return A Future instance with Execution information
+     * @throws ExecutionException on any exception
+     */
+    Future<Execution> execute(String productName, String version, String toolName, Map<String, String> params, Stage stage) throws ExecutionException;
+
+    /**
      * Executes a job by the job name.
      * 
      * Returns immediately after sending execution message.
@@ -65,7 +122,7 @@ public interface Executor {
      * @throws ExecutionException on any exception
      */
     Execution execute(String jobName, Map<String, String> params) throws ExecutionException;
-    
+
     /**
      * Executes a job by the job name.
      * 

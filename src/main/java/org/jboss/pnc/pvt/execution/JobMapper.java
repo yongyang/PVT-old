@@ -17,18 +17,48 @@
 
 package org.jboss.pnc.pvt.execution;
 
+
 /**
+ * 
+ * 
  * @author <a href="mailto:lgao@redhat.com">Lin Gao</a>
  *
  */
-public interface JobMapper {
+abstract class JobMapper {
+
+    static JobMapper DEFAULT = new DefaultJobMapper();
 
     /**
-     * Gets the job configuration according to the job name.
+     * Gets the job configuration according to the tool name.
      * 
-     * @param jobName the job name
-     * @return the job content
+     * @param toolName the tool name
+     * @return the job content, null if no mapping found
      */
-    String getJobXMLContent(String jobName);
-    
+    abstract String getJobXMLContent(String toolName);
+    /**
+     * 
+     * @param productName the product name which the job will be executed for.
+     * @param version the product version
+     * @param toolName the concrete tool name.
+     * @return the jenkins job name
+     */
+    String getJobName(String productName, String version, String toolName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(productName);
+        sb.append("-");
+        sb.append(version);
+        sb.append("-");
+        sb.append(toolName);
+        return sb.toString();
+    }
+
+    static class DefaultJobMapper extends JobMapper {
+
+        @Override
+        String getJobXMLContent(String toolName) {
+            // TODO get jenkins job template
+            return null;
+        }
+
+    }
 }
