@@ -1,6 +1,7 @@
 package org.jboss.pnc.pvt.wicket;
 
 import org.apache.wicket.Page;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.link.Link;
 
@@ -18,5 +19,14 @@ public abstract class TemplatePage extends WebPage {
                 setResponsePage(HomePage.class);
             }
         });
+
+        final WebMarkupContainer messagePanel = new WebMarkupContainer("messagePanel");
+        messagePanel.add( new Link("closeButton") {
+            @Override
+            public void onClick() {
+                messagePanel.setVisible(false);
+            }
+        });
+        add(messagePanel);
     }
 }

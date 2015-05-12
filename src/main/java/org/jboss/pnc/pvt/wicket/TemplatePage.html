@@ -143,23 +143,25 @@
 <div id="eso-shadow"></div>
 
 
-<div id="eso-content"><div class="eso-inner">
-  <div class="flash_container fixedTop">
-    <div id="flash_notice" class="alert alert-success"><a href="#" class="close" data-dismiss="alert">×</a> PVT loaded successfully!</div>
+<div id="eso-content">
+  <div class="eso-inner">
+    <div class="flash_container fixedTop" wicket:id="messagePanel">
+      <div id="flash_notice" class="alert alert-success"><a href="#" class="close" data-dismiss="alert" wicket:id="closeButton">×</a> PVT loaded successfully!</div>
 
-    <div id="flash_alert" class="alert alert-warning" style="display: none">
-      <a href="#" class="close" data-dismiss="alert">×</a>
-      Advisory is currently unassigned. Please <a class="link_to_qa_dialog" href="#">assign a QE owner</a>.
+      <div id="flash_alert" class="alert alert-warning" style="display: none">
+        <a href="#" class="close" data-dismiss="alert">×</a>
+        Advisory is currently unassigned. Please <a class="link_to_qa_dialog" href="#">assign a QE owner</a>.
+      </div>
+
+      <div id="flash_error" class="alert alert-error" style="display: none"><a href="#" class="close" data-dismiss="alert">×</a> alert-error</div>
+
     </div>
 
-    <div id="flash_error" class="alert alert-error" style="display: none"><a href="#" class="close" data-dismiss="alert">×</a> alert-error</div>
+    <!-- extend point of wicket -->
+    <wicket:child />
 
   </div>
-
-  <!-- extend point of wicket -->
-  <wicket:child />
-
-</div></div>
+</div>
 
 
 <div id="eso-footer"><div class="eso-inner">
