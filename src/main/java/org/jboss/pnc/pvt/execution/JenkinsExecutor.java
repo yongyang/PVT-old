@@ -140,7 +140,65 @@ class JenkinsExecutor implements Executor {
             this.crumbFlag = Boolean.FALSE;
         }
     }
-    
+
+    JobMapper getJobMapper() {
+        return JobMapper.DEFAULT;
+    }
+
+    @Override
+    public Execution execute(String productName, String version, String toolName) throws ExecutionException {
+        Future<Execution> future = execute(productName, version, toolName, Stage.Initial);
+        try {
+            return future.get();
+        } catch (InterruptedException | java.util.concurrent.ExecutionException e) {
+            throw new ExecutionException("Failed to execute toolName: " + toolName, e);
+        }
+    }
+
+    @Override
+    public Future<Execution> execute(String productName, String version, String toolName, Stage stage)
+            throws ExecutionException {
+        String jobName = getJobMapper().getJobName(productName, version, toolName);
+        try {
+            checkJenkinsCrumbFlag();
+            JobWithDetails jenkinsJob = getOrCreateJenkinsJob(jobName, toolName);
+            if (jenkinsJob == null) {
+                throw new ExecutionException("No Jenkins job: " + jobName + " found.");
+            }
+        } catch (IOException e) {
+            throw new ExecutionException("Can't create or get job name: " + jobName, e);
+        }
+        
+        return execute(jobName, stage);
+    }
+
+    @Override
+    public Execution execute(String productName, String version, String toolName, Map<String, String> params)
+            throws ExecutionException {
+        Future<Execution> future = execute(productName, version, toolName, null, Stage.Initial);
+        try {
+            return future.get();
+        } catch (InterruptedException | java.util.concurrent.ExecutionException e) {
+            throw new ExecutionException("Failed to execute toolName: " + toolName, e);
+        }
+    }
+
+    @Override
+    public Future<Execution> execute(String productName, String version, String toolName, Map<String, String> params,
+            Stage stage) throws ExecutionException {
+        String jobName = getJobMapper().getJobName(productName, version, toolName);
+        try {
+            checkJenkinsCrumbFlag();
+            JobWithDetails jenkinsJob = getOrCreateJenkinsJob(jobName, toolName);
+            if (jenkinsJob == null) {
+                throw new ExecutionException("No Jenkins job: " + jobName + " found.");
+            }
+        } catch (IOException e) {
+            throw new ExecutionException("Can't create or get job name: " + jobName, e);
+        }
+        return execute(jobName, params, stage);
+    }
+
     @Override
     public Execution execute(String jobName) throws ExecutionException {
         Future<Execution> future = execute(jobName, Stage.Initial);
@@ -167,7 +225,7 @@ class JenkinsExecutor implements Executor {
         Objects.requireNonNull(stage, "stage can not be null");
         try {
             checkJenkinsCrumbFlag();
-            JobWithDetails jenkinsJob = getOrCreateJenkinsJob(jobName);
+            JobWithDetails jenkinsJob = this.jenkinsServer.getJob(jobName);
             if (jenkinsJob == null) {
                 throw new ExecutionException("No Jenkins job: " + jobName + " found.");
             }
@@ -285,9 +343,9 @@ class JenkinsExecutor implements Executor {
     /**
      * Gets or create a job by its name
      */
-    private JobWithDetails getOrCreateJenkinsJob(String jobName) throws IOException, ExecutionException {
+    private JobWithDetails getOrCreateJenkinsJob(String jobName, String toolName) throws IOException, ExecutionException {
         JobWithDetails jenkinsJob = this.jenkinsServer.getJob(jobName);
-        String jobContent = JobMapperFactory.getJobMapper().getJobXMLContent(jobName);
+        String jobContent = getJobMapper().getJobXMLContent(toolName);
         if (jenkinsJob == null && createJenkinsJobIfMissing()) {
             jenkinsJob = createJenkinsJob(jobName, jobContent);
         } else {

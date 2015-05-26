@@ -15,16 +15,13 @@
  * limitations under the License.
  */
 
-package org.jboss.pnc.pvt.execution;
-
 /**
+ * 
+ * Database mapping POJOs.
+ * 
+ * DB Design doc: https://mojo.redhat.com/docs/DOC-1024435
+ * 
  * @author <a href="mailto:lgao@redhat.com">Lin Gao</a>
  *
  */
-public class JobMapperFactory {
-    
-    public static JobMapper getJobMapper() {
-        return FileBasedJobMapper.INSTANCE;
-    }
-
-}
+package org.jboss.pnc.pvt.model;
