@@ -43,3 +43,6 @@ It can be accessed at address: http://localhost:8080/pvt/
 
 And the REST API docs at: http://localhost:8080/pvt/rest/api-docs
 
+To access swagger api doc:
+http://localhost:8080/pvt/apidocs/
+

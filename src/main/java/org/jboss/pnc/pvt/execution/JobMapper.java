@@ -17,6 +17,13 @@
 
 package org.jboss.pnc.pvt.execution;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.Map;
+import org.apache.commons.io.IOUtils;
+import org.jboss.pnc.pvt.util.StringFormatter;
 
 /**
  * 
@@ -51,14 +58,45 @@ abstract class JobMapper {
         sb.append(toolName);
         return sb.toString();
     }
-
+    
+    /*Load default jenkins.template*/
     static class DefaultJobMapper extends JobMapper {
 
         @Override
         String getJobXMLContent(String toolName) {
-            // TODO get jenkins job template
-            return null;
+            InputStream in = getClass().getResourceAsStream("/jenkins.template");
+            StringWriter writer = new StringWriter();
+            try {
+				IOUtils.copy(in, writer, "UTF8");
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				return null;
+			}
+            String theContent=writer.toString();
+            Map<String, Object> variableMap=new HashMap<String, Object>();
+            InputStream in_runsh = getClass().getResourceAsStream("/"+toolName+"/run.sh");
+            InputStream in_runprop = getClass().getResourceAsStream("/"+toolName+"/run.properties");
+            StringWriter writer_runsh = new StringWriter();
+            StringWriter writer_runprop = new StringWriter();
+            try {
+            	IOUtils.copy(in_runsh, writer_runsh, "UTF8");
+            	IOUtils.copy(in_runprop, writer_runprop, "UTF8");
+            } catch (IOException e1) {
+            	// TODO Auto-generated catch block
+            	e1.printStackTrace();
+            	return null;
+            }
+            variableMap.put("toolName", toolName);
+            variableMap.put("run.sh", writer_runsh.toString());
+            variableMap.put("run.properties", writer_runprop.toString());
+            StringFormatter.format(theContent, variableMap);
+        	
+        	return theContent;
         }
+        
 
     }
+    
 }
+
