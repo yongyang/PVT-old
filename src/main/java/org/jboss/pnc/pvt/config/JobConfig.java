@@ -14,5 +14,6 @@ public class JobConfig {
     private String name;
 
     JobConfig() {
+
     }
 }

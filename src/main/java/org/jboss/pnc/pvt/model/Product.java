@@ -17,7 +17,13 @@
 
 package org.jboss.pnc.pvt.model;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import org.jboss.pnc.pvt.config.PVTStatus;
+
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * <code>Product</code> represents a product stream, like: EAP 6.4.x, BRMS 6.0.x, etc.
@@ -25,6 +31,7 @@ import java.io.Serializable;
  * @author <a href="mailto:lgao@redhat.com">Lin Gao</a>
  *
  */
+@JsonAutoDetect
 public class Product implements Serializable {
 
     /**
@@ -32,25 +39,36 @@ public class Product implements Serializable {
      */
     private static final long serialVersionUID = 5742290247172000842L;
 
-    private long id;
+    // uuid
+    private String id = UUID.randomUUID().toString();
     
     private String name;
+
+    // package maintainer
+    private String maintainer;
+
+    // dev team contactor
+    private String contactor;
     
-    private String branch;
-    
-    private String mavenRepo;
+    private String description;
+
+    private List<Release> releases = new ArrayList<>();
+
+
+    public Product() {
+    }
 
     /**
      * @return the id
      */
-    public long getId() {
+    public String getId() {
         return id;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -69,41 +87,43 @@ public class Product implements Serializable {
     }
 
     /**
-     * @return the branch
+     * @return the description
      */
-    public String getBranch() {
-        return branch;
+    public String getDescription() {
+        return description;
     }
 
     /**
-     * @param branch the branch to set
+     * @param description the description to set
      */
-    public void setBranch(String branch) {
-        this.branch = branch;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    /**
-     * @return the mavenRepo
-     */
-    public String getMavenRepo() {
-        return mavenRepo;
+    public String getMaintainer() {
+        return maintainer;
     }
 
-    /**
-     * @param mavenRepo the mavenRepo to set
-     */
-    public void setMavenRepo(String mavenRepo) {
-        this.mavenRepo = mavenRepo;
+    public void setMaintainer(String maintainer) {
+        this.maintainer = maintainer;
+    }
+
+    public String getContactor() {
+        return contactor;
+    }
+
+    public void setContactor(String contactor) {
+        this.contactor = contactor;
     }
 
     /* (non-Javadoc)
-     * @see java.lang.Object#hashCode()
-     */
+         * @see java.lang.Object#hashCode()
+         */
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((branch == null) ? 0 : branch.hashCode());
+        result = prime * result + ((description == null) ? 0 : description.hashCode());
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         return result;
     }
@@ -120,10 +140,10 @@ public class Product implements Serializable {
         if (getClass() != obj.getClass())
             return false;
         Product other = (Product) obj;
-        if (branch == null) {
-            if (other.branch != null)
+        if (description == null) {
+            if (other.description != null)
                 return false;
-        } else if (!branch.equals(other.branch))
+        } else if (!description.equals(other.description))
             return false;
         if (name == null) {
             if (other.name != null)
@@ -138,7 +158,29 @@ public class Product implements Serializable {
      */
     @Override
     public String toString() {
-        return "Product [name=" + name + ", branch=" + branch + ", mavenRepo=" + mavenRepo + "]";
+        return "Product [name=" + name + ", description=" + description + "]";
     }
-    
+
+    /**
+     * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
+     */
+    @JsonAutoDetect
+    public static class Release {
+
+        private String id = UUID.randomUUID().toString();
+
+        // ref of product
+        private String productId;
+
+        // ex: 7.0.0.DR1
+        private String release;
+
+        // the distribution zips, urls to download,
+        // ex: http://download.devel.redhat.com/devel/candidates/JBEAP/JBEAP-7.0.0.DR6/jboss-eap-7.0.0.DR6.zip
+        private List<String> distributions = new ArrayList<>();
+
+        private PVTStatus status;
+
+
+    }
 }

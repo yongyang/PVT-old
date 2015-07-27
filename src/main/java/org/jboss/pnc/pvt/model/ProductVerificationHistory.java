@@ -34,7 +34,7 @@ public class ProductVerificationHistory implements Serializable {
 
 	private long id;
     
-    private Product procut;
+    private Product product;
     
     private String productVersion;
     
@@ -57,17 +57,17 @@ public class ProductVerificationHistory implements Serializable {
 	}
 
 	/**
-	 * @return the procut
+	 * @return the product
 	 */
-	public Product getProcut() {
-		return procut;
+	public Product getProduct() {
+		return product;
 	}
 
 	/**
-	 * @param procut the procut to set
+	 * @param product the product to set
 	 */
-	public void setProcut(Product procut) {
-		this.procut = procut;
+	public void setProduct(Product product) {
+		this.product = product;
 	}
 
 	/**
@@ -120,7 +120,7 @@ public class ProductVerificationHistory implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((output == null) ? 0 : output.hashCode());
-		result = prime * result + ((procut == null) ? 0 : procut.hashCode());
+		result = prime * result + ((product == null) ? 0 : product.hashCode());
 		result = prime * result
 				+ ((productVersion == null) ? 0 : productVersion.hashCode());
 		result = prime * result + status;
@@ -144,10 +144,10 @@ public class ProductVerificationHistory implements Serializable {
 				return false;
 		} else if (!output.equals(other.output))
 			return false;
-		if (procut == null) {
-			if (other.procut != null)
+		if (product == null) {
+			if (other.product != null)
 				return false;
-		} else if (!procut.equals(other.procut))
+		} else if (!product.equals(other.product))
 			return false;
 		if (productVersion == null) {
 			if (other.productVersion != null)
@@ -164,7 +164,7 @@ public class ProductVerificationHistory implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		return "ProductVerificationHistory [procut=" + procut.toString()
+		return "ProductVerificationHistory [product=" + product.toString()
 				+ ", productVersion=" + productVersion + ", status=" + status
 				+ ", output=" + output + "]";
 	}

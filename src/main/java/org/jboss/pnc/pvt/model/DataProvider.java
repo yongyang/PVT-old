@@ -39,42 +39,44 @@ public class DataProvider {
 
     //** ==========  Start of faked Data  =============== *//
     private static List<Product> products = new ArrayList<Product>();
+/*
     static {
         Product prd = new Product();
         prd.setId(1L);
         prd.setName("EAP");
-        prd.setBranch("6.4.x");
+        prd.setDescription("6.4.x");
         prd.setMavenRepo("http://download.devel.redhat.com/devel/candidates/JBEAP/");
         products.add(prd);
 
         prd = new Product();
         prd.setId(2L);
         prd.setName("EAP");
-        prd.setBranch("7.0.x");
+        prd.setDescription("7.0.x");
         prd.setMavenRepo("http://download.devel.redhat.com/devel/candidates/JBEAP/");
         products.add(prd);
 
         prd = new Product();
         prd.setId(3L);
         prd.setName("JWS");
-        prd.setBranch("3.0.x");
+        prd.setDescription("3.0.x");
         prd.setMavenRepo("http://download.devel.redhat.com/devel/candidates/JWS/");
         products.add(prd);
 
         prd = new Product();
         prd.setId(4L);
         prd.setName("BRMS");
-        prd.setBranch("6.1.x");
+        prd.setDescription("6.1.x");
         prd.setMavenRepo("http://download.devel.redhat.com/devel/candidates/BRMS/");
         products.add(prd);
 
         prd = new Product();
         prd.setId(5L);
         prd.setName("JBoss Fuse");
-        prd.setBranch("6.1.x");
+        prd.setDescription("6.1.x");
         prd.setMavenRepo("http://download.devel.redhat.com/devel/candidates/fuse/");
         products.add(prd);
     }
+*/
 
     public List<Product> getAllProducts() {
         return products;

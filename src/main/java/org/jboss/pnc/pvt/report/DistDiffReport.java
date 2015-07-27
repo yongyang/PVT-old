@@ -5,4 +5,6 @@ package org.jboss.pnc.pvt.report;
  */
 public class DistDiffReport extends Report {
 
+    private String link;
+
 }
