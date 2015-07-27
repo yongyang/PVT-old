@@ -44,6 +44,8 @@ public class Product implements Serializable {
     
     private String name;
 
+    private String packages;
+
     // package maintainer
     private String maintainer;
 
@@ -84,6 +86,14 @@ public class Product implements Serializable {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPackages() {
+        return packages;
+    }
+
+    public void setPackages(String packages) {
+        this.packages = packages;
     }
 
     /**

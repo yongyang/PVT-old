@@ -29,6 +29,7 @@ public class NewProductPage extends TemplatePage {
         };
 
         newProductForm.add(new TextField<String>("name"));
+        newProductForm.add(new TextField<String>("packages"));
         newProductForm.add(new TextField<String>("maintainer"));
         newProductForm.add(new TextField<String>("contactor"));
         newProductForm.add(new TextArea<String>("description"));

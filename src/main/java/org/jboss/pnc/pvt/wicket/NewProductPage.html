@@ -21,12 +21,16 @@
 
         <h2>Product Summary</h2>
 
-
         <table cellspacing="3" cellpadding="3">
 
           <tr id='name' >
             <td class="header-label" width = "150">Name:</td>
             <td><input wicket:id="name" id="advisory_synopsis" maxlength="78" name="advisory[synopsis]" size="60" type="text" /></td>
+          </tr>
+
+          <tr id='packages' >
+            <td class="header-label" width = "150">Packages:</td>
+            <td><input wicket:id="packages" maxlength="78" name="advisory[synopsis]" size="60" type="text" /> NOTE: separate by space or semicolon</td>
           </tr>
 
           <tr>
