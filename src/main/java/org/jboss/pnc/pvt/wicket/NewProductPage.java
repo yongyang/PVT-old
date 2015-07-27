@@ -2,7 +2,6 @@ package org.jboss.pnc.pvt.wicket;
 
 import com.googlecode.wicket.kendo.ui.form.TextArea;
 import com.googlecode.wicket.kendo.ui.form.TextField;
-import com.sun.xml.internal.bind.v2.runtime.output.SAXOutput;
 import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
