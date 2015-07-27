@@ -28,8 +28,7 @@ import java.util.*;
 public class ReleasesPage extends TemplatePage{
 
     public ReleasesPage() {
-        super();
-
+        super("PVT releases loaded.");
 
         add(new Link<String>("link-release") {
             @Override

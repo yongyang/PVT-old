@@ -1,5 +1,6 @@
 package org.jboss.pnc.pvt.wicket;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -16,7 +17,14 @@ import java.util.Calendar;
  */
 public abstract class TemplatePage extends WebPage {
 
+    private WebMarkupContainer releasesLi;
+    private WebMarkupContainer productsLi;
+
     public TemplatePage() {
+        this("");
+    }
+
+    public TemplatePage(String info) {
         super();
 
         final Label timeLabel = new Label("time", new Model<String>() {
@@ -35,14 +43,17 @@ public abstract class TemplatePage extends WebPage {
 
         add(timeLabel);
 
-        add(new Link<String>("link-releases") {
+        add(releasesLi = new WebMarkupContainer("li-releases"));
+        releasesLi.add(new Link<String>("link-releases") {
             @Override
             public void onClick() {
                 setResponsePage(ReleasesPage.class);
             }
         });
 
-        add(new Link<String>("link-products") {
+
+        add(productsLi = new WebMarkupContainer("li-products"));
+        productsLi.add(new Link<String>("link-products") {
             @Override
             public void onClick() {
                 setResponsePage(ProductsPage.class);
@@ -57,5 +68,24 @@ public abstract class TemplatePage extends WebPage {
             }
         });
         add(messagePanel);
+
+        messagePanel.add(new Label("message", (info == null || info.isEmpty()) ? "Welcome to PVT!" : info));
+
+        setActiveMenu("releases");
+    }
+
+    public void setActiveMenu(String menu) {
+        releasesLi.add(AttributeModifier.remove("class"));
+        switch (menu) {
+            case "releases":
+                releasesLi.add(AttributeModifier.replace("class", "active"));
+                break;
+            case "products":
+                productsLi.add(AttributeModifier.replace("class", "active"));
+                break;
+            default:
+                releasesLi.add(AttributeModifier.replace("class", "active"));
+
+        }
     }
 }

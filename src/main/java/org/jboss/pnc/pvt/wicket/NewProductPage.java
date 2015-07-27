@@ -24,6 +24,7 @@ public class NewProductPage extends TemplatePage {
                 dao.getPvtModel().addProduct(newProduct);
                 dao.persist();
 
+                setResponsePage(new ProductsPage("Product: " + newProduct.getName() + " Created."));
             }
         };
 

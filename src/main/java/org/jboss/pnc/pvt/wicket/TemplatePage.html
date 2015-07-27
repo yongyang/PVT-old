@@ -133,9 +133,15 @@
 <div id="eso-topnav">
   <div class="eso-inner">
     <ul>
-      <li id="main_list_errata" class="active"><a title="Releases" wicket:id="link-releases">Releases</a></li><li id="main_list_errata"><a wicket:id="link-products" href="https://errata.devel.redhat.com/errata" title="Products">Products</a></li><li id="main_dashboard"><a href="https://errata.devel.redhat.com/reports" title="Overview of All Advisories">Jobs</a></li><li id="main_pkgbrowser"><a href="https://errata.devel.redhat.com/package" title="Package Browser">Packages</a></li><li id="main_bugs"><a href="https://errata.devel.redhat.com/issues" title="Bugs and JIRA Issues">Issues</a></li><li id="main_tps"><a href="https://errata.devel.redhat.com/tps" title="TPS Results">Users</a></li><li id="main_docs"><a href="https://errata.devel.redhat.com/docs/list" title="Documentation Work Queue">PNC</a></li><li id="main_rpmdiff"><a href="https://errata.devel.redhat.com/rpmdiff" title="List Current Rpmdiff Runs">ETT</a></li><li id="main_releng"><a href="https://errata.devel.redhat.com/release_engineering" title="Released Packages">Brew</a></li>
-
-
+      <li id="main_releases" wicket:id="li-releases" class="active"><a title="Releases" wicket:id="link-releases">Releases</a></li>
+      <li id="main_products" wicket:id="li-products"><a wicket:id="link-products" href="https://errata.devel.redhat.com/errata" title="Products">Products</a></li>
+      <li id="main_dashboard"><a href="https://errata.devel.redhat.com/reports" title="Overview of All Advisories">Jobs</a></li>
+      <li id="main_pkgbrowser"><a href="https://errata.devel.redhat.com/package" title="Package Browser">Packages</a></li>
+      <li id="main_bugs"><a href="https://errata.devel.redhat.com/issues" title="Bugs and JIRA Issues">Issues</a></li>
+      <li id="main_tps"><a href="https://errata.devel.redhat.com/tps" title="TPS Results">Users</a></li>
+      <li id="main_docs"><a href="https://errata.devel.redhat.com/docs/list" title="Documentation Work Queue">PNC</a></li>
+      <li id="main_rpmdiff"><a href="https://errata.devel.redhat.com/rpmdiff" title="List Current Rpmdiff Runs">ETT</a></li>
+      <li id="main_releng"><a href="https://errata.devel.redhat.com/release_engineering" title="Released Packages">Brew</a></li>
     </ul>
   </div>
 </div>
@@ -147,7 +153,7 @@
 <div id="eso-content">
   <div class="eso-inner">
     <div class="flash_container fixedTop" wicket:id="messagePanel">
-      <div id="flash_notice" class="alert alert-success"><a href="#" class="close" data-dismiss="alert" wicket:id="closeButton">×</a> PVT loaded successfully!</div>
+      <div id="flash_notice" class="alert alert-success"><a href="#" class="close" data-dismiss="alert" wicket:id="closeButton">×</a> <span wicket:id="message">PVT loaded successfully!</span></div>
 
       <div id="flash_alert" class="alert alert-warning" style="display: none">
         <a href="#" class="close" data-dismiss="alert">×</a>

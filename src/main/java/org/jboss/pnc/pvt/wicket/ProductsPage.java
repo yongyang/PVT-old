@@ -28,8 +28,12 @@ import java.util.*;
 public class ProductsPage extends TemplatePage{
 
     public ProductsPage() {
-        super();
+        this("PVT products loaded.");
+        setActiveMenu("products");
+    }
 
+    public ProductsPage(String info) {
+        super(info);
 
         add(new Link<String>("link-product") {
             @Override
