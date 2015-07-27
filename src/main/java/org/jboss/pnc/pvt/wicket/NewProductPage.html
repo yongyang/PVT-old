@@ -25,7 +25,7 @@
 
           <tr id='name' >
             <td class="header-label" width = "150">Name:</td>
-            <td><input wicket:id="name" id="advisory_synopsis" maxlength="78" name="advisory[synopsis]" size="60" type="text" /></td>
+            <td><input wicket:id="name" id="advisory_synopsis" maxlength="78" name="advisory[synopsis]" size="60" type="text" /> NOTE: unique, not null</td>
           </tr>
 
           <tr id='packages' >
@@ -36,14 +36,14 @@
           <tr>
             <td class="header-label">Product Maintainer:</td>
             <td>
-              <input wicket:id="maintainer" id="advisory_package_owner_email" name="maintainer" size="30" type="text" value="" />
+              <input wicket:id="maintainer" id="advisory_package_owner_email" name="maintainer" size="30" type="text" value="" /> NOTE: email
             </td>
           </tr>
 
           <tr>
             <td class="header-label">Dev team Contactor:</td>
             <td>
-              <input wicket:id="contactor" id="advisory_manager_email" name="advisory[manager_email]" size="30" type="text" value="" />
+              <input wicket:id="contactor" id="advisory_manager_email" name="advisory[manager_email]" size="30" type="text" value="" /> NOTE: email
             </td>
           </tr>
 
