@@ -36,6 +36,18 @@ public class ExecutionEndPoint {
         Execution execution = executor.execute(jobName);
         return Response.ok(execution).build();
     }
+
+    @ApiOperation(value = "Start a Jenkins Job by tool name, product name and version")
+    @POST
+    @Path("/{toolname}")
+    public Response execute(@ApiParam("Tool name") @PathParam("toolName") String toolName, 
+    		@ApiParam("Product Name") @PathParam("productName") String productName,
+    		@ApiParam("Produt Version") @PathParam("version") String verion)
+    		throws ExecutionException {
+    	Executor executor = ExecutorFactory.getExecutor();
+    	Execution execution = executor.execute(toolName, productName, verion);
+    	return Response.ok(execution).build();
+    }
     
     @ApiOperation(value = "Start a Jenkins Job and wait until it starts")
     @POST
