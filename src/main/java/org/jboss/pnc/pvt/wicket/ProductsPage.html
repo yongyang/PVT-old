@@ -17,7 +17,7 @@
 
 
   <span class="superlight tiny">
-    (Select a default filter in <a href="/user/preferences">preferences</a>).
+    (Select a filter in dropdown list below).
   </span>
 
   <form accept-charset="UTF-8" action="/errata" class="edit_system_errata_filter" id="filter_form_form" method="get">
@@ -31,7 +31,7 @@
         </div>
         <div class="filter_label">Filter:</div>
         <div class="filter_select_div">
-          <select class="eso-chosen-select" id="filter_select" name="errata_filter[id]" style="min-width:200px;">
+          <select class="" id="filter_select" name="errata_filter[id]" style="min-width:200px;">
             <option value="" selected="selected">(Unsaved Filter)</option>
             <optgroup label="System Filters" id="system_filters_optgroup">
               <option value="1" selected="selected">Active Advisories (Default)</option>
@@ -46,12 +46,9 @@
           </select>
         </div>
         <div class="filter_buttons_div">
-          <a href="" class="btn btn-small submit-button refresh-submit-button" id="filter_btn_refresh"><i
-                  class="icon-refresh" style="opacity:0.4;padding-right:2px;"></i>Refresh</a>
-          <a href="" class="btn btn-small" id="filter_btn_modify"><i class="icon-edit"
-                                                                     style="opacity:0.4;padding-right:2px;"></i>Modify</a>
-          <a href="" class="btn btn-small" id="filter_btn_new"><i class="icon-plus"
-                                                                  style="opacity:0.4;padding-right:0px;"></i>New</a>
+          <a href="" class="btn btn-small submit-button refresh-submit-button" id="filter_btn_refresh">Refresh</a>
+          <a href="" class="btn btn-small" id="filter_btn_modify">Modify</a>
+          <a href="" class="btn btn-small" id="filter_btn_new">New</a>
         </div>
         <div class="please_wait_div" style="display:none;">
           Please wait...
