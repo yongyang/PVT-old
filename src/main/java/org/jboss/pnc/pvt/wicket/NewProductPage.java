@@ -16,6 +16,8 @@ public class NewProductPage extends TemplatePage {
     private Product newProduct = new Product();
 
     public NewProductPage() {
+        setActiveMenu("products");
+
         Form newProductForm = new Form("form-newproduct", new CompoundPropertyModel(newProduct)) {
             @Override
             protected void onSubmit() {
