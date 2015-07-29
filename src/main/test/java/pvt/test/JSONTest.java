@@ -14,7 +14,7 @@ public class JSONTest {
         Product product = new Product();
         product.setName("testName");
         product.setDescription("testDesc");
-        product.setContactor("test@test.com");
+        product.setDeveloper("test@test.com");
         product.setMaintainer("test@test.com");
 
         pvtModel.addProduct(product);

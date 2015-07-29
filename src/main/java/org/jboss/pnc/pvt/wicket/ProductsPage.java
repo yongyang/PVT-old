@@ -29,12 +29,12 @@ public class ProductsPage extends TemplatePage{
 
     public ProductsPage() {
         this("PVT products loaded.");
-        setActiveMenu("products");
     }
 
     public ProductsPage(String info) {
         super(info);
-
+        setActiveMenu("products");
+/*
         add(new Link<String>("link-product") {
             @Override
             public void onClick() {
@@ -45,6 +45,7 @@ public class ProductsPage extends TemplatePage{
                 setResponsePage(ReleasePage.class, pp);
             }
         });
+*/
 
         add(new Link<String>("link-newproduct") {
             @Override

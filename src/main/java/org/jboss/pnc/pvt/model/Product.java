@@ -49,8 +49,10 @@ public class Product implements Serializable {
     // package maintainer
     private String maintainer;
 
-    // dev team contactor
-    private String contactor;
+    // developer
+    private String developer;
+
+    private String qe;
     
     private String description;
 
@@ -118,17 +120,25 @@ public class Product implements Serializable {
         this.maintainer = maintainer;
     }
 
-    public String getContactor() {
-        return contactor;
+    public String getDeveloper() {
+        return developer;
     }
 
-    public void setContactor(String contactor) {
-        this.contactor = contactor;
+    public void setDeveloper(String developer) {
+        this.developer = developer;
+    }
+
+    public String getQe() {
+        return qe;
+    }
+
+    public void setQe(String qe) {
+        this.qe = qe;
     }
 
     /* (non-Javadoc)
-         * @see java.lang.Object#hashCode()
-         */
+             * @see java.lang.Object#hashCode()
+             */
     @Override
     public int hashCode() {
         final int prime = 31;
