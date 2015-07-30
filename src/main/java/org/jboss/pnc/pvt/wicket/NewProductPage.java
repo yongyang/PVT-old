@@ -4,6 +4,7 @@ import com.googlecode.wicket.kendo.ui.form.TextArea;
 import com.googlecode.wicket.kendo.ui.form.TextField;
 import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.jboss.pnc.pvt.dao.PVTDataAccessObject;
 import org.jboss.pnc.pvt.model.Product;
@@ -18,6 +19,8 @@ public class NewProductPage extends TemplatePage {
     public NewProductPage() {
         setActiveMenu("products");
 
+        add(new FeedbackPanel("feedbackMessage"));
+
         Form newProductForm = new Form("form-newproduct", new CompoundPropertyModel(newProduct)) {
             @Override
             protected void onSubmit() {
@@ -30,7 +33,9 @@ public class NewProductPage extends TemplatePage {
             }
         };
 
-        newProductForm.add(new TextField<String>("name"));
+        TextField<String> nameTextField = new TextField<String>("name");
+        nameTextField.setRequired(true);
+        newProductForm.add(nameTextField);
         newProductForm.add(new TextField<String>("packages"));
         newProductForm.add(new TextField<String>("maintainer"));
         newProductForm.add(new TextField<String>("developer"));
@@ -38,5 +43,7 @@ public class NewProductPage extends TemplatePage {
         newProductForm.add(new TextArea<String>("description"));
 
         add(newProductForm);
+
+
     }
 }
