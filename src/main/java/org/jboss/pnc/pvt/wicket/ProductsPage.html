@@ -3236,7 +3236,7 @@
   <div id="filter_results">
 
     <div class="small light" style="margin-bottom:9px;">
-      455 advisories found. Showing page 1 of 23.
+      <span wicket:id="product_count">0</span> products found.
     </div>
 
     <table class="errata_list" style="width:100%;">
@@ -3251,31 +3251,31 @@
       </thead>
 
 
-      <tbody class="errata_row even">
+      <tbody wicket:id="product_rows " class="errata_row even">
       <tr class="upper">
         <td class="norightpad first">
           <big>
-            <a class="advisory_link show_type show_type_RHBA">JBOSS-EAP</a>
+            <a class="advisory_link show_type show_type_RHBA"><span wicket:id="product_name"></span></a>
           </big>
         </td>
         <td rowspan="2" style="white-space:nowrap;">
-          <div class="clipwidth " style="max-width:100px" title="RHEL-7.2.0">
+          <div class="clipwidth " style="max-width:100px">
             7.0.0.DR6<br/><span style="font-size:120%;"><span class="state_indicator state_indicator_qe">PASSED</span></span>
           </div>
         </td>
         <td rowspan="2">
-          <div class="clipwidth " style="max-width:100px" title="RHEL-7.2.0">Fernando Nasser</div>
+          <div class="clipwidth " style="max-width:160px"><span wicket:id="product_maintainer"></span></div>
         </td>
         <td>
-          <a href="mailto:dev@jboss.org" title="Giuseppe Scrivano (gscrivan@redhat.com)">dev@jboss.org</a><br/>
+          <a href="mailto:dev@jboss.org"><span wicket:id="product_developer"></span></a><br/>
         </td>
         <td>
-          <div class="clipwidth " style="max-width:100px" title="RHEL-7.2.0">qe@jboss.org</div>
+          <div class="clipwidth " style="max-width:120px"><span wicket:id="product_qe"></span></div>
         </td>
       </tr>
       <tr class="lower">
         <td colspan="1" class="first">
-          JBoss Enterprise Application Platform
+          <span wicket:id="product_description"></span>
         </td>
         <td>
           <div class="clipwidth " style="max-width:95px" title="RHEL Virt - Jarda">-</div>
@@ -3286,263 +3286,8 @@
       </tr>
       </tbody>
 
-      <tbody class="errata_row odd">
-      <tr class="upper">
-        <td class="norightpad first">
-          <big>
-            <a class="advisory_link show_type show_type_RHBA">BRMS</a>
-          </big>
-        </td>
-        <td rowspan="2" style="white-space:nowrap;">
-          <div class="clipwidth " style="max-width:100px" title="RHEL-7.2.0">
-            7.0.0.DR6<br/><span style="font-size:120%;"><span class="state_indicator state_indicator_qe">PASSED</span></span>
-          </div>
-        </td>
-        <td rowspan="2">
-          <div class="clipwidth " style="max-width:100px" title="RHEL-7.2.0">rzhang@redhat.com</div>
-        </td>
-        <td>
-          <a href="mailto:dev@jboss.org" title="Giuseppe Scrivano (gscrivan@redhat.com)">dev@jboss.org</a><br/>
-        </td>
-        <td>
-          <div class="clipwidth " style="max-width:100px" title="RHEL-7.2.0">qe@jboss.org</div>
-        </td>
-      </tr>
-      <tr class="lower">
-        <td colspan="1" class="first">
-          JBoss Enterprise Application Platform
-        </td>
-        <td>
-          <div class="clipwidth " style="max-width:95px" title="RHEL Virt - Jarda">-</div>
-        </td>
-        <td>
-          <div class="clipwidth " style="max-width:95px" title="Virt QE">-</div>
-        </td>
-      </tr>
-      </tbody>
-
-      <!--
-
-            <tbody class="errata_row odd">
-            <tr class="upper">
-              <td class="norightpad first">
-                <big>
-                  <a href="/advisory/20451" class="advisory_link show_type show_type_RHBA">RHBA-2015:20451</a>
-                </big>
-
-
-              </td>
-              <td rowspan="2">
-                <span title="Red Hat Enterprise Linux">RHEL</span>
-              </td>
-              <td rowspan="2" style="white-space:nowrap;">
-                <div class="clipwidth " style="max-width:100px" title="RHEL-7.2.0">RHEL-7.2.0</div>
-              </td>
-              <td rowspan="2">
-                <div class="embargo_stamp">
-                  <div class='small superlight'>-</div>
-                </div>
-              </td>
-              <td rowspan="2">
-                <div class="compact">2016-Nov-11<br/>
-                  <small style='color:#888'>(default)</small>
-                  <br/>
-                  <small>over 1 year</small>
-                </div>
-              </td>
-              <td>
-                <a href="mailto:steved@redhat.com" title="Steve Dickson (steved@redhat.com)">steved</a><br/>
-              </td>
-              <td>
-                <span class="small superlight" title="Filesystem QE (fs-qe)"><i>unassigned</i></span>
-                <br/>
-              </td>
-              <td>
-                <span class="superlight">-</span>
-              </td>
-              <td class="last compact" rowspan="2">
-
-                <span style="font-size:120%;"><span
-                        class="state_indicator state_indicator_new_files">NEW FILES</span></span><br/>
-
-                <span class="tiny light" title="In state NEW FILES for 14 hours">(for 14 hours)</span>
-
-                <br/>
-
-                <span class="tiny light" title="Created on 2015-May-04"> 14 hours old</span>
-              </td>
-            </tr>
-            <tr class="lower">
-              <td colspan="3" class="first">
-
-                <span class="light">(4 bugs)</span>
-                rpcbind bug fix and enhancement update
-              </td>
-              <td>
-                <div class="clipwidth " style="max-width:95px" title="Kernel Filesystem">Kernel Filesystem</div>
-              </td>
-              <td>
-                <div class="clipwidth " style="max-width:95px" title="Filesystem QE">Filesystem QE</div>
-              </td>
-              <td>
-                Not requested
-              </td>
-            </tr>
-            </tbody>
-
-
-            <tbody class="errata_row even">
-            <tr class="upper">
-              <td class="norightpad first">
-                <big>
-                  <a href="/advisory/20450" class="advisory_link show_type show_type_RHBA">RHBA-2015:20450</a>
-                </big>
-
-
-              </td>
-              <td rowspan="2">
-                <span title="Red Hat Enterprise Linux">RHEL</span>
-              </td>
-              <td rowspan="2" style="white-space:nowrap;">
-                <div class="clipwidth " style="max-width:100px" title="FAST7.2">FAST7.2</div>
-              </td>
-              <td rowspan="2">
-                <div class="embargo_stamp">
-                  <div class='small superlight'>-</div>
-                </div>
-              </td>
-              <td rowspan="2">
-                <div class="compact">ASAP<br/>
-                  <small style='color:#888'>(default)</small>
-                  <br/></div>
-              </td>
-              <td>
-                <a href="mailto:ppisar@redhat.com" title="Petr Pisar (ppisar@redhat.com)">ppisar</a><br/>
-              </td>
-              <td>
-                <span class="small superlight" title="BaseOS QE - Applications (qe-baseos-apps)"><i>unassigned</i></span>
-                <br/>
-              </td>
-              <td>
-                <span class="small superlight" title="Docs Errata List (docs-errata-list)"><i>unassigned</i></span>
-              </td>
-              <td class="last compact" rowspan="2">
-
-                <span style="font-size:120%;"><span class="state_indicator state_indicator_qe">PASSED</span></span><br/>
-
-                <span class="tiny light" title="In state QE for 16 hours">(for 16 hours)</span>
-
-                <br/>
-
-                <span class="tiny light" title="Created on 2015-May-04"> 16 hours old</span>
-              </td>
-            </tr>
-            <tr class="lower">
-              <td colspan="3" class="first">
-
-                <span class="light">(1 bug)</span>
-                perl-Test-Warn bug fix and enhancement update
-              </td>
-              <td>
-                <div class="clipwidth " style="max-width:95px" title="Developer Experience - LAMP">Developer Experience -
-                  LAMP
-                </div>
-              </td>
-              <td>
-                <div class="clipwidth " style="max-width:95px" title="BaseOS QE - Apps">BaseOS QE - Apps</div>
-              </td>
-              <td>
-                Requested
-              </td>
-            </tr>
-            </tbody>
-
-
-            <tbody class="errata_row odd">
-            <tr class="upper">
-              <td class="norightpad first">
-                <big>
-                  <a href="/advisory/20449" class="advisory_link show_type show_type_RHBA">RHBA-2015:20449</a>
-                </big>
-
-
-              </td>
-              <td rowspan="2">
-                <span title="Red Hat Enterprise Linux">RHEL</span>
-              </td>
-              <td rowspan="2" style="white-space:nowrap;">
-                <div class="clipwidth " style="max-width:100px" title="FAST7.2">FAST7.2</div>
-              </td>
-              <td rowspan="2">
-                <div class="embargo_stamp">
-                  <div class='small superlight'>-</div>
-                </div>
-              </td>
-              <td rowspan="2">
-                <div class="compact">ASAP<br/>
-                  <small style='color:#888'>(default)</small>
-                  <br/></div>
-              </td>
-              <td>
-                <a href="mailto:ppisar@redhat.com" title="Petr Pisar (ppisar@redhat.com)">ppisar</a><br/>
-              </td>
-              <td>
-                <span class="small superlight" title="BaseOS QE - Applications (qe-baseos-apps)"><i>unassigned</i></span>
-                <br/>
-              </td>
-              <td>
-                <span class="small superlight" title="Docs Errata List (docs-errata-list)"><i>unassigned</i></span>
-              </td>
-              <td class="last compact" rowspan="2">
-
-                <span style="font-size:120%;"><span class="state_indicator state_indicator_qe">REJECTED</span></span><br/>
-
-                <span class="tiny light" title="In state QE for 16 hours">(for 16 hours)</span>
-
-                <br/>
-
-                <span class="tiny light" title="Created on 2015-May-04"> 17 hours old</span>
-              </td>
-            </tr>
-            <tr class="lower">
-              <td colspan="3" class="first">
-
-                <span class="light">(1 bug)</span>
-                perl-Test-Pod-Coverage bug fix and enhancement update
-              </td>
-              <td>
-                <div class="clipwidth " style="max-width:95px" title="Developer Experience - LAMP">Developer Experience -
-                  LAMP
-                </div>
-              </td>
-              <td>
-                <div class="clipwidth " style="max-width:95px" title="BaseOS QE - Apps">BaseOS QE - Apps</div>
-              </td>
-              <td>
-                Requested
-              </td>
-            </tr>
-            </tbody>
-
-      -->
     </table>
 
-
-    <div class="pagination"><span class="previous_page disabled">&#8592; Previous</span> <em class="current">1</em> <a
-            rel="next" href="/errata?page=2">2</a> <a href="/errata?page=3">3</a> <a href="/errata?page=4">4</a> <a
-            href="/errata?page=5">5</a> <a href="/errata?page=6">6</a> <a href="/errata?page=7">7</a> <a
-            href="/errata?page=8">8</a> <a href="/errata?page=9">9</a> <span class="gap">&hellip;</span> <a
-            href="/errata?page=22">22</a> <a href="/errata?page=23">23</a> <a rel="next" class="next_page"
-                                                                              href="/errata?page=2">Next &#8594;</a>
-    </div>
-
-    <div>
-    <form wicket:id="form">
-      <div wicket:id="datatable">[datatable]</div>
-      <br/>
-      <button wicket:id="refresh">Refresh</button>
-    </form>
-    </div>
   </div>
 
 </wicket:extend>
