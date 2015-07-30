@@ -23,6 +23,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.markup.repeater.data.ListDataProvider;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -75,7 +76,20 @@ public class ProductsPage extends TemplatePage{
         add(new ListView<Product>("product_rows", products) {
             @Override
             protected void populateItem(ListItem<Product> item) {
-                item.add(new Label("product_name", new PropertyModel(item.getModel(), "name")));
+                item.add(new Link<String>("product_link") {
+                    @Override
+                    public void onClick() {
+                        PageParameters pp = new PageParameters();
+                        pp.set(0, item.getModel().getObject().getName());
+                        setResponsePage(ProductPage.class, pp);
+                    }
+
+                    @Override
+                    public IModel<?> getBody() {
+                        return new PropertyModel(item.getModel(), "name");
+                    }
+                });
+//                item.add(new Label("product_name", new PropertyModel(item.getModel(), "name")));
                 item.add(new Label("product_maintainer", new PropertyModel(item.getModel(), "maintainer")));
                 item.add(new Label("product_developer", new PropertyModel(item.getModel(), "developer")));
                 item.add(new Label("product_qe", new PropertyModel(item.getModel(), "qe")));
