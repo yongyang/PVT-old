@@ -8,5 +8,5 @@ import java.io.Serializable;
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
  */
 @JsonAutoDetect
-public class Job implements Serializable{
+public class Job implements Serializable {
 }
