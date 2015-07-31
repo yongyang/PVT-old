@@ -6,6 +6,9 @@ import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.validation.IValidatable;
+import org.apache.wicket.validation.IValidator;
+import org.apache.wicket.validation.ValidationError;
 import org.jboss.pnc.pvt.dao.PVTDataAccessObject;
 import org.jboss.pnc.pvt.model.Product;
 
@@ -35,6 +38,25 @@ public class NewProductPage extends TemplatePage {
 
         TextField<String> nameTextField = new TextField<String>("name");
         nameTextField.setRequired(true);
+        nameTextField.add(new IValidator<String>() {
+            @Override
+            public void validate(IValidatable<String> validatable) {
+                String inputName = validatable.getValue();
+                PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
+                boolean existed = false;
+                for(Product p : dao.getPvtModel().getProducts()){
+                    if(p.getName().equalsIgnoreCase(inputName)) {
+                        existed = true;
+                        break;
+                    }
+                }
+                if(existed) {
+                    ValidationError error = new ValidationError(this);
+                    error.setMessage("Product " +  inputName  + " is already existed");
+                    validatable.error(error);
+                }
+            }
+        });
         newProductForm.add(nameTextField);
         newProductForm.add(new TextField<String>("packages"));
         newProductForm.add(new TextField<String>("maintainer"));
