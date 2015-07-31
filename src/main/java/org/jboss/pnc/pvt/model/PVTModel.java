@@ -17,11 +17,21 @@ public class PVTModel implements Serializable {
 
     private List<Product> products = new ArrayList<>();
 
+    private List<Release> releases = new ArrayList<>();
+
     public void addProduct(Product product) {
         products.add(product);
     }
 
     public List<Product> getProducts() {
         return products;
+    }
+
+    public void addRelease(Release release) {
+        releases.add(release);
+    }
+
+    public List<Release> getReleases() {
+        return releases;
     }
 }

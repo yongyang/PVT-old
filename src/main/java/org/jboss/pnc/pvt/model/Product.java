@@ -18,7 +18,6 @@
 package org.jboss.pnc.pvt.model;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import org.jboss.pnc.pvt.config.PVTStatus;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -81,6 +80,10 @@ public class Product implements Serializable {
      */
     public String getName() {
         return name;
+    }
+
+    public String getProductName(){
+        return getName();
     }
 
     /**
@@ -177,26 +180,4 @@ public class Product implements Serializable {
         return "Product [name=" + name + ", description=" + description + "]";
     }
 
-    /**
-     * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
-     */
-    @JsonAutoDetect
-    public static class Release {
-
-        private String id = UUID.randomUUID().toString();
-
-        // ref of product
-        private String productId;
-
-        // ex: 7.0.0.DR1
-        private String release;
-
-        // the distribution zips, urls to download,
-        // ex: http://download.devel.redhat.com/devel/candidates/JBEAP/JBEAP-7.0.0.DR6/jboss-eap-7.0.0.DR6.zip
-        private List<String> distributions = new ArrayList<>();
-
-        private PVTStatus status;
-
-
-    }
 }

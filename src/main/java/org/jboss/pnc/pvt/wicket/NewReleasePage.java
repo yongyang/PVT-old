@@ -3,38 +3,49 @@ package org.jboss.pnc.pvt.wicket;
 import com.googlecode.wicket.kendo.ui.form.TextArea;
 import com.googlecode.wicket.kendo.ui.form.TextField;
 import org.apache.wicket.Application;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.jboss.pnc.pvt.dao.PVTDataAccessObject;
 import org.jboss.pnc.pvt.model.Product;
+import org.jboss.pnc.pvt.model.Release;
 
 /**
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
  */
 public class NewReleasePage extends TemplatePage {
 
-    private Product newProduct = new Product();
+    private Release newRelease = new Release();
 
     public NewReleasePage() {
         setActiveMenu("releases");
 
         add(new FeedbackPanel("feedbackMessage"));
 
-        Form newProductForm = new Form("form-newproduct", new CompoundPropertyModel(newProduct)) {
+        Form newReleaseForm = new Form("form-newrelease", new CompoundPropertyModel(newRelease)) {
             @Override
             protected void onSubmit() {
-                System.out.println("Submit: " + newProduct);
+                System.out.println("Submit: " + newRelease);
                 PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
-                dao.getPvtModel().addProduct(newProduct);
+                dao.getPvtModel().addRelease(newRelease);
                 dao.persist();
 
-                setResponsePage(new ProductsPage("Product: " + newProduct.getName() + " Created."));
+                setResponsePage(new ReleasesPage("Release: " + newRelease.getName() + " Created."));
             }
         };
+
+        newReleaseForm.add(
+                new DropDownChoice<Product>(
+                        "productName",
+                        Model.ofList(((PVTApplication) Application.get()).getDAO().getPvtModel().getProducts()),
+                        new ChoiceRenderer<Product>("name", "name")
+                ));
 
         TextField<String> nameTextField = new TextField<String>("name");
         nameTextField.setRequired(true);
@@ -44,7 +55,7 @@ public class NewReleasePage extends TemplatePage {
                 String inputName = validatable.getValue();
                 PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
                 boolean existed = false;
-                for(Product p : dao.getPvtModel().getProducts()){
+                for(Release p : dao.getPvtModel().getReleases()){
                     if(p.getName().equalsIgnoreCase(inputName)) {
                         existed = true;
                         break;
@@ -52,19 +63,15 @@ public class NewReleasePage extends TemplatePage {
                 }
                 if(existed) {
                     ValidationError error = new ValidationError(this);
-                    error.setMessage("Product " + inputName + " is already existed");
+                    error.setMessage("Release " + inputName + " is already existed");
                     validatable.error(error);
                 }
             }
         });
-        newProductForm.add(nameTextField);
-        newProductForm.add(new TextField<String>("packages"));
-        newProductForm.add(new TextField<String>("maintainer"));
-        newProductForm.add(new TextField<String>("developer"));
-        newProductForm.add(new TextField<String>("qe"));
-        newProductForm.add(new TextArea<String>("description"));
+        newReleaseForm.add(nameTextField);
+        newReleaseForm.add(new TextArea<String>("distributions"));
 
-        add(newProductForm);
+        add(newReleaseForm);
 
 
     }
