@@ -3,18 +3,24 @@ package org.jboss.pnc.pvt.wicket;
 import com.googlecode.wicket.kendo.ui.form.TextArea;
 import com.googlecode.wicket.kendo.ui.form.TextField;
 import org.apache.wicket.Application;
+import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.jboss.pnc.pvt.dao.PVTDataAccessObject;
 import org.jboss.pnc.pvt.model.Product;
 import org.jboss.pnc.pvt.model.Release;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
@@ -72,6 +78,7 @@ public class NewReleasePage extends TemplatePage {
         newReleaseForm.add(new TextArea<String>("distributions"));
         newReleaseForm.add(new TextArea<String>("description"));
 
+        newReleaseForm.add(new CheckBoxMultipleChoice<String>("jobs", Model.ofList(Arrays.asList("ZipDiff", "Version convention", "JDK version compatible"))));
         add(newReleaseForm);
 
     }

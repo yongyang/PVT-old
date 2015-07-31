@@ -36,7 +36,7 @@
             <td class="header-label" width = "150">Distributions:</td>
             <td>
               <textarea wicket:id="distributions" cols="75" id="advisory_topic" name="advisory[topic]" rows="6" wrap="hard"></textarea>
-              <br/> NOTE one zip one line, ex:
+              <br/> NOTE: one zip one line, ex:
               <br/> http://abc.com/a.zip
               <br/> http://abc.com/b.zip
             </td>
@@ -50,7 +50,9 @@
           <tr>
             <td class="header-label" width = "150">Active Verify Jobs:</td>
             <td>
-              <textarea cols="75" id="jobs" name="advisory[topic]" rows="6" wrap="hard"></textarea>
+              <div wicket:id="jobs">
+                <input type="checkbox"/>
+              </div>
             </td>
           </tr>
         </table>
