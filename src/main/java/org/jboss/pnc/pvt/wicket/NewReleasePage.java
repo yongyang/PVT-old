@@ -70,9 +70,9 @@ public class NewReleasePage extends TemplatePage {
         });
         newReleaseForm.add(nameTextField);
         newReleaseForm.add(new TextArea<String>("distributions"));
+        newReleaseForm.add(new TextArea<String>("description"));
 
         add(newReleaseForm);
-
 
     }
 }

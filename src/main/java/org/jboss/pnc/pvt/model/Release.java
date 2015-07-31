@@ -26,6 +26,11 @@ public class Release implements Serializable {
     // ex: http://download.devel.redhat.com/devel/candidates/JBEAP/JBEAP-7.0.0.DR6/jboss-eap-7.0.0.DR6.zip
     private List<String> distributions = new ArrayList<>();
 
+    // The jobs applied to this release
+    private List<Job> jobs = new ArrayList<>();
+
+    private String description;
+
     private PVTStatus status;
 
     private long createTime;
@@ -76,5 +81,13 @@ public class Release implements Serializable {
 
     public void setCreateTime(long createTime) {
         this.createTime = createTime;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
