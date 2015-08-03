@@ -1,6 +1,7 @@
 package org.jboss.pnc.pvt.model;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.jboss.pnc.pvt.config.PVTStatus;
 
 import java.io.Serializable;
@@ -31,7 +32,7 @@ public class Release implements Serializable {
 
     private String description;
 
-    private PVTStatus status;
+    private PVTStatus status = PVTStatus.NEW;
 
     private long createTime;
 
@@ -63,6 +64,7 @@ public class Release implements Serializable {
         return distributions;
     }
 
+    @JsonIgnore
     public String[] getDistributionArray(){
         return distributions.split(" ");
     }

@@ -3,14 +3,12 @@ package org.jboss.pnc.pvt.wicket;
 import com.googlecode.wicket.kendo.ui.form.TextArea;
 import com.googlecode.wicket.kendo.ui.form.TextField;
 import org.apache.wicket.Application;
-import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.form.validation.AbstractFormValidator;
+import org.apache.wicket.markup.html.form.validation.IFormValidator;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
@@ -46,40 +44,58 @@ public class NewReleasePage extends TemplatePage {
             }
         };
 
-        newReleaseForm.add(
-                new DropDownChoice<Product>(
-                        "productName",
-                        Model.ofList(((PVTApplication) Application.get()).getDAO().getPvtModel().getProducts()),
-                        new ChoiceRenderer<Product>("name", "name")
-                ));
+
+        List<String> productNames = new ArrayList<>();
+        for(Product p : ((PVTApplication) Application.get()).getDAO().getPvtModel().getProducts()) {
+            productNames.add(p.getName());
+        }
+
+        DropDownChoice<String> productDropDownChoice = new DropDownChoice<String>("productName", Model.ofList(productNames), new ChoiceRenderer<String>("toString", "toString") {
+        }) {
+            @Override
+            public boolean isNullValid() {
+                return true;
+            }
+
+        };
+        productDropDownChoice.setRequired(true);
+        newReleaseForm.add(productDropDownChoice);
 
         TextField<String> nameTextField = new TextField<String>("name");
         nameTextField.setRequired(true);
-        nameTextField.add(new IValidator<String>() {
-            @Override
-            public void validate(IValidatable<String> validatable) {
-                String inputName = validatable.getValue();
-                PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
-                boolean existed = false;
-                for(Release p : dao.getPvtModel().getReleases()){
-                    if(p.getName().equalsIgnoreCase(inputName)) {
-                        existed = true;
-                        break;
-                    }
-                }
-                if(existed) {
-                    ValidationError error = new ValidationError(this);
-                    error.setMessage("Release " + inputName + " is already existed");
-                    validatable.error(error);
-                }
-            }
-        });
+
         newReleaseForm.add(nameTextField);
         newReleaseForm.add(new TextArea<String>("distributions"));
         newReleaseForm.add(new TextArea<String>("description"));
 
         newReleaseForm.add(new CheckBoxMultipleChoice<String>("jobs", Model.ofList(Arrays.asList("ZipDiff", "Version convention", "JDK version compatible"))));
+
+
+        newReleaseForm.add(new IFormValidator(){
+            public FormComponent<?>[] getDependentFormComponents() {
+                return new FormComponent[]{nameTextField, productDropDownChoice};
+            }
+
+            public void validate(Form<?> form) {
+                PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
+                boolean existed = false;
+                for(Release rel : dao.getPvtModel().getReleases()){
+                    if(rel.getName().equalsIgnoreCase(nameTextField.getInput()) && rel.getProductName().equalsIgnoreCase(productDropDownChoice.getInput())) {
+                        existed = true;
+                        break;
+                    }
+                }
+                if(existed) {
+                    ValidationError error = new ValidationError();
+                    error.setMessage("The Release " + productDropDownChoice.getInput() + "-" + nameTextField.getInput()  + " is already existed");
+                    nameTextField.error(error);
+                }
+            }
+        });
+
         add(newReleaseForm);
 
     }
+
+
 }

@@ -23,19 +23,19 @@
           <tr>
             <td class="header-label" width = "150">Product Name:</td>
             <td>
-              <select wicket:id="productName" id="productName" maxlength="78" name="productNames" size="1"/>
+              <select wicket:id="productName" id="productName" maxlength="78" name="productNames" size="1"/> NOTE: not null
             </td>
           </tr>
 
           <tr id='name' >
-            <td class="header-label" width = "150">Name:</td>
+            <td class="header-label" width = "150">Release Name:</td>
             <td><input wicket:id="name" id="advisory_synopsis" maxlength="78" name="advisory[synopsis]" size="60" type="text" /> NOTE: unique, not null</td>
           </tr>
 
           <tr id='topic' >
             <td class="header-label" width = "150">Distributions:</td>
             <td>
-              <textarea wicket:id="distributions" cols="75" id="advisory_topic" name="advisory[topic]" rows="6" wrap="hard"></textarea>
+              <textarea wicket:id="distributions" cols="75" id="advisory_topic" name="advisory[topic]" rows="6"></textarea>
               <br/> NOTE: one zip one line, ex:
               <br/> http://abc.com/a.zip
               <br/> http://abc.com/b.zip
