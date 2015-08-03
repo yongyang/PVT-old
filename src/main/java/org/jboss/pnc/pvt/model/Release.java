@@ -22,9 +22,9 @@ public class Release implements Serializable {
     // release name ex: 7.0.0.DR1
     private String name;
 
-    // the distribution zips, urls to download,
+    // the distribution zips, urls to download, separate by space
     // ex: http://download.devel.redhat.com/devel/candidates/JBEAP/JBEAP-7.0.0.DR6/jboss-eap-7.0.0.DR6.zip
-    private List<String> distributions = new ArrayList<>();
+    private String distributions;
 
     // The jobs applied to this release
     private List<Job> jobs = new ArrayList<>();
@@ -59,11 +59,15 @@ public class Release implements Serializable {
         this.name = name;
     }
 
-    public List<String> getDistributions() {
+    public String getDistributions() {
         return distributions;
     }
 
-    public void setDistributions(List<String> distributions) {
+    public String[] getDistributionArray(){
+        return distributions.split(" ");
+    }
+
+    public void setDistributions(String distributions) {
         this.distributions = distributions;
     }
 
