@@ -34,7 +34,7 @@ public class Release implements Serializable {
 
     private PVTStatus status = PVTStatus.NEW;
 
-    private long createTime;
+    private long createTime = System.currentTimeMillis();
 
     public String getId() {
         return id;
@@ -66,7 +66,7 @@ public class Release implements Serializable {
 
     @JsonIgnore
     public String[] getDistributionArray(){
-        return distributions.split(" ");
+        return distributions.split("\\\r\\n");
     }
 
     public void setDistributions(String distributions) {
