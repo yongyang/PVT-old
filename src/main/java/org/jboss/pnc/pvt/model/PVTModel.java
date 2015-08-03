@@ -45,6 +45,21 @@ public class PVTModel implements Serializable {
     public void addRelease(Release release) {
         releases.add(release);
     }
+    
+    public void updateRelease(Release release) {
+    	
+    	for (Release r : releases){
+    		if (r.getId().equals(release.getId())){
+    			int index = releases.indexOf(r);
+    			releases.set(index, release);
+    			break;	
+    		}	
+    	}
+    }
+    
+    public void removeRelease(Release release){
+    	releases.remove(release);
+    }
 
     public List<Release> getReleases() {
         return releases;
