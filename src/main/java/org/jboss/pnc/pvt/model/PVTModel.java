@@ -22,6 +22,17 @@ public class PVTModel implements Serializable {
     public void addProduct(Product product) {
         products.add(product);
     }
+    
+    public void updateProduct(Product product) {
+    	
+    	for (Product p : products){
+    		if (p.getId().equals(product.getId())){
+    			int index = products.indexOf(p);
+    			products.set(index, product);
+    			break;	
+    		}	
+    	}
+    }
 
     public List<Product> getProducts() {
         return products;

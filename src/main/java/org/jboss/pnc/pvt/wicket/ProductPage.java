@@ -3,8 +3,13 @@ package org.jboss.pnc.pvt.wicket;
 import com.googlecode.wicket.kendo.ui.form.TextArea;
 import com.googlecode.wicket.kendo.ui.form.TextField;
 import org.apache.wicket.Application;
+import org.apache.wicket.Session;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.jboss.pnc.pvt.dao.PVTDataAccessObject;
 import org.jboss.pnc.pvt.model.Product;
 
@@ -13,30 +18,48 @@ import org.jboss.pnc.pvt.model.Product;
  */
 public class ProductPage extends TemplatePage {
 
-    private Product newProduct = new Product();
+    private Product product = new Product();
 
     public ProductPage() {
         setActiveMenu("products");
-
-        Form newProductForm = new Form("form-newproduct", new CompoundPropertyModel(newProduct)) {
-            @Override
-            protected void onSubmit() {
-                System.out.println("Submit: " + newProduct);
-                PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
-                dao.getPvtModel().addProduct(newProduct);
-                dao.persist();
-
-                setResponsePage(new ProductsPage("Product: " + newProduct.getName() + " Created."));
+        product = (Product) Session.get().getAttribute("product");
+        
+        Button editButton = new Button("edit")
+        {
+        	@Override
+			public void onSubmit() {
+            	Session.get().setAttribute("product", product);                        
+                setResponsePage(EditProductPage.class);
             }
         };
+        editButton.setDefaultFormProcessing(false);
+        Button backButton = new Button("back"){
+        	@Override
+			public void onSubmit() {                     
+                setResponsePage(ProductsPage.class);
+            }
+        };
+        backButton.setDefaultFormProcessing(false);
 
-        newProductForm.add(new TextField<String>("name"));
-        newProductForm.add(new TextField<String>("packages"));
-        newProductForm.add(new TextField<String>("maintainer"));
-        newProductForm.add(new TextField<String>("developer"));
-        newProductForm.add(new TextField<String>("qe"));
-        newProductForm.add(new TextArea<String>("description"));
+        Form viewProductForm = new Form("form-viewproduct", new CompoundPropertyModel(product));
+//        {
+//            @Override
+//            protected void onSubmit() {
+//            	Session.get().setAttribute("product", product);                        
+//                setResponsePage(EditProductPage.class);
+//            }
+//        };
+        
+        viewProductForm.add(editButton);
+        viewProductForm.add(backButton);
 
-        add(newProductForm);
+        viewProductForm.add(new TextField<String>("name"));
+        viewProductForm.add(new TextField<String>("packages"));
+        viewProductForm.add(new TextField<String>("maintainer"));
+        viewProductForm.add(new TextField<String>("developer"));
+        viewProductForm.add(new TextField<String>("qe"));
+        viewProductForm.add(new TextArea<String>("description"));
+
+        add(viewProductForm);
     }
 }

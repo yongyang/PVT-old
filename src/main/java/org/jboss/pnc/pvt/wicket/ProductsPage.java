@@ -8,6 +8,7 @@ import com.googlecode.wicket.kendo.ui.datatable.column.PropertyColumn;
 import com.googlecode.wicket.kendo.ui.form.button.AjaxButton;
 import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Session;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.util.lang.PropertyResolver;
@@ -79,9 +80,10 @@ public class ProductsPage extends TemplatePage{
                 item.add(new Link<String>("product_link") {
                     @Override
                     public void onClick() {
-                        PageParameters pp = new PageParameters();
+                    	PageParameters pp = new PageParameters();
                         pp.set(0, item.getModel().getObject().getName());
-                        setResponsePage(ProductPage.class, pp);
+                        Session.get().setAttribute("product", item.getModel().getObject());                        
+                        setResponsePage(ProductPage.class,pp);
                     }
 
                     @Override

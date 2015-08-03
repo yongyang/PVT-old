@@ -12,7 +12,7 @@
 
 
 
-  <form wicket:id="form-newproduct" accept-charset="UTF-8" action="/errata/preview" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="xqS0Zvub2y+hv8+Inq9vR5cBFTkHoRM/X6/aXBF6Zw4=" /></div>
+  <form wicket:id="form-viewproduct" accept-charset="UTF-8" action="/errata/preview" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="xqS0Zvub2y+hv8+Inq9vR5cBFTkHoRM/X6/aXBF6Zw4=" /></div>
 
     <div class="clearfix pretty-form">
       <div class="eso-greybox" style="background-color:#eee;">
@@ -23,47 +23,40 @@
 
           <tr id='name' >
             <td class="header-label" width = "150">Name:</td>
-            <td><input wicket:id="name" id="advisory_synopsis" maxlength="78" name="advisory[synopsis]" size="60" type="text" /> NOTE: unique, not null</td>
+            <td><input wicket:id="name" id="advisory_synopsis" maxlength="78" name="advisory[synopsis]" size="60" type="text" disabled="true" /></td>
           </tr>
 
           <tr id='packages' >
             <td class="header-label" width = "150">Packages:</td>
-            <td><input wicket:id="packages" maxlength="78" name="advisory[synopsis]" size="60" type="text" /> NOTE: separate by space or semicolon</td>
+            <td><input wicket:id="packages" maxlength="78" name="advisory[synopsis]" size="60" type="text" disabled="true" /></td>
           </tr>
 
           <tr>
             <td class="header-label">Product Maintainer:</td>
-            <td>
-              <input wicket:id="maintainer" id="advisory_package_owner_email" name="maintainer" size="30" type="text" value="" /> NOTE: email
-            </td>
+            <td><input wicket:id="maintainer" id="advisory_package_owner_email" name="maintainer" size="30" type="text" disabled="true" /></td>
           </tr>
 
           <tr>
             <td class="header-label">Developer Contactor:</td>
-            <td>
-              <input wicket:id="developer" id="advisory_dev_email" name="developer" size="30" type="text" value="" /> NOTE: email
-            </td>
+            <td><input wicket:id="developer" id="advisory_dev_email" name="developer" size="30" type="text" disabled="true" /></td>
           </tr>
 
           <tr>
             <td class="header-label">QE:</td>
-            <td>
-              <input wicket:id="qe" id="advisory_qe_email" name="qe" size="30" type="text" value="" /> NOTE: email
-            </td>
+            <td><input wicket:id="qe" id="advisory_qe_email" name="qe" size="30" type="text" disabled="true" /></td>
           </tr>
 
           <tr id='topic' >
             <td class="header-label" width = "150">Description:</td>
-            <td>
-              <textarea wicket:id="description" cols="75" id="advisory_topic" name="advisory[topic]" rows="5" wrap="soft"></textarea>
+            <td><textarea wicket:id="description" cols="75" id="advisory_topic" name="advisory[topic]" rows="5" wrap="soft" disabled="true"></textarea>
             </td>
           </tr>
 
         </table>
 
         <div class="align-right" style="margin-top:25px;">
-          <input action="reset" class="btn btn-primary" name="commit" type="reset" value="Reset" />
-          <input action="preview" class="btn btn-primary" id="submit_tag" name="commit" type="submit" value="Submit" />
+          <input wicket:id="edit" class="btn btn-primary" name="edit" type="submit" value="edit" />
+          <input wicket:id="back" class="btn btn-primary" name="back" type="submit" value="back" />
         </div>
 
       </div>
