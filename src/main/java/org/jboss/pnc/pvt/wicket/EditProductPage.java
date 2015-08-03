@@ -14,6 +14,10 @@ import org.jboss.pnc.pvt.model.Product;
 import com.googlecode.wicket.kendo.ui.form.TextArea;
 import com.googlecode.wicket.kendo.ui.form.TextField;
 
+/**
+ * @author <a href="mailto:huwang@redhat.com">Hui Wang</a>
+ *
+ */
 public class EditProductPage extends TemplatePage {
 	
     private Product editProduct = new Product();
@@ -21,7 +25,6 @@ public class EditProductPage extends TemplatePage {
     public EditProductPage() {
     	setActiveMenu("products");
     	editProduct = (Product) Session.get().getAttribute("product");
-    	System.out.println("product name ======="+editProduct.getName());
 
         //add(new FeedbackPanel("feedbackMessage"));
 

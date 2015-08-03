@@ -33,6 +33,10 @@ public class PVTModel implements Serializable {
     		}	
     	}
     }
+    
+    public void removeProduct(Product product){
+    	products.remove(product);
+    }
 
     public List<Product> getProducts() {
         return products;

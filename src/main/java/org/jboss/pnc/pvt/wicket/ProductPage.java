@@ -33,6 +33,7 @@ public class ProductPage extends TemplatePage {
             }
         };
         editButton.setDefaultFormProcessing(false);
+        
         Button backButton = new Button("back"){
         	@Override
 			public void onSubmit() {                     
@@ -40,19 +41,25 @@ public class ProductPage extends TemplatePage {
             }
         };
         backButton.setDefaultFormProcessing(false);
-
+        
+        Button removeButton = new Button("remove"){
+        	@Override
+			public void onSubmit() {   
+        		PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
+                dao.getPvtModel().removeProduct(product);
+                dao.persist();
+                setResponsePage(ProductsPage.class);
+            }
+        };
+        removeButton.setDefaultFormProcessing(false);
+        
+        
         Form viewProductForm = new Form("form-viewproduct", new CompoundPropertyModel(product));
-//        {
-//            @Override
-//            protected void onSubmit() {
-//            	Session.get().setAttribute("product", product);                        
-//                setResponsePage(EditProductPage.class);
-//            }
-//        };
+
         
         viewProductForm.add(editButton);
         viewProductForm.add(backButton);
-
+        viewProductForm.add(removeButton);
         viewProductForm.add(new TextField<String>("name"));
         viewProductForm.add(new TextField<String>("packages"));
         viewProductForm.add(new TextField<String>("maintainer"));
