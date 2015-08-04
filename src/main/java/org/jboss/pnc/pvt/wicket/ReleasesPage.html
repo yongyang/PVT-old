@@ -3260,18 +3260,20 @@
         </td>
         <td rowspan="2" style="white-space:nowrap;">
           <div class="clipwidth " style="max-width:100px">
-            7.0.0.DR6<br/><span style="font-size:120%;"><span class="state_indicator state_indicator_qe">PASSED</span></span>
+            <span style="font-size:120%;"><span wicket:id="release_status" class="state_indicator state_indicator_qe">NEW</span></span>
           </div>
         </td>
         <td rowspan="2">
           <div class="clipwidth " style="max-width:160px">
-            <span wicket:id="release_distributions">
+            <div wicket:id="release_distributions">
               <a wicket:id="release_distribution" href=""></a> <br/>
-            </span>
+            </div>
           </div>
         </td>
-        <td>
-          <a href="mailto:dev@jboss.org"><span>ZipDiff</span></a><br/>
+        <td rowspan="2">
+          <div wicket:id="release_jobs">
+            <a href="job"><span wicket:id="release_job">ZipDiff</span></a><br/>
+          </div>
         </td>
         <td>
           <div class="clipwidth " style="max-width:130px">
@@ -3281,10 +3283,7 @@
       </tr>
       <tr class="lower">
         <td colspan="1" class="first">
-          <!--<span wicket:id="product_description"></span>-->
-        </td>
-        <td>
-          <div class="clipwidth " style="max-width:95px" title="RHEL Virt - Jarda">-</div>
+          <span wicket:id="release_description"></span>
         </td>
         <td>
           <div class="clipwidth " style="max-width:95px" title="Virt QE">-</div>

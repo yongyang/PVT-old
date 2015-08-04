@@ -109,10 +109,25 @@ public class ReleasesPage extends TemplatePage{
                 });
 
 
-//                item.add(new Label("product_name", new PropertyModel(item.getModel(), "name")));
-//                item.add(new Label("product_maintainer", new PropertyModel(item.getModel(), "maintainer")));
-//                item.add(new Label("product_developer", new PropertyModel(item.getModel(), "developer")));
-//                item.add(new Label("product_qe", new PropertyModel(item.getModel(), "qe")));
+                item.add(new Label("release_status", new PropertyModel(item.getModel(), "status")));
+                item.add(new Label("release_description", new PropertyModel(item.getModel(), "description")));
+                item.add(new ListView<String>("release_jobs", item.getModelObject().getJobs()) {
+                    @Override
+                    protected void populateItem(ListItem<String> item) {
+                        Link<String> jobLink = new Link<String>("release_job", Model.of(item.getModelObject())) {
+                            @Override
+                            public void onClick() {
+                                //TODO: open job
+                            }
+
+                            @Override
+                            public IModel<?> getBody() {
+                                return  Model.of(item.getModelObject());
+                            }
+                        };
+                        item.add(jobLink);
+                    }
+                });
                 item.add(new ListView<String>("release_distributions", Arrays.asList(item.getModelObject().getDistributionArray())) {
                     @Override
                     protected void populateItem(ListItem<String> item) {

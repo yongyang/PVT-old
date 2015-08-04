@@ -28,7 +28,7 @@ public class Release implements Serializable {
     private String distributions;
 
     // The jobs applied to this release
-    private List<Job> jobs = new ArrayList<>();
+    private List<String> jobs = new ArrayList<>();
 
     private String description;
 
@@ -95,5 +95,13 @@ public class Release implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<String> getJobs() {
+        return jobs;
+    }
+
+    public void setJobs(List<String> jobs) {
+        this.jobs = jobs;
     }
 }

@@ -67,9 +67,7 @@ public class NewReleasePage extends TemplatePage {
         newReleaseForm.add(nameTextField);
         newReleaseForm.add(new TextArea<String>("distributions"));
         newReleaseForm.add(new TextArea<String>("description"));
-
         newReleaseForm.add(new CheckBoxMultipleChoice<String>("jobs", Model.ofList(Arrays.asList("ZipDiff", "Version convention", "JDK version compatible"))));
-
 
         newReleaseForm.add(new IFormValidator(){
             public FormComponent<?>[] getDependentFormComponents() {
