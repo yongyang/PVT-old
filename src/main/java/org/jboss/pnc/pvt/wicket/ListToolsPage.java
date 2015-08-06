@@ -87,7 +87,6 @@ public class ListToolsPage extends TemplatePage {
                     }
                 });
                 item.add(new Label("tool_type", new PropertyModel(item.getModel(), "type")));
-                item.add(new Label("tool_level", new PropertyModel(item.getModel(), "level")));
                 item.add(new Label("tool_description", new PropertyModel(item.getModel(), "description")));
                 if(tools.indexOf(item.getModel().getObject()) % 2 == 1) {
                     item.add(AttributeModifier.replace("class", "errata_row odd"));
