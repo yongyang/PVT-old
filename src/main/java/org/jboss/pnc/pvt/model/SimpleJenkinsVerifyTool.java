@@ -1,7 +1,7 @@
 package org.jboss.pnc.pvt.model;
 
 /**
- * A jenkins verify tool to call a defined jekins job
+ * A jenkins verify tool to call a defined/existed jenkins job
  *
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
  */

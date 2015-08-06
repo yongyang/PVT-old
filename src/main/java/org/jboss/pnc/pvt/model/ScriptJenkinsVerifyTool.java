@@ -27,7 +27,7 @@ import java.util.Set;
 /**
  *
  * 
- * A verify tool use script as jenkins job parameter
+ * A verify tool use script as jenkins job parameter, jenkins job will run the the script to do the verify things
  * 
  * @author <a href="mailto:huwang@redhat.com">Hui Wang</a>
  *

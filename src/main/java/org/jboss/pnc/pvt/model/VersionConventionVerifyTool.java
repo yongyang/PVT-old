@@ -1,7 +1,7 @@
 package org.jboss.pnc.pvt.model;
 
 /**
- * A verify tool to check the version convention
+ * A verify tool to check the version convention, ex: the jars should have -rehdat-x suffix in version
  *
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
  */

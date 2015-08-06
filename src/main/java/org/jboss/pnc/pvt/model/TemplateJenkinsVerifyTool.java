@@ -1,7 +1,7 @@
 package org.jboss.pnc.pvt.model;
 
 /**
- * A verify tool to call jenkins server with config.xml job template
+ * A verify tool to call jenkins server with config.xml job template provided
  *
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
  */
