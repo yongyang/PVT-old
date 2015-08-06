@@ -25,5 +25,4 @@ done;
 #Run test
 unzip -q $_archive_old -d $_workspace_old
 unzip -q $_archive_new -d $_workspace_new
-java -jar dist-diff2-0.2.0-jar-with-dependencies.jar -a $_workspace_old -b $_workspace_new -i 
-
+java -jar dist-diff2-0.2.0-jar-with-dependencies.jar -a $_workspace_old -b $_workspace_new -i

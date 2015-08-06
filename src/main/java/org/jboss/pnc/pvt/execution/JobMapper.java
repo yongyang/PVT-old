@@ -60,7 +60,7 @@ abstract class JobMapper {
     }
     
     /*Load default jenkins.template*/
-    static class DefaultJobMapper extends JobMapper {
+    public static class DefaultJobMapper extends JobMapper {
 
         @Override
         String getJobXMLContent(String toolName) {
