@@ -9,17 +9,25 @@ public class VerifyParameter {
     private String previousRelease;
     private String currentRelease;
 
+    private String previousDistributionZip;
+    private String currentDistributionZip;
+
     private Properties properties = new Properties();
 
-    public VerifyParameter(String previousRelease, String currentRelease) {
-        this.previousRelease = previousRelease;
-        this.currentRelease = currentRelease;
+
+    public VerifyParameter(String previousRelease, String currentRelease, String previousDistributionZip, String currentDistributionZip) {
+        this(previousRelease, currentRelease, previousDistributionZip, currentDistributionZip, null);
     }
 
-    public VerifyParameter(String previousRelease, String currentRelease, Properties properties) {
+    public VerifyParameter(String previousRelease, String currentRelease, String previousDistributionZip, String currentDistributionZip, Properties properties) {
         this.previousRelease = previousRelease;
         this.currentRelease = currentRelease;
-        this.properties = properties;
+        this.previousDistributionZip = previousDistributionZip;
+        this.currentDistributionZip = currentDistributionZip;
+        if(properties != null && !properties.isEmpty()) {
+            this.properties = properties;
+        }
+
     }
 
     public void addProperty(String name, String value) {
@@ -34,5 +42,23 @@ public class VerifyParameter {
         return properties.containsKey(name);
     }
 
+    public String getPreviousRelease() {
+        return previousRelease;
+    }
 
+    public String getCurrentRelease() {
+        return currentRelease;
+    }
+
+    public String getPreviousDistributionZip() {
+        return previousDistributionZip;
+    }
+
+    public String getCurrentDistributionZip() {
+        return currentDistributionZip;
+    }
+
+    public Properties getProperties() {
+        return properties;
+    }
 }

@@ -14,7 +14,9 @@ public abstract class VerifyResult<T> {
 
     private Status status = Status.IN_PROGRESS;
 
-    abstract T getResult();
+    private Exception exception;
+
+    public abstract T getResultMap();
 
     public Status getStatus() {
         return status;
@@ -22,5 +24,13 @@ public abstract class VerifyResult<T> {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public Exception getException() {
+        return exception;
+    }
+
+    public void setException(Exception exception) {
+        this.exception = exception;
     }
 }
