@@ -44,8 +44,6 @@ public class SingleToolPage extends TemplatePage {
      */
     private int mode = MODE_EDIT;
 
-    private FeedbackPanel feedBackPanel = new FeedbackPanel("feedbackMessage");
-
     public SingleToolPage(PageParameters pp) {
         this(pp, null);
     }
@@ -54,7 +52,7 @@ public class SingleToolPage extends TemplatePage {
         super(pp, info);
         setActiveMenu("tools");
 
-        add(feedBackPanel);
+        add(new FeedbackPanel("feedbackMessage"));
 
         if (pp != null) {
             StringValue modeStr = pp.get("mode");
@@ -62,7 +60,6 @@ public class SingleToolPage extends TemplatePage {
                 try {
                     mode = modeStr.toInt();
                 } catch (StringValueConversionException e) {
-                    warn("Bad parameter: mode: " + modeStr.toString());
                     mode = MODE_EDIT;
                 }
             }
@@ -169,7 +166,7 @@ public class SingleToolPage extends TemplatePage {
         toolForm.add(toolTypeChoice);
 
         toolForm.add(new TextArea<String>("description"));
-        toolForm.add(new TextArea<String>("command"));
+        toolForm.add(new TextArea<String>("script"));
 
         add(toolForm);
     }
