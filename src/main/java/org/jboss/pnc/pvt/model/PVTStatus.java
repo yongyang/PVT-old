@@ -1,4 +1,4 @@
-package org.jboss.pnc.pvt.config;
+package org.jboss.pnc.pvt.model;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 

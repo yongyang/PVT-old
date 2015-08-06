@@ -1,4 +1,4 @@
-package org.jboss.pnc.pvt.config;
+package org.jboss.pnc.pvt.git;
 
 import java.util.ArrayList;
 import java.util.List;

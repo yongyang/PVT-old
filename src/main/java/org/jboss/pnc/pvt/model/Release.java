@@ -2,7 +2,6 @@ package org.jboss.pnc.pvt.model;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.jboss.pnc.pvt.config.PVTStatus;
 
 import java.io.Serializable;
 import java.util.ArrayList;
