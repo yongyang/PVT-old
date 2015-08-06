@@ -16,10 +16,9 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.StringValueConversionException;
 import org.jboss.pnc.pvt.model.ScriptJenkinsVerifyTool;
-import org.jboss.pnc.pvt.model.ScriptJenkinsVerifyTool.Level;
-import org.jboss.pnc.pvt.model.ScriptJenkinsVerifyTool.Type;
 
 import com.googlecode.wicket.kendo.ui.form.TextArea;
+import org.jboss.pnc.pvt.model.VerifyTool;
 
 
 /**
@@ -157,10 +156,10 @@ public class SingleToolPage extends TemplatePage {
         removeButton.setVisible(mode == MODE_EDIT || mode == MODE_VIEW);
         toolForm.add(new RequiredTextField<String>("name"));
 
-        IModel<Type> defaultType = Model.of(tool.getType() == null ? Type.STATIC : tool.getType());
+        IModel<VerifyTool.Type> defaultType = Model.of(tool.getType() == null ? VerifyTool.Type.STATIC : tool.getType());
         toolForm.getModelObject().setType(defaultType.getObject());
-        List<Type> types = Arrays.asList(Type.values());
-        DropDownChoice<Type> toolTypeChoice = new DropDownChoice<Type>("type", defaultType, Model.ofList(types)) {
+        List<VerifyTool.Type> types = Arrays.asList(VerifyTool.Type.values());
+        DropDownChoice<VerifyTool.Type> toolTypeChoice = new DropDownChoice<VerifyTool.Type>("type", defaultType, Model.ofList(types)) {
             @Override
             protected void onModelChanged() {
                 toolForm.getModelObject().setType(getModelObject());
@@ -168,19 +167,6 @@ public class SingleToolPage extends TemplatePage {
         };
         toolTypeChoice.setRequired(true);
         toolForm.add(toolTypeChoice);
-
-        IModel<Level> defaultLevel = Model.of(tool.getLevel() == null ? Level.ALL : tool.getLevel());
-        toolForm.getModelObject().setLevel(defaultLevel.getObject());
-        List<Level> levels = Arrays.asList(Level.values());
-        DropDownChoice<Level> toolLevelChoice = new DropDownChoice<Level>("level", defaultLevel, Model.ofList(levels)) {
-
-            @Override
-            protected void onModelChanged() {
-                toolForm.getModelObject().setLevel(getModelObject());
-            }
-        };
-        toolLevelChoice.setRequired(true);
-        toolForm.add(toolLevelChoice);
 
         toolForm.add(new TextArea<String>("description"));
         toolForm.add(new TextArea<String>("command"));

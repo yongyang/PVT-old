@@ -13,8 +13,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.jboss.pnc.pvt.model.ScriptJenkinsVerifyTool;
-import org.jboss.pnc.pvt.model.ScriptJenkinsVerifyTool.Level;
-import org.jboss.pnc.pvt.model.ScriptJenkinsVerifyTool.Type;
+import org.jboss.pnc.pvt.model.VerifyTool;
 
 
 /**
@@ -36,9 +35,8 @@ public class ListToolsPage extends TemplatePage {
         tool.setId(1L);
         tool.setName("My Tool1");
         tool.setDescription("Test tool to use 2 variables");
-        tool.setLevel(Level.ALL);
-        tool.setType(Type.STATIC);
-        
+        tool.setType(VerifyTool.Type.STATIC);
+
         tools.add(tool);
 
         tool = new ScriptJenkinsVerifyTool();
@@ -46,8 +44,7 @@ public class ListToolsPage extends TemplatePage {
         tool.setId(2L);
         tool.setName("My Tool2");
         tool.setDescription("Test tool to use 2 variables of SecMain");
-        tool.setLevel(Level.PRODUCT);
-        tool.setType(Type.RUNTIME);
+        tool.setType(VerifyTool.Type.RUNTIME);
         
         tools.add(tool);
     }
