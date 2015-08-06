@@ -15,9 +15,9 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.StringValueConversionException;
-import org.jboss.pnc.pvt.model.TestTool;
-import org.jboss.pnc.pvt.model.TestTool.Level;
-import org.jboss.pnc.pvt.model.TestTool.Type;
+import org.jboss.pnc.pvt.model.ScriptJenkinsVerifyTool;
+import org.jboss.pnc.pvt.model.ScriptJenkinsVerifyTool.Level;
+import org.jboss.pnc.pvt.model.ScriptJenkinsVerifyTool.Type;
 
 import com.googlecode.wicket.kendo.ui.form.TextArea;
 
@@ -69,7 +69,7 @@ public class SingleToolPage extends TemplatePage {
             }
         }
 
-        final TestTool tool;
+        final ScriptJenkinsVerifyTool tool;
         if (mode == MODE_EDIT || mode == MODE_VIEW) {
             add(new Label("tool_summary", "Edit Verification Tool"));
             tool = getToolByIdOrName(pp);
@@ -78,14 +78,14 @@ public class SingleToolPage extends TemplatePage {
             }
         } else if (mode == MODE_CREATE) {
             add(new Label("tool_summary", "Create a Verification Tool"));
-            tool = new TestTool();
+            tool = new ScriptJenkinsVerifyTool();
         } else {
             throw new IllegalArgumentException("Wrong mode parameter: mode = " + mode);
         }
 
         assert tool != null : "Tool should not be null from this point";
 
-        final Form<TestTool> toolForm = new Form<TestTool>("form-tool", new CompoundPropertyModel<TestTool>(tool)) {
+        final Form<ScriptJenkinsVerifyTool> toolForm = new Form<ScriptJenkinsVerifyTool>("form-tool", new CompoundPropertyModel<ScriptJenkinsVerifyTool>(tool)) {
 
             @Override
             protected void onSubmit() {
@@ -123,7 +123,7 @@ public class SingleToolPage extends TemplatePage {
                 if (mode == MODE_EDIT || mode == MODE_VIEW) {
                     toolForm.getModel().setObject(getToolByIdOrName(pp));
                 } else {
-                    toolForm.getModel().setObject(new TestTool());
+                    toolForm.getModel().setObject(new ScriptJenkinsVerifyTool());
                 }
             }
         };
@@ -188,7 +188,7 @@ public class SingleToolPage extends TemplatePage {
         add(toolForm);
     }
 
-    private TestTool getToolByIdOrName(PageParameters pp) {
+    private ScriptJenkinsVerifyTool getToolByIdOrName(PageParameters pp) {
         assert pp != null : "Wrong state!!";
         StringValue str = pp.get("id");
         if (str.isNull() || str.isEmpty()) {
@@ -197,7 +197,7 @@ public class SingleToolPage extends TemplatePage {
         if (str.isNull() || str.isEmpty()) {
             return null;
         }
-        for (TestTool t: ListToolsPage.getAllTools()) {
+        for (ScriptJenkinsVerifyTool t: ListToolsPage.getAllTools()) {
             if (str.toString().equals(t.getId() + "")
                     || str.toString().equals(t.getName())) {
                 return t;
@@ -206,15 +206,15 @@ public class SingleToolPage extends TemplatePage {
         return null;
     }
 
-    private void createTool(TestTool tool) {
+    private void createTool(ScriptJenkinsVerifyTool tool) {
         ListToolsPage.getAllTools().add(tool);
     }
 
-    private void updateTool(TestTool tool) {
+    private void updateTool(ScriptJenkinsVerifyTool tool) {
         //TODO update db
     }
 
-    private void removeTool(TestTool tool) {
+    private void removeTool(ScriptJenkinsVerifyTool tool) {
         ListToolsPage.getAllTools().remove(tool);
     }
 }

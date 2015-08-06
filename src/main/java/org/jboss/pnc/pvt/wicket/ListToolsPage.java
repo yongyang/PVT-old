@@ -12,9 +12,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.jboss.pnc.pvt.model.TestTool;
-import org.jboss.pnc.pvt.model.TestTool.Level;
-import org.jboss.pnc.pvt.model.TestTool.Type;
+import org.jboss.pnc.pvt.model.ScriptJenkinsVerifyTool;
+import org.jboss.pnc.pvt.model.ScriptJenkinsVerifyTool.Level;
+import org.jboss.pnc.pvt.model.ScriptJenkinsVerifyTool.Type;
 
 
 /**
@@ -29,10 +29,10 @@ public class ListToolsPage extends TemplatePage {
         this(pp, "PVT tools loaded.");
     }
 
-    private static List<TestTool> tools = new ArrayList<TestTool>();
+    private static List<ScriptJenkinsVerifyTool> tools = new ArrayList<ScriptJenkinsVerifyTool>();
     static {
-        TestTool tool = new TestTool();
-        tool.setCommand("java -jar tool.jar Main ${args1} ${args2}");
+        ScriptJenkinsVerifyTool tool = new ScriptJenkinsVerifyTool();
+        tool.setScript("java -jar tool.jar Main ${args1} ${args2}");
         tool.setId(1L);
         tool.setName("My Tool1");
         tool.setDescription("Test tool to use 2 variables");
@@ -41,8 +41,8 @@ public class ListToolsPage extends TemplatePage {
         
         tools.add(tool);
 
-        tool = new TestTool();
-        tool.setCommand("java -jar tool.jar SecMain ${args1} ${args2}");
+        tool = new ScriptJenkinsVerifyTool();
+        tool.setScript("java -jar tool.jar SecMain ${args1} ${args2}");
         tool.setId(2L);
         tool.setName("My Tool2");
         tool.setDescription("Test tool to use 2 variables of SecMain");
@@ -52,7 +52,7 @@ public class ListToolsPage extends TemplatePage {
         tools.add(tool);
     }
 
-    static List<TestTool> getAllTools() {
+    static List<ScriptJenkinsVerifyTool> getAllTools() {
         return tools;
     }
 
@@ -69,13 +69,13 @@ public class ListToolsPage extends TemplatePage {
             }
         });
 
-        List<TestTool> tools = getAllTools();
+        List<ScriptJenkinsVerifyTool> tools = getAllTools();
 
         add(new Label("tool_count", Model.of("" + tools.size())));
 
-        add(new ListView<TestTool>("tool_rows", tools) {
+        add(new ListView<ScriptJenkinsVerifyTool>("tool_rows", tools) {
             @Override
-            protected void populateItem(ListItem<TestTool> item) {
+            protected void populateItem(ListItem<ScriptJenkinsVerifyTool> item) {
                 item.add(new Link<String>("tool_link") {
                     @Override
                     public void onClick() {
