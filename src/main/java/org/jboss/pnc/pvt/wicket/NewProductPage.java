@@ -6,6 +6,9 @@ import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.StringValue;
+import org.apache.wicket.util.string.StringValueConversionException;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
@@ -17,22 +20,30 @@ import org.jboss.pnc.pvt.model.Product;
  */
 public class NewProductPage extends TemplatePage {
 
-    private Product newProduct = new Product();
-
-    public NewProductPage() {
+    Product product = new Product();
+    FeedbackPanel feedBackPanel = new FeedbackPanel("feedbackMessage");
+    Form productForm;
+    
+    public NewProductPage(PageParameters pp) {
+        this(pp, null);
+    }
+    
+    public NewProductPage(PageParameters pp, String info) {
+    	super(pp, info);
+    	
         setActiveMenu("products");
-
-        add(new FeedbackPanel("feedbackMessage"));
-
-        Form newProductForm = new Form("form-newproduct", new CompoundPropertyModel(newProduct)) {
+        add(feedBackPanel);
+        
+        if (pp != null) {
+            String id = pp.get("productId").toString();
+        	PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
+        	product = dao.getPvtModel().getProductbyId(id);
+        }
+        
+        productForm = new Form("form-product", new CompoundPropertyModel(product)) {
             @Override
             protected void onSubmit() {
-                System.out.println("Submit: " + newProduct);
-                PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
-                dao.getPvtModel().addProduct(newProduct);
-                dao.persist();
-
-                setResponsePage(new ProductsPage("Product: " + newProduct.getName() + " Created."));
+            	doSubmit();
             }
         };
 
@@ -57,15 +68,22 @@ public class NewProductPage extends TemplatePage {
                 }
             }
         });
-        newProductForm.add(nameTextField);
-        newProductForm.add(new TextField<String>("packages"));
-        newProductForm.add(new TextField<String>("maintainer"));
-        newProductForm.add(new TextField<String>("developer"));
-        newProductForm.add(new TextField<String>("qe"));
-        newProductForm.add(new TextArea<String>("description"));
+        productForm.add(nameTextField);
+        productForm.add(new TextField<String>("packages"));
+        productForm.add(new TextField<String>("maintainer"));
+        productForm.add(new TextField<String>("developer"));
+        productForm.add(new TextField<String>("qe"));
+        productForm.add(new TextArea<String>("description"));
 
-        add(newProductForm);
-
-
+        add(productForm);
     }
+    
+    protected void doSubmit(){
+    	PageParameters pp = new PageParameters();
+        PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
+        dao.getPvtModel().addProduct(product);
+        dao.persist();
+        setResponsePage(new ProductsPage(pp,("Product: " + product.getName() + " Created.")));
+    }
+
 }

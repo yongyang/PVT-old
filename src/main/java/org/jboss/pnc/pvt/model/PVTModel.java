@@ -37,6 +37,17 @@ public class PVTModel implements Serializable {
     public void removeProduct(Product product){
     	products.remove(product);
     }
+    
+    public Product getProductbyId(String id){
+    	Product product = new Product();
+    	for (Product p : products){
+    		if (p.getId().equals(id)){
+    			product = p;
+    			break;	
+    		}	
+    	}
+    	return product;
+    }
 
     public List<Product> getProducts() {
         return products;
@@ -59,6 +70,17 @@ public class PVTModel implements Serializable {
     
     public void removeRelease(Release release){
     	releases.remove(release);
+    }
+    
+    public Release getReleasebyId(String id){
+    	Release release = new Release();
+    	for (Release p : releases){
+    		if (p.getId().equals(id)){
+    			release = p;
+    			break;	
+    		}	
+    	}
+    	return release;
     }
 
     public List<Release> getReleases() {

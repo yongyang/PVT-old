@@ -38,12 +38,12 @@ import java.util.*;
  */
 public class ProductsPage extends TemplatePage{
 
-    public ProductsPage() {
-        this("PVT products loaded.");
+    public ProductsPage(PageParameters pp) {
+        this(pp,"PVT products loaded.");
     }
 
-    public ProductsPage(String info) {
-        super(info);
+    public ProductsPage(PageParameters pp, String info) {
+    	super(pp, info);
         setActiveMenu("products");
 /*
         add(new Link<String>("link-product") {
@@ -62,9 +62,6 @@ public class ProductsPage extends TemplatePage{
             @Override
             public void onClick() {
                 PageParameters pp = new PageParameters();
-                pp.set(0, "a");
-                pp.set(1,"b");
-                pp.add("c","d");
                 setResponsePage(NewProductPage.class, pp);
             }
         });
@@ -81,9 +78,8 @@ public class ProductsPage extends TemplatePage{
                     @Override
                     public void onClick() {
                     	PageParameters pp = new PageParameters();
-                        pp.set(0, item.getModel().getObject().getName());
-                        Session.get().setAttribute("product", item.getModel().getObject());                        
-                        setResponsePage(ProductPage.class,pp);
+                        pp.set("productId", item.getModel().getObject().getId());
+                        setResponsePage(EditProductPage.class,pp);
                     }
 
                     @Override
