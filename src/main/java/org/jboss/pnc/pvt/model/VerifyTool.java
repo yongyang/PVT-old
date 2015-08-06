@@ -170,7 +170,7 @@ public abstract class VerifyTool {
      */
     @Override
     public String toString() {
-        return "TestTool [id=" + id + ", name=" + name + ", type=" + type + "]";
+        return "VerifyTool [id=" + id + ", name=" + name + ", type=" + type + "]";
     }
 
 
