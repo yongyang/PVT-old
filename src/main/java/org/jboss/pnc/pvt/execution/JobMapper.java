@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.apache.commons.io.IOUtils;
 import org.jboss.pnc.pvt.util.StringFormatter;
 
@@ -75,8 +76,8 @@ abstract class JobMapper {
 			}
             String theContent=writer.toString();
             Map<String, Object> variableMap=new HashMap<String, Object>();
-            InputStream in_runsh = getClass().getResourceAsStream("/"+toolName+"/run.sh");
-            InputStream in_runprop = getClass().getResourceAsStream("/"+toolName+"/run.properties");
+            InputStream in_runsh = getClass().getResourceAsStream("/testtool/"+toolName+"/run.sh");
+            InputStream in_runprop = getClass().getResourceAsStream("/testtool/"+toolName+"/run.properties");
             StringWriter writer_runsh = new StringWriter();
             StringWriter writer_runprop = new StringWriter();
             try {
@@ -90,9 +91,8 @@ abstract class JobMapper {
             variableMap.put("toolName", toolName);
             variableMap.put("run.sh", writer_runsh.toString());
             variableMap.put("run.properties", writer_runprop.toString());
-            StringFormatter.format(theContent, variableMap);
         	
-        	return theContent;
+        	return StringFormatter.format(theContent, variableMap);
         }
         
 

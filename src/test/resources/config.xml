@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description>Run ${toolName} verification test on ${projectName} ${version} .&lt;br&gt;&#xd;
+  <description>Run zipdiff verification test on Productization Verification Tool(PVT).&lt;br&gt;&#xd;
 </description>
   
   <logRotator class="hudson.tasks.LogRotator">
@@ -52,7 +52,7 @@ done;
 #Run test
 unzip -q $_archive_old -d $_workspace_old
 unzip -q $_archive_new -d $_workspace_new
-java -jar dist-diff2-0.2.0-jar-with-dependencies.jar -a $_workspace_old -b $_workspace_new -i     
+java -jar dist-diff2-0.2.0-jar-with-dependencies.jar -a $_workspace_old -b $_workspace_new -i
       </command>
     </hudson.tasks.Shell>
   </builders>

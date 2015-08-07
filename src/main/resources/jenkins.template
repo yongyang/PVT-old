@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description>Run ${toolName} verification test on ${projectName} ${version} .&lt;br&gt;&#xd;
+  <description>Run ${toolName} verification test on ${projectName}.&lt;br&gt;&#xd;
 </description>
   
   <logRotator class="hudson.tasks.LogRotator">
@@ -21,8 +21,8 @@
   <builders>
     <hudson.tasks.Shell>
       <command># check if the build is needed
-              ${run.properties}
-              ${run.sh}
+${run.properties}
+${run.sh}
       </command>
     </hudson.tasks.Shell>
   </builders>
