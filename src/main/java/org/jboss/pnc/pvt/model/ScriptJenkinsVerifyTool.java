@@ -32,7 +32,7 @@ import java.util.Set;
  * @author <a href="mailto:huwang@redhat.com">Hui Wang</a>
  *
  */
-public class ScriptJenkinsVerifyTool extends SimpleJenkinsVerifyTool implements Serializable {
+public class ScriptJenkinsVerifyTool extends TemplateJenkinsVerifyTool implements Serializable {
 
 	/**
 	 * 
