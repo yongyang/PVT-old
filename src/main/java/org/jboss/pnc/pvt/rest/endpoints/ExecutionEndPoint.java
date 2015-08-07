@@ -39,13 +39,13 @@ public class ExecutionEndPoint {
 
     @ApiOperation(value = "Start a Jenkins Job by tool name, product name and version")
     @POST
-    @Path("/{toolname}")
-    public Response execute(@ApiParam("Tool name") @PathParam("toolName") String toolName, 
-    		@ApiParam("Product Name") @PathParam("productName") String productName,
-    		@ApiParam("Produt Version") @PathParam("version") String verion)
+    @Path("/{productName}-{version}-{toolName}")
+    public Response execute(@ApiParam("Product Name") @PathParam("productName") String productName,
+    		@ApiParam("Produt Version") @PathParam("version") String verion,
+    		@ApiParam("Tool name") @PathParam("toolName") String toolName)
     		throws ExecutionException {
     	Executor executor = ExecutorFactory.getExecutor();
-    	Execution execution = executor.execute(toolName, productName, verion);
+    	Execution execution = executor.execute(productName, verion, toolName);
     	return Response.ok(execution).build();
     }
     

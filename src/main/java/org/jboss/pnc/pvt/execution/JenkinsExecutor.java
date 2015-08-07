@@ -113,11 +113,11 @@ class JenkinsExecutor implements Executor {
     }
 
     private boolean createJenkinsJobIfMissing() {
-        return Boolean.valueOf(props.getProperty("jenkins.job.create.missing", "False"));
+        return Boolean.valueOf(props.getProperty("jenkins.job.create.missing", "True"));
     }
 
     private boolean overrideJenkinsJob() {
-        return Boolean.valueOf(props.getProperty("jenkins.job.override", "False"));
+        return Boolean.valueOf(props.getProperty("jenkins.job.override", "True"));
     }
 
     private Properties getDefaultJenkinsProps() throws IOException {
@@ -193,6 +193,7 @@ class JenkinsExecutor implements Executor {
             if (jenkinsJob == null) {
                 throw new ExecutionException("No Jenkins job: " + jobName + " found.");
             }
+            
         } catch (IOException e) {
             throw new ExecutionException("Can't create or get job name: " + jobName, e);
         }
@@ -347,6 +348,7 @@ class JenkinsExecutor implements Executor {
         JobWithDetails jenkinsJob = this.jenkinsServer.getJob(jobName);
         String jobContent = getJobMapper().getJobXMLContent(toolName);
         if (jenkinsJob == null && createJenkinsJobIfMissing()) {
+        	logger.info("Start to create the Jenkins job");
             jenkinsJob = createJenkinsJob(jobName, jobContent);
         } else {
             if (overrideJenkinsJob()) {
