@@ -1,37 +1,19 @@
 package org.jboss.pnc.pvt.wicket;
 
-import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.kendo.ui.datatable.DataTable;
-import com.googlecode.wicket.kendo.ui.datatable.column.CurrencyPropertyColumn;
-import com.googlecode.wicket.kendo.ui.datatable.column.IColumn;
-import com.googlecode.wicket.kendo.ui.form.button.AjaxButton;
 import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Session;
-import org.apache.wicket.WicketRuntimeException;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.core.util.lang.PropertyResolver;
-import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
-import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLocator;
-import org.apache.wicket.extensions.markup.html.repeater.util.SingleSortState;
-import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.repeater.data.IDataProvider;
-import org.apache.wicket.markup.repeater.data.ListDataProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import com.googlecode.wicket.kendo.ui.datatable.column.PropertyColumn;
 import org.jboss.pnc.pvt.model.Product;
 import org.jboss.pnc.pvt.model.Release;
 
-import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -39,36 +21,20 @@ import java.util.*;
  */
 public class ReleasesPage extends TemplatePage{
 
-    public ReleasesPage() {
-        this("PVT releases loaded.");
+    public ReleasesPage(PageParameters pp) {
+        this(pp,"PVT releases loaded.");
     }
 
-    public ReleasesPage(String info) {
-        super(info);
+    public ReleasesPage(PageParameters pp,String info) {
+        super(pp,info);
         setActiveMenu("releases");
-
-/*
-        add(new Link<String>("link-release") {
-            @Override
-            public void onClick() {
-                PageParameters pp = new PageParameters();
-                pp.set(0, "a");
-                pp.set(1, "b");
-                pp.add("c", "d");
-                setResponsePage(ReleasePage.class, pp);
-            }
-        });
-*/
-
 
         add(new Link<String>("link-newrelease") {
             @Override
             public void onClick() {
                 PageParameters pp = new PageParameters();
-                pp.set(0, "a");
-                pp.set(1, "b");
-                pp.add("c", "d");
-                setResponsePage(NewReleasePage.class, pp);
+                pp.set("mode", "3"); // MODE_CREATE
+                setResponsePage(ReleasePage.class, pp);
             }
         });
 
@@ -78,28 +44,26 @@ public class ReleasesPage extends TemplatePage{
         add(new ListView<Release>("release_rows", releases) {
             @Override
             protected void populateItem(ListItem<Release> item) {
-                item.add(new Link<String>("product_link") {
+            	Link product_link = new Link("product_link") {
                     @Override
                     public void onClick() {
-                        PageParameters pp = new PageParameters();
-                        pp.set(0, item.getModel().getObject().getName());
-                        Session.get().setAttribute("product", item.getModel().getObject());
-                        setResponsePage(ProductPage.class,pp);
+                    	PageParameters pp = new PageParameters();
+                        pp.set("productId", item.getModel().getObject().getProductId());
+                        setResponsePage(EditProductPage.class,pp);
                     }
-
-                    @Override
-                    public IModel<?> getBody() {
-                        return new PropertyModel(item.getModel(), "productName");
-                    }
-                });
+                };
+                String productId = item.getModel().getObject().getProductId();
+                String productName = ((PVTApplication) Application.get()).getDAO().getPvtModel().getProductbyId(productId).getName();
+                product_link.add(new Label("product_name", productName));
+            	item.add(product_link);
 
                 item.add(new Link<String>("release_link") {
                     @Override
                     public void onClick() {
                         PageParameters pp = new PageParameters();
-                        pp.set(0, item.getModel().getObject().getName());
-                        Session.get().setAttribute("product", item.getModel().getObject());
-                        setResponsePage(ProductPage.class,pp);
+                        pp.set("releaseId", item.getModel().getObject().getId());
+                        pp.set("mode", "1");
+                        setResponsePage(ReleasePage.class,pp);
                     }
 
                     @Override

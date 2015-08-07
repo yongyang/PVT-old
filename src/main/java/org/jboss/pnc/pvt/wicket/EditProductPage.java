@@ -36,17 +36,16 @@ public class EditProductPage extends TemplatePage {
         setActiveMenu("products");
         add(feedBackPanel);
         
+        PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
         if (pp != null) {
-            String id = pp.get("productId").toString();
-        	PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
-        	product = dao.getPvtModel().getProductbyId(id);
+        	if (!pp.get("productId").isNull())
+        		product = dao.getPvtModel().getProductbyId(pp.get("productId").toString());
         }
         
         productForm = new Form("form-product", new CompoundPropertyModel(product)) {
             @Override
             protected void onSubmit() {
             	PageParameters pp = new PageParameters();
-        		PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
                 dao.getPvtModel().updateProduct(product);
                 dao.persist();                        
                 setResponsePage(new ProductsPage(pp,("Product: " + product.getName() + " Updated.")));
@@ -59,8 +58,6 @@ public class EditProductPage extends TemplatePage {
         productForm.add(new TextField<String>("developer"));
         productForm.add(new TextField<String>("qe"));
         productForm.add(new TextArea<String>("description"));
-        
-        add(productForm);
         
         Button backButton = new Button("back"){
         	@Override
@@ -85,6 +82,8 @@ public class EditProductPage extends TemplatePage {
         
         productForm.add(backButton);
         productForm.add(removeButton);
+        
+        add(productForm);
         
     }
 	

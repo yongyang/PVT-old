@@ -16,8 +16,8 @@ public class Release implements Serializable {
 
     private String id = UUID.randomUUID().toString();
 
-    // name of product
-    private String productName;
+    // id of product
+    private String productId;
 
     // release name ex: 7.0.0.DR1
     private String name;
@@ -43,12 +43,12 @@ public class Release implements Serializable {
         this.id = id;
     }
 
-    public String getProductName() {
-        return productName;
+    public String getProductId() {
+        return productId;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
     public String getName() {

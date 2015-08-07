@@ -9,6 +9,7 @@ import org.apache.wicket.markup.html.form.validation.IFormValidator;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
@@ -26,10 +27,15 @@ import java.util.List;
 public class NewReleasePage extends TemplatePage {
 
     private Release newRelease = new Release();
+    
+    public NewReleasePage(PageParameters pp) {
+        this(pp,"PVT release to be created.");
+    }
 
-    public NewReleasePage() {
+    public NewReleasePage(PageParameters pp, String info) {
+    	super(pp,info);
+    	
         setActiveMenu("releases");
-
         add(new FeedbackPanel("feedbackMessage"));
 
         Form newReleaseForm = new Form("form-newrelease", new CompoundPropertyModel(newRelease)) {
@@ -40,7 +46,7 @@ public class NewReleasePage extends TemplatePage {
                 dao.getPvtModel().addRelease(newRelease);
                 dao.persist();
 
-                setResponsePage(new ReleasesPage("Release: " + newRelease.getName() + " Created."));
+                setResponsePage(new ReleasesPage(pp,"Release: " + newRelease.getName() + " Created."));
             }
         };
 
@@ -78,7 +84,7 @@ public class NewReleasePage extends TemplatePage {
                 PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
                 boolean existed = false;
                 for(Release rel : dao.getPvtModel().getReleases()){
-                    if(rel.getName().equalsIgnoreCase(nameTextField.getInput()) && rel.getProductName().equalsIgnoreCase(productDropDownChoice.getInput())) {
+                    if(rel.getName().equalsIgnoreCase(nameTextField.getInput()) && rel.getProductId().equalsIgnoreCase(productDropDownChoice.getInput())) {
                         existed = true;
                         break;
                     }
