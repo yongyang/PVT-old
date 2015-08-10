@@ -1,6 +1,5 @@
 package org.jboss.pnc.pvt.model;
 
-import jdk.internal.util.xml.impl.Input;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
