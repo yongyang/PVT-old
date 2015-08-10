@@ -67,7 +67,7 @@ public class JDKCompatibleVerifyTool extends VerifyTool {
             final boolean p = passed;
             VerifyResult<Boolean> verifyResult = new VerifyResult<Boolean>() {
                 @Override
-                public Boolean getResultMap() {
+                public Boolean getResult() {
                     //TODO: return the detail info
                     return p;
                 }

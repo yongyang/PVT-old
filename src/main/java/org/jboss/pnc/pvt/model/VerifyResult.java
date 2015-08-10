@@ -16,7 +16,7 @@ public abstract class VerifyResult<T> {
 
     private Exception exception;
 
-    public abstract T getResultMap();
+    public abstract T getResult();
 
     public Status getStatus() {
         return status;

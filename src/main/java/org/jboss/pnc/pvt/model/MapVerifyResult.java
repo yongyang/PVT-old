@@ -15,7 +15,7 @@ public class MapVerifyResult extends VerifyResult<Map> {
     }
 
     @Override
-    public Map getResultMap() {
+    public Map getResult() {
         return resultMap;
     }
 }
