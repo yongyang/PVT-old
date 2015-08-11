@@ -7,7 +7,11 @@ package org.jboss.pnc.pvt.model;
  */
 public class SimpleJenkinsVerifyTool extends VerifyTool {
 
+    private static final long serialVersionUID = -8291271547157028632L;
+
     private String jobId;
+
+    public static final String LABEL = "Simple Jenkins Tool";
 
     public String getJobId() {
         return jobId;
@@ -18,8 +22,24 @@ public class SimpleJenkinsVerifyTool extends VerifyTool {
     }
 
     @Override
-    protected VerifyResult verify(VerifyParameter param) {
+    protected <T> VerifyResult<T> verify(VerifyParameter param) {
         //TODO: call Jenkins Executor
         return null;
+    }
+
+    /* (non-Javadoc)
+     * @see org.jboss.pnc.pvt.model.VerifyTool#getLabel()
+     */
+    @Override
+    public String getLabel() {
+        return LABEL;
+    }
+
+    /* (non-Javadoc)
+     * @see org.jboss.pnc.pvt.model.VerifyTool#getPageVariant()
+     */
+    @Override
+    public String getPageVariant() {
+        return "simplejenkins";
     }
 }

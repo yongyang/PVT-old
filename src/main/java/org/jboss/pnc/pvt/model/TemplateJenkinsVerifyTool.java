@@ -6,8 +6,12 @@ package org.jboss.pnc.pvt.model;
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
  */
 public class TemplateJenkinsVerifyTool extends VerifyTool {
+    
+    private static final long serialVersionUID = -7165679900379794100L;
 
-    protected String jenkinsConfigXML;
+    private String jenkinsConfigXML;
+
+    public static final String LABEL = "Templage Jenkins Tool";
 
     public String getJenkinsConfigXML() {
         return jenkinsConfigXML;
@@ -18,8 +22,24 @@ public class TemplateJenkinsVerifyTool extends VerifyTool {
     }
 
     @Override
-    protected VerifyResult verify(VerifyParameter param) {
+    protected <T> VerifyResult<T> verify(VerifyParameter param) {
         //TODO: call Jenkins Executor
         return null;
+    }
+
+    /* (non-Javadoc)
+     * @see org.jboss.pnc.pvt.model.VerifyTool#getLabel()
+     */
+    @Override
+    public String getLabel() {
+        return LABEL;
+    }
+
+    /* (non-Javadoc)
+     * @see org.jboss.pnc.pvt.model.VerifyTool#getPageVariant()
+     */
+    @Override
+    public String getPageVariant() {
+        return "templatejenkins";
     }
 }

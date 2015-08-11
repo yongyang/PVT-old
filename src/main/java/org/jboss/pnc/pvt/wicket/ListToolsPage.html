@@ -8,13 +8,16 @@
 <wicket:extend>
 
   <div class="btn-group" style="float:right;margin-top:8px;">
-    <a wicket:id="link-tool" class="btn">New Tool</a>
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    New Tool <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+    <li wicket:id="tool_lables"><a wicket:id="link-tool"></a></li>
+  </ul>
     <a href="#" class="btn">Help</a>
-
   </div>
 
   <h1>Verification Tools List</h1>
-
 
   <span class="superlight tiny">
     (Select a filter in dropdown list below).
@@ -63,26 +66,30 @@
     <table class="errata_list" style="width:100%;">
       <thead>
       <tr class="errata_list_head">
-        <th>Test Tool</th>
-        <th>Tool Type</th>
+        <th>Test Tool Name</th>
+        <th>Tool Label</th>
+        <th>Tool Use Type</th>
       </tr>
       </thead>
 
       <tbody wicket:id="tool_rows " class="errata_row even">
       <tr class="upper">
         <td class="norightpad first">
-          <big>
             <a wicket:id="tool_link" class="advisory_link show_type show_type_RHBA"></a>
-          </big>
         </td>
-        <td rowspan="2" style="white-space:nowrap;">
+        <td style="white-space:nowrap;">
+          <div class="clipwidth " style="max-width:200px">
+            <span wicket:id="tool_label"></span>
+          </div>
+        </td>
+        <td style="white-space:nowrap;">
           <div class="clipwidth " style="max-width:100px">
-            <span wicket:id="tool_type"></span>
+            <span wicket:id="tool_useType"></span>
           </div>
         </td>
       </tr>
       <tr class="lower">
-        <td colspan="1" class="first">
+        <td colspan="3" class="first">
           <span wicket:id="tool_description"></span>
         </td>
       </tr>

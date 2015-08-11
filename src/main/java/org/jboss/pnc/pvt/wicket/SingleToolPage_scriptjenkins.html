@@ -20,25 +20,19 @@
     <div class="clearfix pretty-form">
       <div class="eso-greybox" style="background-color:#eee;">
 
-        <h2>Tool Summary</h2>
+        <h2>Verify Tool Summary</h2>
 
         <table cellspacing="3" cellpadding="3">
+
           <tr id='name' >
             <td class="header-label" width = "150">Name:</td>
             <td><input wicket:id="name" maxlength="78" size="30" type="text" /> NOTE: unique, not null</td>
           </tr>
 
           <tr>
-            <td class="header-label" width = "150">Tool Type:</td>
+            <td class="header-label" width = "150">Tool Use Type:</td>
             <td>
-              <select wicket:id="type" id="type" size="1"/> NOTE: tool type
-            </td>
-          </tr>
-
-          <tr>
-            <td class="header-label" width = "150">Description:</td>
-            <td>
-              <textarea wicket:id="description" cols="75" id="description" rows="5" wrap="soft"></textarea>
+              <select wicket:id="useType" size="1"/> NOTE: tool Use type
             </td>
           </tr>
 
@@ -46,6 +40,18 @@
             <td class="header-label" width = "150">Command:</td>
             <td>
               <textarea wicket:id="script" cols="75" id="script" rows="5" wrap="soft"></textarea>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="header-label" width = "150">Jenkins Configuration:</td>
+            <td><span wicket:id="jenkinsConfigXML"></span></td>
+          </tr>
+
+          <tr>
+            <td class="header-label" width = "150">Description:</td>
+            <td>
+              <textarea wicket:id="description" cols="75" id="script" rows="5" wrap="soft"></textarea>
             </td>
           </tr>
 

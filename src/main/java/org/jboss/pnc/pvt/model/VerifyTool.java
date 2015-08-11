@@ -1,17 +1,26 @@
 package org.jboss.pnc.pvt.model;
 
-import java.util.*;
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
- * The base verity tool definition
+ * The base verify tool definition.
+ * 
+ * Each sub class is recommended to have a 'LABEL' class variant to distinguish it from other tools.
  *
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
  */
-public abstract class VerifyTool {
+public abstract class VerifyTool implements Serializable {
+
+    private static final long serialVersionUID = -5353557149342108021L;
+
     /**
-     * TestTool Type
+     * TestTool UseType
      */
-    public static enum Type {
+    public static enum UseType {
 
         /** tool type which is used for static package analysis **/
         STATIC("Static"),
@@ -21,7 +30,7 @@ public abstract class VerifyTool {
 
         private String name;
 
-        Type(final String name) {
+        UseType(final String name) {
             this.name = name;
         }
 
@@ -34,10 +43,10 @@ public abstract class VerifyTool {
             return this.name;
         }
 
-        private static final Map<String, Type> MAP;
+        private static final Map<String, UseType> MAP;
         static {
-            final Map<String, Type> map = new HashMap<String, Type>();
-            for (Type element : values())
+            final Map<String, UseType> map = new HashMap<>();
+            for (UseType element : values())
             {
                 final String name = element.getName();
                 if (name != null)
@@ -50,14 +59,8 @@ public abstract class VerifyTool {
             return MAP.keySet();
         }
 
-        public static List<String> namesList() {
-            List<String> list = new ArrayList<String>();
-            list.addAll(names());
-            return list;
-        }
-
-        public static Type forName(final String name) {
-            final Type element = MAP.get(name);
+        public static UseType forName(final String name) {
+            final UseType element = MAP.get(name);
             if (element != null) {
                 return element;
             }
@@ -71,7 +74,7 @@ public abstract class VerifyTool {
 
     private String description;
 
-    private Type type; // static, runtime
+    private UseType useType = UseType.STATIC; // static, runtime, default to STATIC
 
     /**
      * @return the id
@@ -118,17 +121,16 @@ public abstract class VerifyTool {
     /**
      * @return the type
      */
-    public Type getType() {
-        return type;
+    public UseType getUseType() {
+        return useType;
     }
 
     /**
      * @param type the type to set
      */
-    public void setType(Type type) {
-        this.type = type;
+    public void setUseType(UseType type) {
+        this.useType = type;
     }
-
 
 
     /* (non-Javadoc)
@@ -139,7 +141,7 @@ public abstract class VerifyTool {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result + ((type == null) ? 0 : type.hashCode());
+        result = prime * result + ((useType == null) ? 0 : useType.hashCode());
         return result;
     }
 
@@ -160,7 +162,7 @@ public abstract class VerifyTool {
                 return false;
         } else if (!name.equals(other.name))
             return false;
-        if (type != other.type)
+        if (useType != other.useType)
             return false;
         return true;
     }
@@ -170,14 +172,65 @@ public abstract class VerifyTool {
      */
     @Override
     public String toString() {
-        return "VerifyTool [id=" + id + ", name=" + name + ", type=" + type + "]";
+        return "VerifyTool [id=" + id + ", name=" + name + ", useType=" + useType + "]";
     }
-
 
     /**
      * Do verify
      *
      * @param param@return
      */
-    protected abstract VerifyResult verify(VerifyParameter param);
+    protected abstract <T> VerifyResult<T> verify(VerifyParameter param);
+
+    /**
+     * @return the Label to distinguish the tool
+     */
+    public abstract String getLabel();
+
+    /**
+     * @return the variant used for wicket page
+     */
+    public abstract String getPageVariant();
+
+    /**
+     * Register all sub class of VerifyTool here
+     */
+    private static final Map<String, Class<? extends VerifyTool>> toolsMap = new HashMap<>();
+    static {
+        toolsMap.put(JDKCompatibleVerifyTool.LABEL, JDKCompatibleVerifyTool.class);
+        toolsMap.put(VersionConventionVerifyTool.LABEL, VersionConventionVerifyTool.class);
+        toolsMap.put(SimpleJenkinsVerifyTool.LABEL, SimpleJenkinsVerifyTool.class);
+        toolsMap.put(TemplateJenkinsVerifyTool.LABEL, TemplateJenkinsVerifyTool.class);
+        toolsMap.put(ScriptJenkinsVerifyTool.LABEL, ScriptJenkinsVerifyTool.class);
+    }
+
+    /**
+     * @return a Set contains all registered VerificationTool implementations.
+     */
+    public static Map<String, Class<? extends VerifyTool>> getAllVerifyToolImplCls() {
+        return Collections.unmodifiableMap(toolsMap);
+    }
+
+    /**
+     * Creates a VerifyTool instance according to the tool label.
+     * 
+     * @param toolLabel usually comes from 'LABEL' class variant of each VerifyTool implementation.
+     * @return a VerifyTool instance which has the label specified.
+     * @throws RuntimeException if it can't create such a instance for any reason.
+     */
+    public static VerifyTool createVerifyTool(String toolLabel) {
+        if (toolLabel == null) {
+            throw new IllegalArgumentException("Can't create the verify tool instance without knowing the type of it.");
+        }
+        Class<? extends VerifyTool> toolCls = toolsMap.get(toolLabel);
+        if (toolCls == null) {
+            throw new IllegalArgumentException("Unknown tool label: " + toolLabel);
+        }
+        try {
+            return toolCls.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new IllegalStateException("Can't create the VerifyTool instance.", e);
+        }
+    }
+
 }

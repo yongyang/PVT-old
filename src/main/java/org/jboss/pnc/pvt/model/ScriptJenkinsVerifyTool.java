@@ -17,12 +17,14 @@
 
 package org.jboss.pnc.pvt.model;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
+
+import org.apache.wicket.util.io.IOUtils;
+import org.jboss.pnc.pvt.util.StringFormatter;
 
 /**
  *
@@ -41,8 +43,34 @@ public class ScriptJenkinsVerifyTool extends TemplateJenkinsVerifyTool implement
 
     private String script;
 
+    public static final String LABEL = "Script Jenkins Tool";
 
-	/**
+    private static final String SHELL_SCRIPT_JENKINS_TEMPLTE;
+    static {
+        try (InputStream input = ScriptJenkinsVerifyTool.class.getClassLoader().getResourceAsStream("jenkins_shell.template");) {
+            SHELL_SCRIPT_JENKINS_TEMPLTE = IOUtils.toString(input);
+        } catch (IOException | NullPointerException e) {
+            throw new IllegalStateException("Can't load jenkins shell template.", e);
+        }
+    }
+
+	/* (non-Javadoc)
+     * @see org.jboss.pnc.pvt.model.TemplateJenkinsVerifyTool#getLabel()
+     */
+    @Override
+    public String getLabel() {
+        return LABEL;
+    }
+
+    /* (non-Javadoc)
+     * @see org.jboss.pnc.pvt.model.TemplateJenkinsVerifyTool#getPageVariant()
+     */
+    @Override
+    public String getPageVariant() {
+        return "scriptjenkins";
+    }
+
+    /**
 	 * @return the script
 	 */
 	public String getScript() {
@@ -55,5 +83,17 @@ public class ScriptJenkinsVerifyTool extends TemplateJenkinsVerifyTool implement
 	public void setScript(String script) {
 		this.script = script;
 	}
+
+	/**
+	 * Jenkins Configuration XML will be composed using the value of <code>script</code> in this object.
+	 */
+    public String getJenkinsConfigXML() {
+        if (this.script == null || this.script.trim().length() == 0) {
+            return super.getJenkinsConfigXML();
+        }
+        Map<String, Object> variableMap = new HashMap<>();
+        variableMap.put("script", this.script);
+        return StringFormatter.format(SHELL_SCRIPT_JENKINS_TEMPLTE, variableMap);
+    }
 
 }

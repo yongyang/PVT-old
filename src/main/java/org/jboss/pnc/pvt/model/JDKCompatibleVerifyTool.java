@@ -1,30 +1,61 @@
 package org.jboss.pnc.pvt.model;
 
-import org.apache.commons.io.IOUtils;
-
-import java.io.*;
-import java.net.HttpURLConnection;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
+
+import org.apache.commons.io.IOUtils;
 
 /**
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
  */
 public class JDKCompatibleVerifyTool extends VerifyTool {
 
+    private static final long serialVersionUID = -7513802473705616180L;
+
     private static final int JAVA_CLASS_MAGIC = 0xCAFEBABE;
+
+    public static final String LABEL = "JDK Compatible Check";
 
     private String expectJDKVersion;
 
     @Override
+    public UseType getUseType() {
+        return UseType.STATIC; // always used for static package analysis
+    }
+
+    /* (non-Javadoc)
+     * @see org.jboss.pnc.pvt.model.VerifyTool#getLabel()
+     */
+    @Override
+    public String getLabel() {
+        return LABEL;
+    }
+
+    /* (non-Javadoc)
+     * @see org.jboss.pnc.pvt.model.VerifyTool#getPageVariant()
+     */
+    @Override
+    public String getPageVariant() {
+        return "jdktool";
+    }
+
+    @Override
     protected VerifyResult verify(VerifyParameter param) {
+        if (getExpectJDKVersion() == null || getExpectJDKVersion().trim().length() == 0) {
+            throw new IllegalStateException("Please set expect JDK version first!");
+        }
         String zipUrl = param.getCurrentDistributionZip();
         boolean passed = true;
         try(ZipInputStream zipInputStream = new ZipInputStream(new URL(zipUrl).openStream())) {
@@ -140,4 +171,19 @@ public class JDKCompatibleVerifyTool extends VerifyTool {
             jar.close();
         }
     }
+
+    /**
+     * @return the expectJDKVersion
+     */
+    public String getExpectJDKVersion() {
+        return expectJDKVersion;
+    }
+
+    /**
+     * @param expectJDKVersion the expectJDKVersion to set
+     */
+    public void setExpectJDKVersion(String expectJDKVersion) {
+        this.expectJDKVersion = expectJDKVersion;
+    }
+
 }
