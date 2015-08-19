@@ -61,8 +61,7 @@ public class ReleasesPage extends TemplatePage{
                     public void onClick() {
                         PageParameters pp = new PageParameters();
                         pp.set("releaseId", item.getModel().getObject().getId());
-                        pp.set("mode", "1");
-                        setResponsePage(NewReleasePage.class,pp);
+                        setResponsePage(EditReleasePage.class,pp);
                     }
 
                     @Override

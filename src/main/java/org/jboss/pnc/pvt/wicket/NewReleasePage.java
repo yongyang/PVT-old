@@ -137,7 +137,7 @@ public class NewReleasePage extends TemplatePage {
                 PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
                 boolean existed = false;
                 for (Release rel : dao.getPvtModel().getReleases()) {
-                    if (rel.getName().equalsIgnoreCase(nameTextField.getInput()) && rel.getProductId().equalsIgnoreCase(productDropDownChoice.getInput())) {
+                    if ((!rel.getId().equalsIgnoreCase(release.getId())) && rel.getName().equalsIgnoreCase(nameTextField.getInput()) && rel.getProductId().equalsIgnoreCase(productDropDownChoice.getInput())) {
                         existed = true;
                         break;
                     }
@@ -149,8 +149,10 @@ public class NewReleasePage extends TemplatePage {
                 }
             }
         });
-
     }
+
+
+
 
     public String getTitle() {
         return "Create a Release";
@@ -173,11 +175,6 @@ public class NewReleasePage extends TemplatePage {
     }
 
     public void doRemove() {
-        PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
-        dao.getPvtModel().removeRelease(release);
-        dao.persist();
-        PageParameters pp = new PageParameters();
-        setResponsePage(new ReleasesPage(pp, "Tool: " + release.getName() + " is removed."));
 
     }
 

@@ -31,10 +31,25 @@ public class EditReleasePage extends NewReleasePage {
         releaseForm.getModel().setObject(release);
     }
 
+    public void doRemove() {
+        PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
+        dao.getPvtModel().removeRelease(release);
+        dao.persist();
+        PageParameters pp = new PageParameters();
+        setResponsePage(new ReleasesPage(pp, "Release: " + release.getName() + " is removed."));
+    }
+
     @Override
     protected void onConfigure() {
         super.onConfigure();
         nameTextField.setEnabled(false);
+        productDropDownChoice.setEnabled(false);
         removeButton.setVisible(true);
+
+        //will call New release validator
+    }
+
+    public String getTitle() {
+        return "Modify a Release";
     }
 }
