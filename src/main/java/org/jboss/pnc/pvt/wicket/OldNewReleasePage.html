@@ -4,15 +4,15 @@
 
 <wicket:extend>
 
-  <h1><span wicket:id="release_summary"></span></h1>
+  <h1>New Release</h1>
 
   <p>
-    Please fill the release form, for any question please contact <a href="mailto:jbossas-product@redhat.com">jbossas-prod@redhat.com</a>.
+    Please fill the new release form, for any question please contact <a href="mailto:jbossas-product@redhat.com">jbossas-prod@redhat.com</a>.
   </p>
 
   <div style="color:red" wicket:id="feedbackMessage"></div>
 
-  <form wicket:id="form-release" accept-charset="UTF-8" action="/errata/preview" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="xqS0Zvub2y+hv8+Inq9vR5cBFTkHoRM/X6/aXBF6Zw4=" /></div>
+  <form wicket:id="form-newrelease" accept-charset="UTF-8" action="/errata/preview" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="xqS0Zvub2y+hv8+Inq9vR5cBFTkHoRM/X6/aXBF6Zw4=" /></div>
 
     <div class="clearfix pretty-form">
       <div class="eso-greybox" style="background-color:#eee;">
@@ -23,7 +23,7 @@
           <tr>
             <td class="header-label" width = "150">Product Name:</td>
             <td>
-              <select wicket:id="products" id="productNames" maxlength="78" name="productNames" size="1"/> NOTE: not null
+              <select wicket:id="productName" id="productName" maxlength="78" name="productNames" size="1"/> NOTE: not null
             </td>
           </tr>
 
@@ -58,10 +58,8 @@
         </table>
 
         <div class="align-right" style="margin-top:25px;">
-          <input class="btn btn-primary" type="submit" wicket:id="back" value="Back" />
-          <input class="btn btn-primary" type="reset" wicket:id="reset" />
-          <input class="btn btn-primary" type="submit" wicket:id="remove" value="Remove" onClick="return confirm('are you sure to delete?');" />
-          <input class="btn btn-primary" type="submit" value="Submit" />
+          <input action="reset" class="btn btn-primary" name="commit" type="reset" value="Reset" />
+          <input action="preview" class="btn btn-primary" id="submit_tag" name="commit" type="submit" value="Submit" />
         </div>
 
       </div>

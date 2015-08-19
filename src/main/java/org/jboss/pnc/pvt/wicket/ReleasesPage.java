@@ -11,7 +11,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.jboss.pnc.pvt.model.Product;
 import org.jboss.pnc.pvt.model.Release;
 
 import java.util.*;
@@ -34,7 +33,7 @@ public class ReleasesPage extends TemplatePage{
             public void onClick() {
                 PageParameters pp = new PageParameters();
                 pp.set("mode", "3"); // MODE_CREATE
-                setResponsePage(ReleasePage.class, pp);
+                setResponsePage(NewReleasePage.class, pp);
             }
         });
 
@@ -63,7 +62,7 @@ public class ReleasesPage extends TemplatePage{
                         PageParameters pp = new PageParameters();
                         pp.set("releaseId", item.getModel().getObject().getId());
                         pp.set("mode", "1");
-                        setResponsePage(ReleasePage.class,pp);
+                        setResponsePage(NewReleasePage.class,pp);
                     }
 
                     @Override

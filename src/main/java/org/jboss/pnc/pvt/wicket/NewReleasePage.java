@@ -1,81 +1,132 @@
 package org.jboss.pnc.pvt.wicket;
 
-import com.googlecode.wicket.kendo.ui.form.TextArea;
-import com.googlecode.wicket.kendo.ui.form.TextField;
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.wicket.Application;
-import org.apache.wicket.markup.html.form.*;
-import org.apache.wicket.markup.html.form.validation.AbstractFormValidator;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.validation.IFormValidator;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.validation.IValidatable;
-import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.jboss.pnc.pvt.dao.PVTDataAccessObject;
 import org.jboss.pnc.pvt.model.Product;
 import org.jboss.pnc.pvt.model.Release;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import com.googlecode.wicket.kendo.ui.form.TextArea;
+import com.googlecode.wicket.kendo.ui.form.TextField;
 
 /**
- * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
+ * Created by yyang on 5/5/15.
  */
 public class NewReleasePage extends TemplatePage {
+	
 
-    private Release newRelease = new Release();
-    
+	protected Release release = new Release();
+    protected FeedbackPanel feedBackPanel = new FeedbackPanel("feedbackMessage");
+    protected Form releaseForm;
+
+    protected DropDownChoice<Product> productDropDownChoice;
+    protected Button resetButton;
+    protected Button backButton;
+    protected Button removeButton;
+
     public NewReleasePage(PageParameters pp) {
         this(pp,"PVT release to be created.");
     }
 
+    public String getTitle() {
+        return "Create a Release";
+    }
+
+    public void doSubmit() {
+
+        PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
+
+        release.setProductId(productDropDownChoice.getModelObject().getId());
+        dao.getPvtModel().addRelease(release);
+        dao.persist();
+        PageParameters pp = new PageParameters();
+        pp.set("name", release.getName());
+        setResponsePage(new ReleasesPage(pp, "Release: " + release.getName() + " is created."));
+    }
+
+    public void doReset() {
+        releaseForm.getModel().setObject(new Release());
+    }
+
+    public void doRemove() {
+        PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
+        dao.getPvtModel().removeRelease(release);
+        dao.persist();
+        PageParameters pp = new PageParameters();
+        setResponsePage(new ReleasesPage(pp, "Tool: " + release.getName() + " is removed."));
+
+    }
+
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+        removeButton.setVisible(false);
+    }
+
     public NewReleasePage(PageParameters pp, String info) {
-    	super(pp,info);
-    	
+        super(pp,info);
+        
         setActiveMenu("releases");
         add(new FeedbackPanel("feedbackMessage"));
+        
+        PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
 
-        Form newReleaseForm = new Form("form-newrelease", new CompoundPropertyModel(newRelease)) {
-            @Override
-            protected void onSubmit() {
-                System.out.println("Submit: " + newRelease);
-                PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
-                dao.getPvtModel().addRelease(newRelease);
-                dao.persist();
-
-                setResponsePage(new ReleasesPage(pp,"Release: " + newRelease.getName() + " Created."));
-            }
-        };
-
-
-        List<String> productNames = new ArrayList<>();
-        for(Product p : ((PVTApplication) Application.get()).getDAO().getPvtModel().getProducts()) {
-            productNames.add(p.getName());
+        if (pp != null) {
+        	if (!pp.get("releaseId").isNull())
+            	release = dao.getPvtModel().getReleasebyId(pp.get("releaseId").toString());
         }
+        add(new Label("release_summary", getTitle()));
 
-        DropDownChoice<String> productDropDownChoice = new DropDownChoice<String>("productName", Model.ofList(productNames), new ChoiceRenderer<String>("toString", "toString") {
-        }) {
-            @Override
+        Model<Product> listModel = new Model<Product>();
+        ChoiceRenderer<Product> productRender = new ChoiceRenderer<Product>("name");
+        List<Product> loadProducts = ((PVTApplication) Application.get()).getDAO().getPvtModel().getProducts();
+        DropDownChoice<Product> productDropDownChoice = new DropDownChoice<Product>("products", listModel, loadProducts , productRender){
+        	@Override
             public boolean isNullValid() {
                 return true;
             }
-
+        	@Override
+    		protected boolean wantOnSelectionChangedNotifications() {
+    			return true;
+    		}
         };
         productDropDownChoice.setRequired(true);
-        newReleaseForm.add(productDropDownChoice);
+        if (release != null)
+        	productDropDownChoice.setModelObject(dao.getPvtModel().getProductbyId(release.getProductId()));
+        
+        
+        releaseForm = new Form("form-release", new CompoundPropertyModel(release)) {
+        	@Override
+            protected void onSubmit() {
+                doSubmit();
+            }
+        	
+        };
 
+        releaseForm.add(productDropDownChoice);
         TextField<String> nameTextField = new TextField<String>("name");
         nameTextField.setRequired(true);
+        releaseForm.add(nameTextField);
+        releaseForm.add(new TextArea<String>("distributions"));
+        releaseForm.add(new TextArea<String>("description"));
+        releaseForm.add(new CheckBoxMultipleChoice<String>("jobs", Model.ofList(Arrays.asList("ZipDiff", "Version convention", "JDK version compatible"))));
 
-        newReleaseForm.add(nameTextField);
-        newReleaseForm.add(new TextArea<String>("distributions"));
-        newReleaseForm.add(new TextArea<String>("description"));
-        newReleaseForm.add(new CheckBoxMultipleChoice<String>("jobs", Model.ofList(Arrays.asList("ZipDiff", "Version convention", "JDK version compatible"))));
-
-        newReleaseForm.add(new IFormValidator(){
+        releaseForm.add(new IFormValidator(){
             public FormComponent<?>[] getDependentFormComponents() {
                 return new FormComponent[]{nameTextField, productDropDownChoice};
             }
@@ -96,10 +147,36 @@ public class NewReleasePage extends TemplatePage {
                 }
             }
         });
+        
+        
+        backButton = new Button("back") {
 
-        add(newReleaseForm);
+            @Override
+            public void onSubmit() {
+                PageParameters pp = new PageParameters();
+                setResponsePage(ReleasesPage.class, pp);
+            }
+        };
+        backButton.setDefaultFormProcessing(false);
+        releaseForm.add(backButton);
 
+        resetButton = new Button("reset") {
+            @Override
+            public void onSubmit() {
+                doReset();
+            }
+        };
+        releaseForm.add(resetButton);
+
+        removeButton = new Button("remove") {
+
+            @Override
+            public void onSubmit() {
+                doRemove();
+            }
+        };
+        releaseForm.add(removeButton);
+
+        add(releaseForm);
     }
-
-
 }
