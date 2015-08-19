@@ -34,6 +34,7 @@ public class EditReleasePage extends NewReleasePage {
     @Override
     protected void onConfigure() {
         super.onConfigure();
+        nameTextField.setEnabled(false);
         removeButton.setVisible(true);
     }
 }

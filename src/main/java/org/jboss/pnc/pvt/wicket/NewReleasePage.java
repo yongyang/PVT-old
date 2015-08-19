@@ -33,6 +33,7 @@ public class NewReleasePage extends TemplatePage {
 	protected Release release = new Release();
     protected FeedbackPanel feedBackPanel = new FeedbackPanel("feedbackMessage");
     protected Form releaseForm;
+    TextField<String> nameTextField;
 
     protected DropDownChoice<Product> productDropDownChoice;
     protected Button resetButton;
@@ -60,7 +61,7 @@ public class NewReleasePage extends TemplatePage {
         Model<Product> listModel = new Model<Product>();
         ChoiceRenderer<Product> productRender = new ChoiceRenderer<Product>("name");
         List<Product> loadProducts = ((PVTApplication) Application.get()).getDAO().getPvtModel().getProducts();
-        DropDownChoice<Product> productDropDownChoice = new DropDownChoice<Product>("products", listModel, loadProducts , productRender){
+        productDropDownChoice = new DropDownChoice<Product>("products", listModel, loadProducts , productRender){
         	@Override
             public boolean isNullValid() {
                 return true;
@@ -84,36 +85,13 @@ public class NewReleasePage extends TemplatePage {
         };
 
         releaseForm.add(productDropDownChoice);
-        TextField<String> nameTextField = new TextField<String>("name");
+        nameTextField = new TextField<String>("name");
         nameTextField.setRequired(true);
         releaseForm.add(nameTextField);
         releaseForm.add(new TextArea<String>("distributions"));
         releaseForm.add(new TextArea<String>("description"));
         releaseForm.add(new CheckBoxMultipleChoice<String>("jobs", Model.ofList(Arrays.asList("ZipDiff", "Version convention", "JDK version compatible"))));
 
-        releaseForm.add(new IFormValidator(){
-            public FormComponent<?>[] getDependentFormComponents() {
-                return new FormComponent[]{nameTextField, productDropDownChoice};
-            }
-
-            public void validate(Form<?> form) {
-                PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
-                boolean existed = false;
-                for(Release rel : dao.getPvtModel().getReleases()){
-                    if(rel.getName().equalsIgnoreCase(nameTextField.getInput()) && rel.getProductId().equalsIgnoreCase(productDropDownChoice.getInput())) {
-                        existed = true;
-                        break;
-                    }
-                }
-                if(existed) {
-                    ValidationError error = new ValidationError();
-                    error.setMessage("The Release " + productDropDownChoice.getInput() + "-" + nameTextField.getInput()  + " is already existed");
-                    nameTextField.error(error);
-                }
-            }
-        });
-        
-        
         backButton = new Button("back") {
 
             @Override
@@ -149,6 +127,29 @@ public class NewReleasePage extends TemplatePage {
     protected void onConfigure() {
         super.onConfigure();
         removeButton.setVisible(false);
+
+        releaseForm.add(new IFormValidator() {
+            public FormComponent<?>[] getDependentFormComponents() {
+                return new FormComponent[]{nameTextField, productDropDownChoice};
+            }
+
+            public void validate(Form<?> form) {
+                PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
+                boolean existed = false;
+                for (Release rel : dao.getPvtModel().getReleases()) {
+                    if (rel.getName().equalsIgnoreCase(nameTextField.getInput()) && rel.getProductId().equalsIgnoreCase(productDropDownChoice.getInput())) {
+                        existed = true;
+                        break;
+                    }
+                }
+                if (existed) {
+                    ValidationError error = new ValidationError();
+                    error.setMessage("The Release " + productDropDownChoice.getInput() + "-" + nameTextField.getInput() + " is already existed");
+                    nameTextField.error(error);
+                }
+            }
+        });
+
     }
 
     public String getTitle() {
