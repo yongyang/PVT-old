@@ -43,41 +43,6 @@ public class NewReleasePage extends TemplatePage {
         this(pp,"PVT release to be created.");
     }
 
-    public String getTitle() {
-        return "Create a Release";
-    }
-
-    public void doSubmit() {
-
-        PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
-
-        release.setProductId(productDropDownChoice.getModelObject().getId());
-        dao.getPvtModel().addRelease(release);
-        dao.persist();
-        PageParameters pp = new PageParameters();
-        pp.set("name", release.getName());
-        setResponsePage(new ReleasesPage(pp, "Release: " + release.getName() + " is created."));
-    }
-
-    public void doReset() {
-        releaseForm.getModel().setObject(new Release());
-    }
-
-    public void doRemove() {
-        PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
-        dao.getPvtModel().removeRelease(release);
-        dao.persist();
-        PageParameters pp = new PageParameters();
-        setResponsePage(new ReleasesPage(pp, "Tool: " + release.getName() + " is removed."));
-
-    }
-
-    @Override
-    protected void onConfigure() {
-        super.onConfigure();
-        removeButton.setVisible(false);
-    }
-
     public NewReleasePage(PageParameters pp, String info) {
         super(pp,info);
         
@@ -179,4 +144,40 @@ public class NewReleasePage extends TemplatePage {
 
         add(releaseForm);
     }
+
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+        removeButton.setVisible(false);
+    }
+
+    public String getTitle() {
+        return "Create a Release";
+    }
+
+    public void doSubmit() {
+
+        PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
+
+        release.setProductId(productDropDownChoice.getModelObject().getId());
+        dao.getPvtModel().addRelease(release);
+        dao.persist();
+        PageParameters pp = new PageParameters();
+        pp.set("name", release.getName());
+        setResponsePage(new ReleasesPage(pp, "Release: " + release.getName() + " is created."));
+    }
+
+    public void doReset() {
+        releaseForm.getModel().setObject(new Release());
+    }
+
+    public void doRemove() {
+        PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
+        dao.getPvtModel().removeRelease(release);
+        dao.persist();
+        PageParameters pp = new PageParameters();
+        setResponsePage(new ReleasesPage(pp, "Tool: " + release.getName() + " is removed."));
+
+    }
+
 }
