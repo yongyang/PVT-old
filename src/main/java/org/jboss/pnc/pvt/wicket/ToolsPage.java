@@ -3,6 +3,7 @@ package org.jboss.pnc.pvt.wicket;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -13,6 +14,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.jboss.pnc.pvt.model.VerifyTool;
+import org.jboss.pnc.pvt.model.VerifyToolType;
 
 /**
  * 
@@ -30,12 +32,11 @@ public class ToolsPage extends TemplatePage {
         super(pp, info);
         setActiveMenu("tools");
 
-        List<String> lables = new ArrayList<String>();
-        lables.addAll(VerifyTool.getAllVerifyToolImplCls().keySet());
-        add(new ListView<String>("tool_lables", lables) {
+        List<VerifyToolType> toolTypes = ((PVTApplication) Application.get()).getDAO().getPvtModel().getToolTypes();
 
+        add(new ListView<VerifyToolType>("tool_lables", toolTypes) {
             @Override
-            protected void populateItem(final ListItem<String> item) {
+            protected void populateItem(final ListItem<VerifyToolType> item) {
                 item.add(new Link<String>("link-tool") {
                     @Override
                     public void onClick() {
@@ -47,7 +48,7 @@ public class ToolsPage extends TemplatePage {
 
                     @Override
                     public IModel<?> getBody() {
-                        return item.getModel();
+                        return Model.of(item.getModelObject().getName());
                     }
                 });
             }

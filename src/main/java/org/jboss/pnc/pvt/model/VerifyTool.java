@@ -205,13 +205,6 @@ public abstract class VerifyTool implements Serializable {
     }
 
     /**
-     * @return a Set contains all registered VerificationTool implementations.
-     */
-    public static Map<String, Class<? extends VerifyTool>> getAllVerifyToolImplCls() {
-        return Collections.unmodifiableMap(toolsMap);
-    }
-
-    /**
      * Creates a VerifyTool instance according to the tool label.
      * 
      * @param toolLabel usually comes from 'LABEL' class variant of each VerifyTool implementation.
