@@ -33,7 +33,7 @@ public class ReleasesPage extends TemplatePage{
             public void onClick() {
                 PageParameters pp = new PageParameters();
                 pp.set("mode", "3"); // MODE_CREATE
-                setResponsePage(NewReleasePage.class, pp);
+                setResponsePage(ReleaseNewPage.class, pp);
             }
         });
 
@@ -48,7 +48,7 @@ public class ReleasesPage extends TemplatePage{
                     public void onClick() {
                     	PageParameters pp = new PageParameters();
                         pp.set("productId", item.getModel().getObject().getProductId());
-                        setResponsePage(EditProductPage.class,pp);
+                        setResponsePage(ProductEditPage.class,pp);
                     }
                 };
                 String productId = item.getModel().getObject().getProductId();
@@ -61,7 +61,7 @@ public class ReleasesPage extends TemplatePage{
                     public void onClick() {
                         PageParameters pp = new PageParameters();
                         pp.set("releaseId", item.getModel().getObject().getId());
-                        setResponsePage(EditReleasePage.class,pp);
+                        setResponsePage(ReleaseEditPage.class,pp);
                     }
 
                     @Override

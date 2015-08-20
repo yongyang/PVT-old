@@ -27,7 +27,7 @@ import com.googlecode.wicket.kendo.ui.form.TextField;
 /**
  * Created by yyang on 5/5/15.
  */
-public class NewReleasePage extends TemplatePage {
+public class ReleaseNewPage extends TemplatePage {
 	
 
 	protected Release release = new Release();
@@ -40,11 +40,11 @@ public class NewReleasePage extends TemplatePage {
     protected Button backButton;
     protected Button removeButton;
 
-    public NewReleasePage(PageParameters pp) {
+    public ReleaseNewPage(PageParameters pp) {
         this(pp,"PVT release to be created.");
     }
 
-    public NewReleasePage(PageParameters pp, String info) {
+    public ReleaseNewPage(PageParameters pp, String info) {
         super(pp,info);
         
         setActiveMenu("releases");

@@ -7,8 +7,6 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.string.StringValue;
-import org.apache.wicket.util.string.StringValueConversionException;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
@@ -18,17 +16,17 @@ import org.jboss.pnc.pvt.model.Product;
 /**
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
  */
-public class NewProductPage extends TemplatePage {
+public class ProductNewPage extends TemplatePage {
 
     Product product = new Product();
     FeedbackPanel feedBackPanel = new FeedbackPanel("feedbackMessage");
     Form productForm;
     
-    public NewProductPage(PageParameters pp) {
+    public ProductNewPage(PageParameters pp) {
         this(pp, null);
     }
     
-    public NewProductPage(PageParameters pp, String info) {
+    public ProductNewPage(PageParameters pp, String info) {
     	super(pp, info);
     	
         setActiveMenu("products");

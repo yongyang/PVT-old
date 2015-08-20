@@ -7,13 +7,13 @@ import org.jboss.pnc.pvt.dao.PVTDataAccessObject;
 /**
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
  */
-public class EditReleasePage extends NewReleasePage {
+public class ReleaseEditPage extends ReleaseNewPage {
 
-    public EditReleasePage(PageParameters pp) {
+    public ReleaseEditPage(PageParameters pp) {
         this(pp, "PVT release has been be modified.");
     }
 
-    public EditReleasePage(PageParameters pp, String info) {
+    public ReleaseEditPage(PageParameters pp, String info) {
         super(pp, info);
     }
 

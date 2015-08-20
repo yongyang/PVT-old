@@ -1,36 +1,17 @@
 package org.jboss.pnc.pvt.wicket;
 
-import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.kendo.ui.datatable.DataTable;
-import com.googlecode.wicket.kendo.ui.datatable.column.CurrencyPropertyColumn;
-import com.googlecode.wicket.kendo.ui.datatable.column.IColumn;
-import com.googlecode.wicket.kendo.ui.datatable.column.PropertyColumn;
-import com.googlecode.wicket.kendo.ui.form.button.AjaxButton;
 import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Session;
-import org.apache.wicket.WicketRuntimeException;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.core.util.lang.PropertyResolver;
-import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
-import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLocator;
-import org.apache.wicket.extensions.markup.html.repeater.util.SingleSortState;
-import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.repeater.data.IDataProvider;
-import org.apache.wicket.markup.repeater.data.ListDataProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.jboss.pnc.pvt.model.Product;
 
-import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -62,7 +43,7 @@ public class ProductsPage extends TemplatePage{
             @Override
             public void onClick() {
                 PageParameters pp = new PageParameters();
-                setResponsePage(NewProductPage.class, pp);
+                setResponsePage(ProductNewPage.class, pp);
             }
         });
 
@@ -79,7 +60,7 @@ public class ProductsPage extends TemplatePage{
                     public void onClick() {
                     	PageParameters pp = new PageParameters();
                         pp.set("productId", item.getModel().getObject().getId());
-                        setResponsePage(EditProductPage.class,pp);
+                        setResponsePage(ProductEditPage.class,pp);
                     }
 
                     @Override

@@ -1,15 +1,11 @@
 package org.jboss.pnc.pvt.wicket;
 
 import org.apache.wicket.Application;
-import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.validation.IValidatable;
-import org.apache.wicket.validation.IValidator;
-import org.apache.wicket.validation.ValidationError;
 import org.jboss.pnc.pvt.dao.PVTDataAccessObject;
 import org.jboss.pnc.pvt.model.Product;
 
@@ -20,17 +16,17 @@ import com.googlecode.wicket.kendo.ui.form.TextField;
  * @author <a href="mailto:huwang@redhat.com">Hui Wang</a>
  *
  */
-public class EditProductPage extends TemplatePage {
+public class ProductEditPage extends TemplatePage {
 	
 	Product product = new Product();
     FeedbackPanel feedBackPanel = new FeedbackPanel("feedbackMessage");
     Form productForm;
     
-    public EditProductPage(PageParameters pp) {
+    public ProductEditPage(PageParameters pp) {
         this(pp, null);
     }
     
-    public EditProductPage(PageParameters pp, String info) {
+    public ProductEditPage(PageParameters pp, String info) {
     	super(pp, info);
     	
         setActiveMenu("products");

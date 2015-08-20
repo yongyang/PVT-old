@@ -4,12 +4,9 @@ import com.googlecode.wicket.kendo.ui.form.TextArea;
 import com.googlecode.wicket.kendo.ui.form.TextField;
 import org.apache.wicket.Application;
 import org.apache.wicket.Session;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.jboss.pnc.pvt.dao.PVTDataAccessObject;
 import org.jboss.pnc.pvt.model.Product;
 
@@ -29,7 +26,7 @@ public class ProductPage extends TemplatePage {
         	@Override
 			public void onSubmit() {
             	Session.get().setAttribute("product", product);                        
-                setResponsePage(EditProductPage.class);
+                setResponsePage(ProductEditPage.class);
             }
         };
         editButton.setDefaultFormProcessing(false);
