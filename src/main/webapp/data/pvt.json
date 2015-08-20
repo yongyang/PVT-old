@@ -1,1 +1,28 @@
-{"products":[{"id":"df7a423b-0b4d-40f3-860c-85d178c12cf0","name":"product1","maintainer":"maintainer1@redhat.com","developer":"developer1@redhat.com","qe":"qe1@redhat.com","description":"product1 description"},{"id":"df7a423b-0b4d-40f3-860c-85d178c12cf2","name":"product2","maintainer":"maintainer2@redhat.com","developer":"developer2@redhat.com","qe":"qe2@redhat.com","description":"product2 description"}]}
+{
+  "products": [
+    {
+      "id": "df7a423b-0b4d-40f3-860c-85d178c12cf0",
+      "name": "JBOSS-EAP",
+      "maintainer": "maintainer1@redhat.com",
+      "developer": "developer1@redhat.com",
+      "qe": "qe1@redhat.com",
+      "description": "product1 description"
+    },
+    {
+      "id": "df7a423b-0b4d-40f3-860c-85d178c12cf1",
+      "name": "BRMS",
+      "maintainer": "maintainer2@redhat.com",
+      "developer": "developer2@redhat.com",
+      "qe": "qe2@redhat.com",
+      "description": "product2 description"
+    }
+  ],
+  "toolTypes": [
+    {
+      "id": "df7a423b-0b4d-40f3-860c-85d178c12cf3",
+      "name": "JDKCompatibleVerifyTool",
+      "implClass": "org.jboss.pnc.pvt.model.JDKCompatibleVerifyTool",
+      "description": "A verify tool to check the jdk compatible"
+    }
+  ]
+}

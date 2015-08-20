@@ -19,6 +19,8 @@ public class PVTModel implements Serializable {
 
     private List<Release> releases = new ArrayList<>();
 
+	private List<VerifyToolType> toolTypes = new ArrayList<>();
+
     public void addProduct(Product product) {
         products.add(product);
     }
@@ -86,4 +88,8 @@ public class PVTModel implements Serializable {
     public List<Release> getReleases() {
         return releases;
     }
+
+	public List<VerifyToolType> getToolTypes() {
+		return toolTypes;
+	}
 }
