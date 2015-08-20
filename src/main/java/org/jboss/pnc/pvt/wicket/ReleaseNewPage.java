@@ -30,7 +30,7 @@ import com.googlecode.wicket.kendo.ui.form.TextField;
 public class ReleaseNewPage extends TemplatePage {
 	
 
-	protected Release release = new Release();
+	protected Release release;
     protected FeedbackPanel feedBackPanel = new FeedbackPanel("feedbackMessage");
     protected Form releaseForm;
     TextField<String> nameTextField;
@@ -52,10 +52,6 @@ public class ReleaseNewPage extends TemplatePage {
         
         PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
 
-        if (pp != null) {
-        	if (!pp.get("releaseId").isNull())
-            	release = dao.getPvtModel().getReleasebyId(pp.get("releaseId").toString());
-        }
         add(new Label("release_summary", getTitle()));
 
         Model<Product> listModel = new Model<Product>();
@@ -72,6 +68,9 @@ public class ReleaseNewPage extends TemplatePage {
     		}
         };
         productDropDownChoice.setRequired(true);
+
+        release = getRelease(pp);
+
         if (release != null)
         	productDropDownChoice.setModelObject(dao.getPvtModel().getProductbyId(release.getProductId()));
         
@@ -152,7 +151,9 @@ public class ReleaseNewPage extends TemplatePage {
     }
 
 
-
+    protected Release getRelease(PageParameters pp){
+        return new Release();
+    }
 
     public String getTitle() {
         return "Create a Release";

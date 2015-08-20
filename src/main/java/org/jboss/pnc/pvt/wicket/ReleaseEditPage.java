@@ -3,6 +3,7 @@ package org.jboss.pnc.pvt.wicket;
 import org.apache.wicket.Application;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.jboss.pnc.pvt.dao.PVTDataAccessObject;
+import org.jboss.pnc.pvt.model.Release;
 
 /**
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
@@ -16,6 +17,7 @@ public class ReleaseEditPage extends ReleaseNewPage {
     public ReleaseEditPage(PageParameters pp, String info) {
         super(pp, info);
     }
+
 
     @Override
     public void doSubmit() {
@@ -45,11 +47,22 @@ public class ReleaseEditPage extends ReleaseNewPage {
         nameTextField.setEnabled(false);
         productDropDownChoice.setEnabled(false);
         removeButton.setVisible(true);
-
         //will call New release validator
     }
 
     public String getTitle() {
         return "Modify a Release";
+    }
+
+    @Override
+    protected Release getRelease(PageParameters pp) {
+        if (pp != null) {
+            if (!pp.get("releaseId").isNull()) {
+                PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
+                return dao.getPvtModel().getReleasebyId(pp.get("releaseId").toString());
+            }
+        }
+
+        return null;
     }
 }

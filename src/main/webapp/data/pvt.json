@@ -23,6 +23,30 @@
       "name": "JDKCompatibleVerifyTool",
       "implClass": "org.jboss.pnc.pvt.model.JDKCompatibleVerifyTool",
       "description": "A verify tool to check the jdk compatible"
+    },
+    {
+      "id": "df7a423b-0b4d-40f3-860c-85d178c12cf4",
+      "name": "VersionConventionVerifyTool",
+      "implClass": "org.jboss.pnc.pvt.model.VersionConventionVerifyTool",
+      "description": "A verify tool to check the version convention"
+    },
+    {
+      "id": "df7a423b-0b4d-40f3-860c-85d178c12cf5",
+      "name": "SimpleJenkinsVerifyTool",
+      "implClass": "org.jboss.pnc.pvt.model.SimpleJenkinsVerifyTool",
+      "description": "A verify tool based on Jenkins to specify a job id"
+    },
+    {
+      "id": "df7a423b-0b4d-40f3-860c-85d178c12cf6",
+      "name": "TemplateJenkinsVerifyTool",
+      "implClass": "org.jboss.pnc.pvt.model.TemplateJenkinsVerifyTool",
+      "description": "A verify tool based on Jenkins to specify a job config template"
+    },
+    {
+      "id": "df7a423b-0b4d-40f3-860c-85d178c12cf7",
+      "name": "ScriptJenkinsVerifyTool",
+      "implClass": "org.jboss.pnc.pvt.model.ScriptJenkinsVerifyTool",
+      "description": "A verify tool based on Jenkins to specify a job config template with scripts"
     }
   ]
 }

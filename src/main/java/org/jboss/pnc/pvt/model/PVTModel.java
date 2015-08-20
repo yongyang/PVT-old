@@ -21,6 +21,8 @@ public class PVTModel implements Serializable {
 
 	private List<VerifyToolType> toolTypes = new ArrayList<>();
 
+	private List<? extends VerifyTool> tools = new ArrayList<>();
+
     public void addProduct(Product product) {
         products.add(product);
     }
@@ -91,5 +93,9 @@ public class PVTModel implements Serializable {
 
 	public List<VerifyToolType> getToolTypes() {
 		return toolTypes;
+	}
+
+	public List<? extends VerifyTool> getTools() {
+		return tools;
 	}
 }

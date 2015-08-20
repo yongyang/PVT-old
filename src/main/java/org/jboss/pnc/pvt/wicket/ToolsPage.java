@@ -43,7 +43,16 @@ public class ToolsPage extends TemplatePage {
                         PageParameters pp = new PageParameters();
                         pp.add("mode", SingleToolPage.MODE_CREATE + "");
                         pp.add("label", item.getModelObject());
-                        setResponsePage(SingleToolPage.class, pp);
+
+                        String implClass = item.getModel().getObject().getImplClass();
+                        String newPageClassName = ToolsPage.class.getPackage().getName() + implClass.substring(implClass.lastIndexOf(".")) + "NewPage";
+                        try {
+                            Class newPageClass = getClass().getClassLoader().loadClass(newPageClassName);
+                            setResponsePage(newPageClass, pp);
+                        }
+                        catch (ClassNotFoundException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
 
                     @Override

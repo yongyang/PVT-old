@@ -1,0 +1,131 @@
+package org.jboss.pnc.pvt.wicket;
+
+import com.googlecode.wicket.kendo.ui.form.TextArea;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.jboss.pnc.pvt.model.VerifyTool;
+
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
+ */
+public abstract class AbstractVerifyToolPage extends TemplatePage {
+
+    protected Form<VerifyTool> form;
+
+    public AbstractVerifyToolPage(PageParameters pp) {
+        this(pp, null);
+    }
+
+    public AbstractVerifyToolPage(PageParameters pp, String info) {
+        super(pp, info);
+        setActiveMenu("tools");
+
+        add(new FeedbackPanel("feedbackMessage"));
+
+        add(new Label("tool_summary", getTitle()));
+
+        final VerifyTool tool = getVerifyTool(pp);
+
+        form = new Form<VerifyTool>("form-tool");
+
+        CompoundPropertyModel<VerifyTool> toolModel = new CompoundPropertyModel<VerifyTool>(tool);
+        form.setModel(toolModel);
+
+        // adds common fields
+        form.add(new RequiredTextField<String>("name"));
+
+        IModel<VerifyTool.UseType> defaultType = Model.of(form.getModelObject().getUseType());
+        form.getModelObject().setUseType(defaultType.getObject());
+
+        List<VerifyTool.UseType> types = Arrays.asList(VerifyTool.UseType.values());
+        DropDownChoice<VerifyTool.UseType> toolTypeChoice = new DropDownChoice<VerifyTool.UseType>("useType", defaultType, Model.ofList(types)) {
+            @Override
+            protected void onModelChanged() {
+                form.getModelObject().setUseType(getModelObject());
+            }
+        };
+
+        toolTypeChoice.setRequired(true);
+        form.add(toolTypeChoice);
+        form.add(new TextArea<String>("description"));
+
+        // adds buttons
+        Button backButton = new Button("back") {
+
+            @Override
+            public void onSubmit() {
+                PageParameters pp = new PageParameters();
+                setResponsePage(ToolsPage.class, pp);
+            }
+        };
+        backButton.setDefaultFormProcessing(false);
+        form.add(backButton);
+
+        Button resetButton = new Button("reset") {
+            @Override
+            public void onSubmit() {
+                doReset();
+            }
+        };
+
+        form.add(resetButton);
+
+        Button removeButton = new Button("remove") {
+
+            @Override
+            public void onSubmit() {
+                doRemove(form.getModelObject());
+                PageParameters pp = new PageParameters();
+                setResponsePage(new ToolsPage(pp, "Tool: " + form.getModelObject().getName() + " is removed."));
+            }
+
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                setVisibilityAllowed(true);
+//                setVisible(mode == MODE_EDIT || mode == MODE_VIEW);
+            }
+
+            @Override
+            public boolean isVisible() {
+//                if (mode == MODE_EDIT || mode == MODE_VIEW) {
+//                    return true;
+//                }
+                return false;
+            }
+        };
+//        removeButton.setVisible(mode == MODE_EDIT || mode == MODE_VIEW);
+        form.add(removeButton);
+
+        add(form);
+    }
+
+    protected abstract VerifyTool getVerifyTool(PageParameters pp);
+
+    protected void doSubmit() {
+//        DataProvider.getAllTools().add(tool);
+    }
+
+    protected void doReset() {
+        form.getModel().setObject(getVerifyTool(null));
+    }
+
+    protected void doRemove(VerifyTool tool) {
+        DataProvider.getAllTools().remove(tool);
+    }
+
+    protected String getTitle() {
+        return "Define A JDK compatible verify tool";
+    }
+}
