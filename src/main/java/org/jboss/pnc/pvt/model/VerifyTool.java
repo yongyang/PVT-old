@@ -17,64 +17,11 @@ public abstract class VerifyTool implements Serializable {
 
     private static final long serialVersionUID = -5353557149342108021L;
 
-    /**
-     * TestTool UseType
-     */
-    public static enum UseType {
-
-        /** tool type which is used for static package analysis **/
-        STATIC("Static"),
-
-        /** tool type which is used for run-time testing **/
-        RUNTIME("Runtime");
-
-        private String name;
-
-        UseType(final String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return this.name;
-        }
-
-        public String getName() {
-            return this.name;
-        }
-
-        private static final Map<String, UseType> MAP;
-        static {
-            final Map<String, UseType> map = new HashMap<>();
-            for (UseType element : values())
-            {
-                final String name = element.getName();
-                if (name != null)
-                    map.put(name, element);
-            }
-            MAP = map;
-        }
-
-        public static Set<String> names() {
-            return MAP.keySet();
-        }
-
-        public static UseType forName(final String name) {
-            final UseType element = MAP.get(name);
-            if (element != null) {
-                return element;
-            }
-            throw new IllegalArgumentException("Unknown type: " + name);
-        }
-    }
-
     private long id;
 
     private String name;
 
     private String description;
-
-    private UseType useType = UseType.STATIC; // static, runtime, default to STATIC
 
     /**
      * @return the id
@@ -118,21 +65,6 @@ public abstract class VerifyTool implements Serializable {
         this.description = description;
     }
 
-    /**
-     * @return the type
-     */
-    public UseType getUseType() {
-        return useType;
-    }
-
-    /**
-     * @param type the type to set
-     */
-    public void setUseType(UseType type) {
-        this.useType = type;
-    }
-
-
     /* (non-Javadoc)
      * @see java.lang.Object#hashCode()
      */
@@ -141,7 +73,6 @@ public abstract class VerifyTool implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result + ((useType == null) ? 0 : useType.hashCode());
         return result;
     }
 
@@ -162,8 +93,6 @@ public abstract class VerifyTool implements Serializable {
                 return false;
         } else if (!name.equals(other.name))
             return false;
-        if (useType != other.useType)
-            return false;
         return true;
     }
 
@@ -172,7 +101,7 @@ public abstract class VerifyTool implements Serializable {
      */
     @Override
     public String toString() {
-        return "VerifyTool [id=" + id + ", name=" + name + ", useType=" + useType + "]";
+        return "VerifyTool [id=" + id + ", name=" + name + "]";
     }
 
     /**

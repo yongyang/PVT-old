@@ -30,11 +30,6 @@ public class VersionConventionVerifyTool extends VerifyTool {
     }
 
     @Override
-    public UseType getUseType() {
-        return UseType.STATIC; // always used for static package analysis
-    }
-
-    @Override
     protected <T> VerifyResult<T> verify(VerifyParameter param) {
         //TODO:
         return null;

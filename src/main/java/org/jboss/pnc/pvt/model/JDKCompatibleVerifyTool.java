@@ -30,11 +30,6 @@ public class JDKCompatibleVerifyTool extends VerifyTool {
 
     private String expectJDKVersion;
 
-    @Override
-    public UseType getUseType() {
-        return UseType.STATIC; // always used for static package analysis
-    }
-
     /* (non-Javadoc)
      * @see org.jboss.pnc.pvt.model.VerifyTool#getLabel()
      */

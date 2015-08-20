@@ -179,18 +179,6 @@ public class SingleToolPage extends TemplatePage {
             // adds common fields
             add(new RequiredTextField<String>("name"));
 
-            IModel<VerifyTool.UseType> defaultType = Model.of(getModelObject().getUseType());
-            getModelObject().setUseType(defaultType.getObject());
-            List<VerifyTool.UseType> types = Arrays.asList(VerifyTool.UseType.values());
-            DropDownChoice<VerifyTool.UseType> toolTypeChoice = new DropDownChoice<VerifyTool.UseType>("useType", defaultType, Model.ofList(types)) {
-
-                @Override
-                protected void onModelChanged() {
-                    AbstractToolForm.this.getModelObject().setUseType(getModelObject());
-                }
-            };
-            toolTypeChoice.setRequired(true);
-            add(toolTypeChoice);
             add(new TextArea<String>("description"));
 
             // adds buttons

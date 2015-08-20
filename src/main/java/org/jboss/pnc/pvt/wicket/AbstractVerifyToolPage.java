@@ -23,6 +23,9 @@ public abstract class AbstractVerifyToolPage extends TemplatePage {
 
     protected Form<VerifyTool> form;
 
+    protected Button resetButton;
+    protected Button removeButton;
+
     public AbstractVerifyToolPage(PageParameters pp) {
         this(pp, null);
     }
@@ -45,19 +48,6 @@ public abstract class AbstractVerifyToolPage extends TemplatePage {
         // adds common fields
         form.add(new RequiredTextField<String>("name"));
 
-        IModel<VerifyTool.UseType> defaultType = Model.of(form.getModelObject().getUseType());
-        form.getModelObject().setUseType(defaultType.getObject());
-
-        List<VerifyTool.UseType> types = Arrays.asList(VerifyTool.UseType.values());
-        DropDownChoice<VerifyTool.UseType> toolTypeChoice = new DropDownChoice<VerifyTool.UseType>("useType", defaultType, Model.ofList(types)) {
-            @Override
-            protected void onModelChanged() {
-                form.getModelObject().setUseType(getModelObject());
-            }
-        };
-
-        toolTypeChoice.setRequired(true);
-        form.add(toolTypeChoice);
         form.add(new TextArea<String>("description"));
 
         // adds buttons
@@ -72,7 +62,7 @@ public abstract class AbstractVerifyToolPage extends TemplatePage {
         backButton.setDefaultFormProcessing(false);
         form.add(backButton);
 
-        Button resetButton = new Button("reset") {
+        resetButton = new Button("reset") {
             @Override
             public void onSubmit() {
                 doReset();
@@ -81,7 +71,7 @@ public abstract class AbstractVerifyToolPage extends TemplatePage {
 
         form.add(resetButton);
 
-        Button removeButton = new Button("remove") {
+        removeButton = new Button("remove") {
 
             @Override
             public void onSubmit() {
@@ -90,25 +80,16 @@ public abstract class AbstractVerifyToolPage extends TemplatePage {
                 setResponsePage(new ToolsPage(pp, "Tool: " + form.getModelObject().getName() + " is removed."));
             }
 
-            @Override
-            protected void onConfigure() {
-                super.onConfigure();
-                setVisibilityAllowed(true);
-//                setVisible(mode == MODE_EDIT || mode == MODE_VIEW);
-            }
-
-            @Override
-            public boolean isVisible() {
-//                if (mode == MODE_EDIT || mode == MODE_VIEW) {
-//                    return true;
-//                }
-                return false;
-            }
         };
 //        removeButton.setVisible(mode == MODE_EDIT || mode == MODE_VIEW);
         form.add(removeButton);
 
         add(form);
+    }
+
+    @Override
+    protected void onConfigure() {
+        removeButton.setVisible(false);
     }
 
     protected abstract VerifyTool getVerifyTool(PageParameters pp);

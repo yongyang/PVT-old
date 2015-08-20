@@ -47,14 +47,12 @@ public final class DataProvider {
         simpleJenkinsTool.setName("Simple Jenkins Tool");
         simpleJenkinsTool.setDescription("Simple jenkins tool which just specify the Jenkins Job ID");
         simpleJenkinsTool.setJobId("testJob");
-        simpleJenkinsTool.setUseType(VerifyTool.UseType.STATIC); // this would differ
         tools.add(simpleJenkinsTool);
 
         JDKCompatibleVerifyTool jdkTool = new JDKCompatibleVerifyTool();
         jdkTool.setName("JDK-1.8-Check");
         jdkTool.setId(2L);
         jdkTool.setExpectJDKVersion("1.8");
-        jdkTool.setUseType(VerifyTool.UseType.STATIC);
         jdkTool.setDescription("JDK 1.8 compatible verify tool.");
         tools.add(jdkTool);
 
@@ -62,7 +60,6 @@ public final class DataProvider {
         templateJenkinsTool.setId(3L);
         templateJenkinsTool.setName("Template Jenkins Tool");
         templateJenkinsTool.setDescription("Template jenkins tool which specify the config.xml to execute");
-        templateJenkinsTool.setUseType(VerifyTool.UseType.STATIC);
         templateJenkinsTool.setJenkinsConfigXML("<?xml version='1.0' encoding='UTF-8'?><project><actions/><description>Run ${toolName} verification test on ${projectName}.&lt;br&gt;&#xd;</description></project>");
         tools.add(templateJenkinsTool);
 
@@ -71,14 +68,12 @@ public final class DataProvider {
         scriptJenkinsTool.setId(4L);
         scriptJenkinsTool.setName("Script Jenkins Tool");
         scriptJenkinsTool.setDescription("Script Jenkins tool which you can specify the basic shell script only");
-        scriptJenkinsTool.setUseType(VerifyTool.UseType.RUNTIME);
         tools.add(scriptJenkinsTool);
 
         VersionConventionVerifyTool versionVerifyTool = new VersionConventionVerifyTool();
         versionVerifyTool.setId(5L);
         versionVerifyTool.setDescription("Version Convention Verify Tool");
         versionVerifyTool.setName("VersionConversionVerify");
-        versionVerifyTool.setUseType(VerifyTool.UseType.STATIC);
         tools.add(versionVerifyTool);
     }
 

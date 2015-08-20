@@ -35,4 +35,9 @@ public class JDKCompatibleVerifyToolEditPage extends JDKCompatibleVerifyToolNewP
     protected String getTitle() {
         return "Define a new JDK compatible verify tool";
     }
+
+    @Override
+    protected void onConfigure() {
+        removeButton.setVisible(true);
+    }
 }
