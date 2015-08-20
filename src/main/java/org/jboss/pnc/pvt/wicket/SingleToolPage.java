@@ -199,7 +199,7 @@ public class SingleToolPage extends TemplatePage {
                 @Override
                 public void onSubmit() {
                     PageParameters pp = new PageParameters();
-                    setResponsePage(ListToolsPage.class, pp);
+                    setResponsePage(ToolsPage.class, pp);
                 }
             };
             backButton.setDefaultFormProcessing(false);
@@ -220,7 +220,7 @@ public class SingleToolPage extends TemplatePage {
                 public void onSubmit() {
                     removeTool(AbstractToolForm.this.getModelObject());
                     PageParameters pp = new PageParameters();
-                    setResponsePage(new ListToolsPage(pp, "Tool: " + AbstractToolForm.this.getModelObject().getName() + " is removed."));
+                    setResponsePage(new ToolsPage(pp, "Tool: " + AbstractToolForm.this.getModelObject().getName() + " is removed."));
                 }
 
                 @Override

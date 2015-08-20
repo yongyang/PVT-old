@@ -20,13 +20,13 @@ import org.jboss.pnc.pvt.model.VerifyTool;
  *
  */
 @SuppressWarnings({"serial", "rawtypes"})
-public class ListToolsPage extends TemplatePage {
+public class ToolsPage extends TemplatePage {
 
-    public ListToolsPage(PageParameters pp) {
-        this(pp, "PVT tools loaded.");
+    public ToolsPage(PageParameters pp) {
+        this(pp, "PVT verify tools loaded.");
     }
 
-    public ListToolsPage(PageParameters pp, String info) {
+    public ToolsPage(PageParameters pp, String info) {
         super(pp, info);
         setActiveMenu("tools");
 

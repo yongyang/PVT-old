@@ -77,7 +77,7 @@ public abstract class TemplatePage extends WebPage {
         toolsLi.add(new Link<String>("link-tools") {
             @Override
             public void onClick() {
-                setResponsePage(ListToolsPage.class);
+                setResponsePage(ToolsPage.class);
             }
         });
 
