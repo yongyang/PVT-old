@@ -5,14 +5,27 @@ import org.jboss.pnc.pvt.model.JDKCompatibleVerifyTool;
 import org.jboss.pnc.pvt.model.PVTModel;
 import org.jboss.pnc.pvt.model.Product;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
  */
 public class JSONTest {
 
     public static void main(String[] args) throws Exception {
-        testVerifyTool();
+//        testVerifyTool();
+        testMap();
     }
+
+    public static void testMap() throws Exception{
+        Map<String, String> amap = new HashMap<>();
+        amap.put("a","b");
+        amap.put("x","y");
+        ObjectMapper map = new ObjectMapper();
+        map.writeValue(System.out, amap);
+    }
+
 
     public static void testVerifyTool() throws Exception{
         JDKCompatibleVerifyTool jdkTool = new JDKCompatibleVerifyTool();

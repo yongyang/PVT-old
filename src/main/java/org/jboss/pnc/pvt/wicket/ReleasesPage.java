@@ -73,7 +73,7 @@ public class ReleasesPage extends TemplatePage{
 
                 item.add(new Label("release_status", new PropertyModel(item.getModel(), "status")));
                 item.add(new Label("release_description", new PropertyModel(item.getModel(), "description")));
-                item.add(new ListView<String>("release_jobs", item.getModelObject().getJobs()) {
+                item.add(new ListView<String>("release_jobs", item.getModelObject().getTools()) {
                     @Override
                     protected void populateItem(ListItem<String> item) {
                         Link<String> jobLink = new Link<String>("release_job", Model.of(item.getModelObject())) {

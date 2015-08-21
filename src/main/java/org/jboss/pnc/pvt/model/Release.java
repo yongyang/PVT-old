@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
@@ -26,8 +24,11 @@ public class Release implements Serializable {
     // ex: http://download.devel.redhat.com/devel/candidates/JBEAP/JBEAP-7.0.0.DR6/jboss-eap-7.0.0.DR6.zip
     private String distributions;
 
-    // The jobs applied to this release
-    private List<String> jobs = new ArrayList<>();
+    // The tools applied to this release
+    private List<String> tools = new ArrayList<>();
+
+    // Runtime verification, toolId => verificationId
+    private Map<String, String> verifications = new HashMap<>();
 
     private String description;
 
@@ -96,11 +97,11 @@ public class Release implements Serializable {
         this.description = description;
     }
 
-    public List<String> getJobs() {
-        return jobs;
+    public List<String> getTools() {
+        return tools;
     }
 
-    public void setJobs(List<String> jobs) {
-        this.jobs = jobs;
+    public void setTools(List<String> tools) {
+        this.tools = tools;
     }
 }
