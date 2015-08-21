@@ -48,5 +48,35 @@
       "implClass": "org.jboss.pnc.pvt.model.ScriptJenkinsVerifyTool",
       "description": "A verify tool based on Jenkins to specify a job config template with scripts"
     }
+  ],
+  "releases": [
+    {
+      "id": "06906f58-bf00-47dd-bde1-18e81f6163a9",
+      "productId": "df7a423b-0b4d-40f3-860c-85d178c12cf0",
+      "name": "1.0.0.DR1",
+      "distributions": "http://abc.com/a.zip\r\nhttp://abc.com/b.zip",
+      "jobs": [
+        "ZipDiff",
+        "Version convention",
+        "JDK version compatible"
+      ],
+      "description": "JBOSS-EAP 1.0.0.DR1 release",
+      "status": "NEW",
+      "createTime": 1440062648090
+    },
+    {
+      "id": "06906f58-bf00-47dd-bde1-18e81f6163a9",
+      "productId": "df7a423b-0b4d-40f3-860c-85d178c12cf1",
+      "name": "1.0.0.DR1",
+      "distributions": "http://abc.com/a.zip\r\nhttp://abc.com/b.zip",
+      "jobs": [
+        "ZipDiff",
+        "Version convention",
+        "JDK version compatible"
+      ],
+      "description": "BRMS 1.0.0.DR1 release",
+      "status": "NEW",
+      "createTime": 1440062648090
+    }
   ]
 }
