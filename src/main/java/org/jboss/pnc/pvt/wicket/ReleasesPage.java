@@ -1,6 +1,5 @@
 package org.jboss.pnc.pvt.wicket;
 
-import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -84,7 +83,7 @@ public class ReleasesPage extends TemplatePage{
                         Link<String> jobLink = new Link<String>("release_tool", Model.of(item.getModelObject())) {
                             @Override
                             public void onClick() {
-                                //TODO: open job
+                                //TODO: open tool
                             }
 
                             @Override
@@ -141,7 +140,7 @@ public class ReleasesPage extends TemplatePage{
             VerifyTool tool = pvtModel.getToolById(toolId);
             // start verification and link to Release
             Verification verification = tool.verify(new VerifyParameter(tool.getId(), null, release));
-            release.linkVerification(verification.getToolId(), verification.getId());
+            release.addVerification(verification.getToolId(), verification.getId());
             pvtModel.updateRelease(release);
             pvtModel.addVerification(verification);
             ((PVTApplication) Application.get()).getDAO().persist();
