@@ -27,7 +27,7 @@ public class Verification<T extends Serializable> {
     private String currentReleaseId;
 
     private long startTime;
-    private VerifyStatus status = VerifyStatus.IN_PROGRESS;
+    private Status status = Status.IN_PROGRESS;
 
     private Exception exception;
 
@@ -83,11 +83,21 @@ public class Verification<T extends Serializable> {
         this.startTime = startTime;
     }
 
-    public VerifyStatus getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(VerifyStatus status) {
+    public void setStatus(Status status) {
         this.status = status;
+    }
+
+    /**
+     * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
+     */
+    public static enum Status {
+        IN_PROGRESS,
+        PASSED,
+        REJECTED,
+        NEED_INSPECT
     }
 }

@@ -92,7 +92,7 @@ public class JDKCompatibleVerifyTool extends VerifyTool {
                     return p;
                 }
             };
-            verification.setStatus(p ? VerifyStatus.PASSED : VerifyStatus.REJECTED);
+            verification.setStatus(p ? Verification.Status.PASSED : Verification.Status.REJECTED);
             return verification;
         }
         catch (Exception e) {
