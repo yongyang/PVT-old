@@ -17,15 +17,19 @@
 
 package org.jboss.pnc.pvt.execution;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 
 /**
  * @author <a href="mailto:lgao@redhat.com">Lin Gao</a>
  *
  */
 @XmlRootElement(name = "execution")
-public class Execution {
+@JsonAutoDetect
+public class Execution implements Serializable{
 
     /** Jenkins job name **/
     @XmlAttribute

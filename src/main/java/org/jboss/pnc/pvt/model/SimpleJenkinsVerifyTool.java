@@ -2,6 +2,9 @@ package org.jboss.pnc.pvt.model;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
+import org.jboss.pnc.pvt.execution.Execution;
+
+import java.io.Serializable;
 
 /**
  * A jenkins verify tool to call a defined/existed jenkins job
@@ -27,7 +30,7 @@ public class SimpleJenkinsVerifyTool extends VerifyTool {
     }
 
     @Override
-    protected <T> VerifyResult<T> verify(VerifyParameter param) {
+    protected  Verification<Execution> verify(VerifyParameter param) {
         //TODO: call Jenkins Executor
         return null;
     }

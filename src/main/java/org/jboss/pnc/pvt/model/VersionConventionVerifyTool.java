@@ -1,6 +1,8 @@
 package org.jboss.pnc.pvt.model;
 
 
+import java.io.Serializable;
+
 /**
  * A verify tool to check the version convention, ex: the jars should have -rehdat-x suffix in version
  *
@@ -32,8 +34,8 @@ public class VersionConventionVerifyTool extends VerifyTool {
     }
 
     @Override
-    protected <T> VerifyResult<T> verify(VerifyParameter param) {
-        //TODO:
+    protected <T extends Serializable> Verification<T> verify(VerifyParameter param) {
+        //TODO: call Jenkins Executor
         return null;
     }
 }

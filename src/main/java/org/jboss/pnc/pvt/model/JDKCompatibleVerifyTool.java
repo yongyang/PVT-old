@@ -17,7 +17,6 @@ import java.util.zip.ZipInputStream;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.apache.commons.io.IOUtils;
 
 /**
@@ -44,7 +43,7 @@ public class JDKCompatibleVerifyTool extends VerifyTool {
     }
 
     @Override
-    protected VerifyResult verify(VerifyParameter param) {
+    protected Verification verify(VerifyParameter param) {
         if (getExpectJDKVersion() == null || getExpectJDKVersion().trim().length() == 0) {
             throw new IllegalStateException("Please set expect JDK version first!");
         }
@@ -87,15 +86,15 @@ public class JDKCompatibleVerifyTool extends VerifyTool {
             }
 
             final boolean p = passed;
-            VerifyResult<Boolean> verifyResult = new VerifyResult<Boolean>() {
+            Verification<Boolean> verification = new Verification<Boolean>() {
                 @Override
-                public Boolean getResult() {
+                public Boolean getResultObject() {
                     //TODO: return the detail info
                     return p;
                 }
             };
-            verifyResult.setStatus(p ? VerifyResult.Status.PASSED : VerifyResult.Status.REJECTED);
-            return verifyResult;
+            verification.setStatus(p ? VerifyStatus.PASSED : VerifyStatus.REJECTED);
+            return verification;
         }
         catch (Exception e) {
             e.printStackTrace();

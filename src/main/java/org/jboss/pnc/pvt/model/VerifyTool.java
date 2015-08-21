@@ -109,9 +109,9 @@ public abstract class VerifyTool implements Serializable {
     /**
      * Do verify
      *
-     * @param param@return
+     * @param param@return result, maybe a handle for asynchronous job, such a jenkins job
      */
-    protected abstract <T> VerifyResult<T> verify(VerifyParameter param);
+    protected abstract <T extends Serializable> Verification<T> verify(VerifyParameter param);
 
     /**
      * @return the Label to distinguish the tool

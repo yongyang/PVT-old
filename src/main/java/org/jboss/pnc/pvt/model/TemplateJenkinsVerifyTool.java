@@ -1,5 +1,7 @@
 package org.jboss.pnc.pvt.model;
 
+import java.io.Serializable;
+
 /**
  * A verify tool to call jenkins server with config.xml job template provided
  *
@@ -22,14 +24,13 @@ public class TemplateJenkinsVerifyTool extends VerifyTool {
     }
 
     @Override
-    protected <T> VerifyResult<T> verify(VerifyParameter param) {
-        //TODO: call Jenkins Executor
+    protected <T extends Serializable> Verification<T> verify(VerifyParameter param) {
         return null;
     }
 
     /* (non-Javadoc)
-     * @see org.jboss.pnc.pvt.model.VerifyTool#getLabel()
-     */
+         * @see org.jboss.pnc.pvt.model.VerifyTool#getLabel()
+         */
     @Override
     public String getLabel() {
         return LABEL;
