@@ -7,17 +7,20 @@ import java.util.Properties;
  */
 public class VerifyParameter {
 
+    private String toolId;
+
     private Release previousRelease;
     private Release currentRelease;
 
     private Properties properties = new Properties();
 
 
-    public VerifyParameter(Release previousRelease, Release currentRelease) {
-        this(previousRelease, currentRelease, null);
+    public VerifyParameter(String toolId, Release previousRelease, Release currentRelease) {
+        this(toolId, previousRelease, currentRelease, null);
     }
 
-    public VerifyParameter(Release previousRelease, Release currentRelease, Properties properties) {
+    public VerifyParameter(String toolId,Release previousRelease, Release currentRelease, Properties properties) {
+        this.toolId = toolId;
         this.previousRelease = previousRelease;
         this.currentRelease = currentRelease;
         if(properties != null && !properties.isEmpty()) {
@@ -31,6 +34,10 @@ public class VerifyParameter {
 
     public Release getCurrentRelease() {
         return currentRelease;
+    }
+
+    public String getToolId() {
+        return toolId;
     }
 
     public void addProperty(String name, String value) {

@@ -104,4 +104,16 @@ public class Release implements Serializable {
     public void setTools(List<String> tools) {
         this.tools = tools;
     }
+
+    public Map<String, String> getVerifications() {
+        return verifications;
+    }
+
+    public String getVerificationIdByToolId(String toolId){
+        return verifications.get(toolId);
+    }
+
+    public void linkVerification(String toolId, String verificationId) {
+        verifications.put(toolId, verificationId);
+    }
 }

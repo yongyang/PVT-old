@@ -16,10 +16,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.jboss.pnc.pvt.model.Release;
-import org.jboss.pnc.pvt.model.Verification;
-import org.jboss.pnc.pvt.model.VerifyParameter;
-import org.jboss.pnc.pvt.model.VerifyTool;
+import org.jboss.pnc.pvt.model.*;
 
 import java.util.*;
 
@@ -138,12 +135,16 @@ public class ReleasesPage extends TemplatePage{
         });
     }
 
-    void verifyRelease(Release release) {
+    private void verifyRelease(Release release) {
         for(String toolId : release.getTools()) {
-            VerifyTool tool = ((PVTApplication) Application.get()).getDAO().getPvtModel().getToolById(toolId);
-            Verification verification = tool.verify(new VerifyParameter(null, release));
-
-            //TODO: start verification and link to Release
+            PVTModel pvtModel = ((PVTApplication) Application.get()).getDAO().getPvtModel();
+            VerifyTool tool = pvtModel.getToolById(toolId);
+            // start verification and link to Release
+            Verification verification = tool.verify(new VerifyParameter(tool.getId(), null, release));
+            release.linkVerification(verification.getToolId(), verification.getId());
+            pvtModel.updateRelease(release);
+            pvtModel.addVerification(verification);
+            ((PVTApplication) Application.get()).getDAO().persist();
         }
     }
 }

@@ -33,7 +33,8 @@ public class Verification<T extends Serializable> {
 
     private T resultObject;
 
-    public Verification(String previousReleaseId, String currentReleaseId) {
+    public Verification(String toolId, String previousReleaseId, String currentReleaseId) {
+        this.toolId = toolId;
         this.previousReleaseId = previousReleaseId;
         this.currentReleaseId = currentReleaseId;
     }

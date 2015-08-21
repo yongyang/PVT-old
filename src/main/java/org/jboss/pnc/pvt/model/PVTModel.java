@@ -116,5 +116,9 @@ public class PVTModel implements Serializable {
 		return verifications.get(id);
 	}
 
+	public void addVerification(Verification verification) {
+		verifications.put(verification.getId(), verification);
+	}
+
 
 }
