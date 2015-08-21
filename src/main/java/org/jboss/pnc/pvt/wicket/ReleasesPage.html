@@ -3247,6 +3247,7 @@
         <th>Distributions<br/></th>
         <th>Verify<br/>Jobs</th>
         <th>Create<br/>Time</th>
+        <th>Actions</th>
       </tr>
       </thead>
 
@@ -3271,13 +3272,18 @@
           </div>
         </td>
         <td rowspan="2">
-          <div wicket:id="release_jobs">
-            <a href="job"><span wicket:id="release_job">ZipDiff</span></a><br/>
+          <div wicket:id="release_tools">
+            <a href="job"><span wicket:id="release_tool">ZipDiff</span></a><br/>
           </div>
         </td>
         <td>
           <div class="clipwidth " style="max-width:130px">
             <span wicket:id="release_createTime"></span>
+          </div>
+        </td>
+        <td>
+          <div class="clipwidth " style="max-width:130px">
+            <a href="" class="btn btn-small submit-button refresh-submit-button">VERIFY</a>
           </div>
         </td>
       </tr>
@@ -3287,6 +3293,13 @@
         </td>
         <td>
           <div class="clipwidth " style="max-width:95px" title="Virt QE">-</div>
+        </td>
+        <td>
+          <div class="clipwidth " style="max-width:95px" title="">
+            <div class="clipwidth " style="max-width:130px">
+              <a href="" class="btn btn-small submit-button refresh-submit-button">&nbsp;VIEW&nbsp;</a>
+            </div>
+          </div>
         </td>
       </tr>
       </tbody>
