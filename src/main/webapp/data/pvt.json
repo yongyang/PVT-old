@@ -65,9 +65,7 @@
       "name": "1.0.0.DR1",
       "distributions": "http://abc.com/a.zip\r\nhttp://abc.com/b.zip",
       "tools": [
-        "ZipDiff",
-        "Version convention",
-        "JDK version compatible"
+        "096ffbbe-b7ea-4f36-954a-ea639b7967ad"
       ],
       "description": "JBOSS-EAP 1.0.0.DR1 release",
       "status": "NEW",
