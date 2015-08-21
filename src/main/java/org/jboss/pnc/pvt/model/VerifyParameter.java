@@ -9,21 +9,21 @@ public class VerifyParameter {
     private String previousRelease;
     private String currentRelease;
 
-    private String[] previousDistributionZip;
-    private String[] currentDistributionZip;
+    private String[] previousDistributionZips;
+    private String[] currentDistributionZips;
 
     private Properties properties = new Properties();
 
 
-    public VerifyParameter(String previousRelease, String currentRelease, String[] previousDistributionZip, String[] currentDistributionZip) {
-        this(previousRelease, currentRelease, previousDistributionZip, currentDistributionZip, null);
+    public VerifyParameter(String previousRelease, String currentRelease, String[] previousDistributionZips, String[] currentDistributionZips) {
+        this(previousRelease, currentRelease, previousDistributionZips, currentDistributionZips, null);
     }
 
-    public VerifyParameter(String previousRelease, String currentRelease, String[] previousDistributionZip, String[] currentDistributionZip, Properties properties) {
+    public VerifyParameter(String previousRelease, String currentRelease, String[] previousDistributionZips, String[] currentDistributionZips, Properties properties) {
         this.previousRelease = previousRelease;
         this.currentRelease = currentRelease;
-        this.previousDistributionZip = previousDistributionZip;
-        this.currentDistributionZip = currentDistributionZip;
+        this.previousDistributionZips = previousDistributionZips;
+        this.currentDistributionZips = currentDistributionZips;
         if(properties != null && !properties.isEmpty()) {
             this.properties = properties;
         }
@@ -50,12 +50,12 @@ public class VerifyParameter {
         return currentRelease;
     }
 
-    public String[] getPreviousDistributionZip() {
-        return previousDistributionZip;
+    public String[] getPreviousDistributionZips() {
+        return previousDistributionZips;
     }
 
-    public String[] getCurrentDistributionZip() {
-        return currentDistributionZip;
+    public String[] getCurrentDistributionZips() {
+        return currentDistributionZips;
     }
 
     public Properties getProperties() {

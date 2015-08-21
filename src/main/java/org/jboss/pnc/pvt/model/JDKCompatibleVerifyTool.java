@@ -42,7 +42,7 @@ public class JDKCompatibleVerifyTool extends VerifyTool {
         if (getExpectJDKVersion() == null || getExpectJDKVersion().trim().length() == 0) {
             throw new IllegalStateException("Please set expect JDK version first!");
         }
-        String[] zipUrls = param.getCurrentDistributionZip();
+        String[] zipUrls = param.getCurrentDistributionZips();
 
         //TODO: foreach zipUrls
         String zipUrl = zipUrls[0];
