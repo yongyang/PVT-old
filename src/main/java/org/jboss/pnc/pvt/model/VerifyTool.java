@@ -107,7 +107,7 @@ public abstract class VerifyTool implements Serializable {
     }
 
     /**
-     * Do verify
+     * Do verify, normally the worker need to be run in a separate thread
      *
      * @param param @return result, maybe a handle for asynchronous job, such a jenkins job
      */
