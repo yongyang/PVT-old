@@ -60,7 +60,7 @@
   },
   "releases": [
     {
-      "id": "06906f58-bf00-47dd-bde1-18e81f6163a9",
+      "id": "06906f58-bf00-47dd-bde1-18e81f6163a8",
       "productId": "df7a423b-0b4d-40f3-860c-85d178c12cf0",
       "name": "1.0.0.DR1",
       "distributions": "http://abc.com/a.zip\r\nhttp://abc.com/b.zip",
