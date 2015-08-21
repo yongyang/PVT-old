@@ -22,7 +22,7 @@ public class TemplateJenkinsVerifyTool extends VerifyTool {
     }
 
     @Override
-    protected <T extends Serializable> Verification<T> verify(VerifyParameter param) {
+    public <T extends Serializable> Verification<T> verify(VerifyParameter param) {
         return null;
     }
 

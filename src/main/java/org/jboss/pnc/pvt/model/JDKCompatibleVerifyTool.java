@@ -38,7 +38,7 @@ public class JDKCompatibleVerifyTool extends VerifyTool {
     }
 
     @Override
-    protected Verification verify(VerifyParameter param) {
+    public Verification verify(VerifyParameter param) {
         if (getExpectJDKVersion() == null || getExpectJDKVersion().trim().length() == 0) {
             throw new IllegalStateException("Please set expect JDK version first!");
         }

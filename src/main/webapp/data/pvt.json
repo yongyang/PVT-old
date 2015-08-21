@@ -49,15 +49,15 @@
       "description": "A verify tool based on Jenkins to specify a job config template with scripts"
     }
   ],
-  "tools": [
-    {
+  "tools": {
+    "096ffbbe-b7ea-4f36-954a-ea639b7967ad": {
       "@class": "org.jboss.pnc.pvt.model.JDKCompatibleVerifyTool",
       "id": "096ffbbe-b7ea-4f36-954a-ea639b7967ad",
       "name": "JDK_Compatible_Verify_Tool",
       "description": "jdk version >= 1.8",
       "expectJDKVersion": "1.8"
     }
-  ],
+  },
   "releases": [
     {
       "id": "06906f58-bf00-47dd-bde1-18e81f6163a9",
@@ -88,5 +88,5 @@
       "createTime": 1440062648090
     }
   ],
-  "verifications":{}
+  "verifications": {}
 }

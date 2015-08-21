@@ -23,7 +23,7 @@ public class VersionConventionVerifyTool extends VerifyTool {
     }
 
     @Override
-    protected <T extends Serializable> Verification<T> verify(VerifyParameter param) {
+    public <T extends Serializable> Verification<T> verify(VerifyParameter param) {
         //TODO: call Jenkins Executor
         return null;
     }

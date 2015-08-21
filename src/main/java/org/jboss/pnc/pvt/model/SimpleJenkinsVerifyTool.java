@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import org.jboss.pnc.pvt.execution.Execution;
 
-import java.io.Serializable;
-
 /**
  * A jenkins verify tool to call a defined/existed jenkins job
  *
@@ -28,7 +26,7 @@ public class SimpleJenkinsVerifyTool extends VerifyTool {
     }
 
     @Override
-    protected  Verification<Execution> verify(VerifyParameter param) {
+    public Verification<Execution> verify(VerifyParameter param) {
         //TODO: call Jenkins Executor
         return null;
     }

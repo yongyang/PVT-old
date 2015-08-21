@@ -5,10 +5,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
@@ -23,7 +20,7 @@ public class PVTModel implements Serializable {
 
 	private List<VerifyToolType> toolTypes = new ArrayList<>();
 
-	private List<VerifyTool> tools = new ArrayList<>();
+	private Map<String, VerifyTool> tools = new HashMap<>();
 
 	private Map<String,Verification<?>> verifications = new HashMap<>();
 
@@ -100,11 +97,15 @@ public class PVTModel implements Serializable {
 	}
 
 	public List<VerifyTool> getTools() {
-		return tools;
+		return Arrays.asList(tools.values().toArray(new VerifyTool[tools.size()]));
+	}
+
+	public VerifyTool getToolById(String id) {
+		return tools.get(id);
 	}
 
 	public void addTool(VerifyTool tool) {
-		tools.add(tool);
+		tools.put(tool.getId(), tool);
 	}
 
 	public Map<String, Verification<?>> getVerifications() {

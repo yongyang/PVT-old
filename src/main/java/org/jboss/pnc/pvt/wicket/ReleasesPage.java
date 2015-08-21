@@ -1,7 +1,12 @@
 package org.jboss.pnc.pvt.wicket;
 
+import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxCallListener;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
@@ -12,6 +17,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.jboss.pnc.pvt.model.Release;
+import org.jboss.pnc.pvt.model.VerifyTool;
 
 import java.util.*;
 
@@ -43,25 +49,25 @@ public class ReleasesPage extends TemplatePage{
         add(new ListView<Release>("release_rows", releases) {
             @Override
             protected void populateItem(ListItem<Release> item) {
-            	Link product_link = new Link("product_link") {
+                Link product_link = new Link("product_link") {
                     @Override
                     public void onClick() {
-                    	PageParameters pp = new PageParameters();
+                        PageParameters pp = new PageParameters();
                         pp.set("productId", item.getModel().getObject().getProductId());
-                        setResponsePage(ProductEditPage.class,pp);
+                        setResponsePage(ProductEditPage.class, pp);
                     }
                 };
                 String productId = item.getModel().getObject().getProductId();
                 String productName = ((PVTApplication) Application.get()).getDAO().getPvtModel().getProductbyId(productId).getName();
                 product_link.add(new Label("product_name", productName));
-            	item.add(product_link);
+                item.add(product_link);
 
                 item.add(new Link<String>("release_link") {
                     @Override
                     public void onClick() {
                         PageParameters pp = new PageParameters();
                         pp.set("releaseId", item.getModel().getObject().getId());
-                        setResponsePage(ReleaseEditPage.class,pp);
+                        setResponsePage(ReleaseEditPage.class, pp);
                     }
 
                     @Override
@@ -84,7 +90,7 @@ public class ReleasesPage extends TemplatePage{
 
                             @Override
                             public IModel<?> getBody() {
-                                return  Model.of(item.getModelObject());
+                                return Model.of(item.getModelObject());
                             }
                         };
                         item.add(jobLink);
@@ -93,7 +99,7 @@ public class ReleasesPage extends TemplatePage{
                 item.add(new ListView<String>("release_distributions", Arrays.asList(item.getModelObject().getDistributionArray())) {
                     @Override
                     protected void populateItem(ListItem<String> item) {
-                        ExternalLink link = new ExternalLink("release_distribution", item.getModelObject()){
+                        ExternalLink link = new ExternalLink("release_distribution", item.getModelObject()) {
                             @Override
                             public IModel<?> getBody() {
                                 return Model.of(item.getModelObject());
@@ -103,12 +109,38 @@ public class ReleasesPage extends TemplatePage{
                         item.add(link);
                     }
                 });
-                item.add(new Label("release_createTime",new Date(item.getModel().getObject().getCreateTime()).toString()));
-                if(releases.indexOf(item.getModel().getObject()) % 2 == 1) {
+                item.add(new Label("release_createTime", new Date(item.getModel().getObject().getCreateTime()).toString()));
+                if (releases.indexOf(item.getModel().getObject()) % 2 == 1) {
                     item.add(AttributeModifier.replace("class", "errata_row odd"));
                 }
+
+                AjaxLink<String> verifyLink = new AjaxLink<String>("release_verify") {
+
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        verifyRelease(item.getModelObject());
+                        // reload Release List page
+                        setResponsePage(ReleasesPage.class);
+                    }
+
+                    @Override
+                    protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+                        AjaxCallListener ajaxCallListener = new AjaxCallListener();
+                        ajaxCallListener.onPrecondition("return confirm('" + "Start to verify release: " + item.getModelObject().getName() + "?');");
+                        attributes.getAjaxCallListeners().add(ajaxCallListener);
+                    }
+                };
+                item.add(verifyLink);
+
             }
         });
+    }
+
+    void verifyRelease(Release release) {
+        for(String toolId : release.getTools()) {
+            VerifyTool tool = ((PVTApplication) Application.get()).getDAO().getPvtModel().getToolById(toolId);
+//            tool.verify();
+        }
     }
 }
 
