@@ -34,7 +34,7 @@ public class JDKCompatibleVerifyTool extends VerifyTool {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + "[ name=" + getName() + ", expectJDKVersion=" + getExpectJDKVersion() + "]";
+        return this.getClass().getSimpleName() + " [name=" + getName() + ", expectJDKVersion=" + getExpectJDKVersion() + "]";
     }
 
     @Override
