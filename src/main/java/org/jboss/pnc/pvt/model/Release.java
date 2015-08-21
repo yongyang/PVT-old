@@ -66,7 +66,7 @@ public class Release implements Serializable {
 
     @JsonIgnore
     public String[] getDistributionArray(){
-        return distributions.split("\\\r\\n");
+        return distributions.split("\\r\\n");
     }
 
     public void setDistributions(String distributions) {
@@ -113,7 +113,7 @@ public class Release implements Serializable {
         return verifications.get(toolId);
     }
 
-    public void linkVerification(String toolId, String verificationId) {
+    public void addVerification(String toolId, String verificationId) {
         verifications.put(toolId, verificationId);
     }
 }
