@@ -14,17 +14,6 @@ public class VersionConventionVerifyTool extends VerifyTool {
 
     private String conventionRegexp;
 
-    public static final String LABEL = "Version Convention Check";
-
-
-    /* (non-Javadoc)
-     * @see org.jboss.pnc.pvt.model.VerifyTool#getLabel()
-     */
-    @Override
-    public String getLabel() {
-        return LABEL;
-    }
-
     public String getConventionRegexp() {
         return conventionRegexp;
     }

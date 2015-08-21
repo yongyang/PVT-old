@@ -36,4 +36,8 @@ public class SimpleJenkinsVerifyToolNewPage extends AbstractVerifyToolPage {
         return "Define a simple jenkins verify tool";
     }
 
+    @Override
+    protected void doSubmit() {
+
+    }
 }

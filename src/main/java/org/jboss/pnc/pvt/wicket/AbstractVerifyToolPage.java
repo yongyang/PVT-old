@@ -26,6 +26,8 @@ public abstract class AbstractVerifyToolPage extends TemplatePage {
     protected Button resetButton;
     protected Button removeButton;
 
+    protected VerifyTool tool;
+
     public AbstractVerifyToolPage(PageParameters pp) {
         this(pp, null);
     }
@@ -38,9 +40,16 @@ public abstract class AbstractVerifyToolPage extends TemplatePage {
 
         add(new Label("tool_summary", getTitle()));
 
-        final VerifyTool tool = getVerifyTool(pp);
+        tool = getVerifyTool(pp);
 
-        form = new Form<VerifyTool>("form-tool");
+        form = new Form<VerifyTool>("form-tool"){
+            @Override
+            protected void onSubmit() {
+                doSubmit();
+                setResponsePage(new ToolsPage(pp, "Tool: " + getModelObject().getName() + " is created."));
+            }
+
+        };
 
         CompoundPropertyModel<VerifyTool> toolModel = new CompoundPropertyModel<VerifyTool>(tool);
         form.setModel(toolModel);
@@ -94,9 +103,7 @@ public abstract class AbstractVerifyToolPage extends TemplatePage {
 
     protected abstract VerifyTool getVerifyTool(PageParameters pp);
 
-    protected void doSubmit() {
-//        DataProvider.getAllTools().add(tool);
-    }
+    protected abstract void doSubmit();
 
     protected void doReset() {
         form.getModel().setObject(getVerifyTool(null));

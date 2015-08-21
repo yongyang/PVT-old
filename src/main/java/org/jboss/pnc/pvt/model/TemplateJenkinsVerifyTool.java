@@ -13,8 +13,6 @@ public class TemplateJenkinsVerifyTool extends VerifyTool {
 
     private String jenkinsConfigXML;
 
-    public static final String LABEL = "Templage Jenkins Tool";
-
     public String getJenkinsConfigXML() {
         return jenkinsConfigXML;
     }
@@ -26,14 +24,6 @@ public class TemplateJenkinsVerifyTool extends VerifyTool {
     @Override
     protected <T extends Serializable> Verification<T> verify(VerifyParameter param) {
         return null;
-    }
-
-    /* (non-Javadoc)
-         * @see org.jboss.pnc.pvt.model.VerifyTool#getLabel()
-         */
-    @Override
-    public String getLabel() {
-        return LABEL;
     }
 
 }

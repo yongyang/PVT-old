@@ -35,4 +35,8 @@ public class VersionConventionVerifyToolNewPage extends AbstractVerifyToolPage {
         return "Define a new version convention verify tool";
     }
 
+    @Override
+    protected void doSubmit() {
+
+    }
 }

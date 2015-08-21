@@ -46,4 +46,8 @@ public class ScriptJenkinsVerifyToolNewPage extends AbstractVerifyToolPage {
         return "Define a script jenkins verify tool";
     }
 
+    @Override
+    protected void doSubmit() {
+
+    }
 }

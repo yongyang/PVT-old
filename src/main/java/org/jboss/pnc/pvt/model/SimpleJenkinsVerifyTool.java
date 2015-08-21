@@ -19,8 +19,6 @@ public class SimpleJenkinsVerifyTool extends VerifyTool {
 
     private String jobId;
 
-    public static final String LABEL = "Simple Jenkins Tool";
-
     public String getJobId() {
         return jobId;
     }
@@ -33,14 +31,6 @@ public class SimpleJenkinsVerifyTool extends VerifyTool {
     protected  Verification<Execution> verify(VerifyParameter param) {
         //TODO: call Jenkins Executor
         return null;
-    }
-
-    /* (non-Javadoc)
-     * @see org.jboss.pnc.pvt.model.VerifyTool#getLabel()
-     */
-    @Override
-    public String getLabel() {
-        return LABEL;
     }
 
 }

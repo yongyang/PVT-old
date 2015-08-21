@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.UUID;
 
 /**
- * Verification used to track a verify result, return by VerifyTool.verify
+ * Verification used to track a verify result, return by VerifyTool.verify()
  * Verification will be stored to DB once it created.
  *
  * The executor needs to update Verification once the status updated.

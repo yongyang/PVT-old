@@ -32,28 +32,28 @@ public class VerifyToolTest {
 
     @Test
     public void testCreateInstance() {
-        VerifyTool tool = VerifyTool.createVerifyTool(JDKCompatibleVerifyTool.LABEL);
+        VerifyTool tool = VerifyTool.createVerifyTool("JDKCompatibleVerifyTool.LABE");
         Assert.assertNotNull(tool);
         Assert.assertEquals(JDKCompatibleVerifyTool.class, tool.getClass());
 //        Assert.assertEquals(UseType.STATIC, tool.getUseType());
 //        tool.setUseType(UseType.RUNTIME);
 //        Assert.assertEquals(UseType.STATIC, tool.getUseType()); // still static
 
-        tool = VerifyTool.createVerifyTool(VersionConventionVerifyTool.LABEL);
+        tool = VerifyTool.createVerifyTool("VersionConventionVerifyTool.LABEL");
         Assert.assertNotNull(tool);
         Assert.assertEquals(VersionConventionVerifyTool.class, tool.getClass());
 //        Assert.assertEquals(UseType.STATIC, tool.getUseType());
 //        tool.setUseType(UseType.RUNTIME);
 //        Assert.assertEquals(UseType.STATIC, tool.getUseType()); // still static
 
-        tool = VerifyTool.createVerifyTool(SimpleJenkinsVerifyTool.LABEL);
+        tool = VerifyTool.createVerifyTool("SimpleJenkinsVerifyTool.LABEL");
         Assert.assertNotNull(tool);
         Assert.assertEquals(SimpleJenkinsVerifyTool.class, tool.getClass());
 //        Assert.assertEquals(UseType.STATIC, tool.getUseType()); // default to static
 //        tool.setUseType(UseType.RUNTIME);
 //        Assert.assertEquals(UseType.RUNTIME, tool.getUseType());
 
-        tool = VerifyTool.createVerifyTool(TemplateJenkinsVerifyTool.LABEL);
+        tool = VerifyTool.createVerifyTool("TemplateJenkinsVerifyTool.LABEL");
         Assert.assertNotNull(tool);
         Assert.assertEquals(TemplateJenkinsVerifyTool.class, tool.getClass());
 

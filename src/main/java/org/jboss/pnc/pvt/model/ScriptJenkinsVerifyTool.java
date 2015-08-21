@@ -54,14 +54,6 @@ public class ScriptJenkinsVerifyTool extends TemplateJenkinsVerifyTool implement
         }
     }
 
-	/* (non-Javadoc)
-     * @see org.jboss.pnc.pvt.model.TemplateJenkinsVerifyTool#getLabel()
-     */
-    @Override
-    public String getLabel() {
-        return LABEL;
-    }
-
     /**
 	 * @return the script
 	 */

@@ -114,20 +114,15 @@ public abstract class VerifyTool implements Serializable {
     protected abstract <T extends Serializable> Verification<T> verify(VerifyParameter param);
 
     /**
-     * @return the Label to distinguish the tool
-     */
-    public abstract String getLabel();
-
-    /**
      * Register all sub class of VerifyTool here
      */
     private static final Map<String, Class<? extends VerifyTool>> toolsMap = new HashMap<>();
     static {
-        toolsMap.put(JDKCompatibleVerifyTool.LABEL, JDKCompatibleVerifyTool.class);
-        toolsMap.put(VersionConventionVerifyTool.LABEL, VersionConventionVerifyTool.class);
-        toolsMap.put(SimpleJenkinsVerifyTool.LABEL, SimpleJenkinsVerifyTool.class);
-        toolsMap.put(TemplateJenkinsVerifyTool.LABEL, TemplateJenkinsVerifyTool.class);
-        toolsMap.put(ScriptJenkinsVerifyTool.LABEL, ScriptJenkinsVerifyTool.class);
+//        toolsMap.put(JDKCompatibleVerifyTool.LABEL, JDKCompatibleVerifyTool.class);
+//        toolsMap.put(VersionConventionVerifyTool.LABEL, VersionConventionVerifyTool.class);
+//        toolsMap.put(SimpleJenkinsVerifyTool.LABEL, SimpleJenkinsVerifyTool.class);
+//        toolsMap.put(TemplateJenkinsVerifyTool.LABEL, TemplateJenkinsVerifyTool.class);
+//        toolsMap.put(ScriptJenkinsVerifyTool.LABEL, ScriptJenkinsVerifyTool.class);
     }
 
     /**

@@ -30,16 +30,11 @@ public class JDKCompatibleVerifyTool extends VerifyTool {
 
     private static final int JAVA_CLASS_MAGIC = 0xCAFEBABE;
 
-    public static final String LABEL = "JDK Compatible Check";
-
     private String expectJDKVersion;
 
-    /* (non-Javadoc)
-     * @see org.jboss.pnc.pvt.model.VerifyTool#getLabel()
-     */
     @Override
-    public String getLabel() {
-        return LABEL;
+    public String toString() {
+        return this.getClass().getSimpleName() + "[ name=" + getName() + ", expectJDKVersion=" + getExpectJDKVersion() + "]";
     }
 
     @Override

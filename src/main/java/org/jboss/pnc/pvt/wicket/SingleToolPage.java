@@ -317,7 +317,7 @@ public class SingleToolPage extends TemplatePage {
         } else if (tool instanceof TemplateJenkinsVerifyTool) {
             return new TemplateJenkinsToolForm(tool, pp);
         }
-        throw new IllegalStateException("Not supported tool type: " + tool.getLabel());
+        throw new IllegalStateException("Not supported tool type: " + tool.getName());
     }
 
     // =======================================

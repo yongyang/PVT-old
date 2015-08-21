@@ -12,9 +12,12 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.validation.IFormValidator;
+import org.apache.wicket.markup.html.list.ListItemModel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.validation.ValidationError;
 import org.jboss.pnc.pvt.dao.PVTDataAccessObject;
@@ -23,6 +26,8 @@ import org.jboss.pnc.pvt.model.Release;
 
 import com.googlecode.wicket.kendo.ui.form.TextArea;
 import com.googlecode.wicket.kendo.ui.form.TextField;
+import org.jboss.pnc.pvt.model.Verification;
+import org.jboss.pnc.pvt.model.VerifyTool;
 
 /**
  * Created by yyang on 5/5/15.
@@ -89,7 +94,11 @@ public class ReleaseNewPage extends TemplatePage {
         releaseForm.add(nameTextField);
         releaseForm.add(new TextArea<String>("distributions"));
         releaseForm.add(new TextArea<String>("description"));
-        releaseForm.add(new CheckBoxMultipleChoice<String>("jobs", Model.ofList(Arrays.asList("ZipDiff", "Version convention", "JDK version compatible"))));
+
+
+        List<VerifyTool> tools = dao.getPvtModel().getTools();
+        CheckBoxMultipleChoice<VerifyTool> checkBoxMultipleChoice = new CheckBoxMultipleChoice<VerifyTool>("tools", new ListModel<VerifyTool>(dao.getPvtModel().getTools()), tools);
+        releaseForm.add(checkBoxMultipleChoice);
 
         backButton = new Button("back") {
 

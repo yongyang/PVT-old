@@ -23,7 +23,7 @@ public class PVTModel implements Serializable {
 
 	private List<VerifyToolType> toolTypes = new ArrayList<>();
 
-	private List<? extends VerifyTool> tools = new ArrayList<>();
+	private List<VerifyTool> tools = new ArrayList<>();
 
 	private Map<String,Verification<?>> verifications = new HashMap<>();
 
@@ -99,8 +99,12 @@ public class PVTModel implements Serializable {
 		return toolTypes;
 	}
 
-	public List<? extends VerifyTool> getTools() {
+	public List<VerifyTool> getTools() {
 		return tools;
+	}
+
+	public void addTool(VerifyTool tool) {
+		tools.add(tool);
 	}
 
 	public Map<String, Verification<?>> getVerifications() {
@@ -110,4 +114,6 @@ public class PVTModel implements Serializable {
 	public Verification<?> getVerificationById(String id) {
 		return verifications.get(id);
 	}
+
+
 }

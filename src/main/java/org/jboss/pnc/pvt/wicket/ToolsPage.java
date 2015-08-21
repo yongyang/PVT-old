@@ -85,7 +85,7 @@ public class ToolsPage extends TemplatePage {
                         return new PropertyModel(item.getModel(), "name");
                     }
                 });
-                IModel<String> labelModel = Model.of(item.getModelObject().getLabel());
+                IModel<String> labelModel = Model.of(item.getModelObject().getName());
                 item.add(new Label("tool_label", labelModel));
                 item.add(new Label("tool_description", new PropertyModel(item.getModel(), "description")));
                 if(tools.indexOf(item.getModel().getObject()) % 2 == 1) {

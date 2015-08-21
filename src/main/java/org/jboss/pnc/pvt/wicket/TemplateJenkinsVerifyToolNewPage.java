@@ -36,4 +36,8 @@ public class TemplateJenkinsVerifyToolNewPage extends AbstractVerifyToolPage {
         return "Define a template jenkins verify tool";
     }
 
+    @Override
+    protected void doSubmit() {
+
+    }
 }
