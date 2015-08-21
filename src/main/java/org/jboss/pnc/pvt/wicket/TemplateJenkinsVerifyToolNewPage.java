@@ -1,6 +1,6 @@
 package org.jboss.pnc.pvt.wicket;
 
-import com.googlecode.wicket.kendo.ui.form.TextArea;
+import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.jboss.pnc.pvt.model.TemplateJenkinsVerifyTool;
 import org.jboss.pnc.pvt.model.VerifyTool;

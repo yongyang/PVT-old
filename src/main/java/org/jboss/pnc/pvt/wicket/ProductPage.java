@@ -1,11 +1,11 @@
 package org.jboss.pnc.pvt.wicket;
 
-import com.googlecode.wicket.kendo.ui.form.TextArea;
-import com.googlecode.wicket.kendo.ui.form.TextField;
 import org.apache.wicket.Application;
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.jboss.pnc.pvt.dao.PVTDataAccessObject;
 import org.jboss.pnc.pvt.model.Product;

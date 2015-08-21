@@ -1,7 +1,5 @@
 package org.jboss.pnc.pvt.wicket;
 
-import com.googlecode.wicket.kendo.ui.form.TextArea;
-import com.googlecode.wicket.kendo.ui.form.TextField;
 import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.validation.IFormValidator;

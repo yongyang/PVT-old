@@ -5,12 +5,7 @@ import java.util.List;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.validation.IFormValidator;
 import org.apache.wicket.markup.html.list.ListItemModel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -24,8 +19,6 @@ import org.jboss.pnc.pvt.dao.PVTDataAccessObject;
 import org.jboss.pnc.pvt.model.Product;
 import org.jboss.pnc.pvt.model.Release;
 
-import com.googlecode.wicket.kendo.ui.form.TextArea;
-import com.googlecode.wicket.kendo.ui.form.TextField;
 import org.jboss.pnc.pvt.model.Verification;
 import org.jboss.pnc.pvt.model.VerifyTool;
 

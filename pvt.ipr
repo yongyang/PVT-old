@@ -74,9 +74,6 @@
             <element id="library" level="project" name="Maven: com.googlecode.wicket-jquery-ui:wicket-jquery-ui-calendar:6.19.1" />
             <element id="library" level="project" name="Maven: org.threeten:threetenbp:1.2" />
             <element id="library" level="project" name="Maven: com.googlecode.wicket-jquery-ui:wicket-jquery-ui-plugins:6.19.1" />
-            <element id="library" level="project" name="Maven: com.googlecode.wicket-jquery-ui:wicket-kendo-ui:6.19.1" />
-            <element id="library" level="project" name="Maven: com.googlecode.wicket-jquery-ui:wicket-kendo-ui-culture:6.19.1" />
-            <element id="library" level="project" name="Maven: com.googlecode.wicket-jquery-ui:wicket-kendo-ui-theme-default:6.19.1" />
             <element id="library" level="project" name="Maven: org.apache.wicket:wicket-core:6.19.0" />
             <element id="library" level="project" name="Maven: org.apache.wicket:wicket-util:6.19.0" />
             <element id="library" level="project" name="Maven: org.apache.wicket:wicket-request:6.19.0" />
@@ -90,7 +87,7 @@
           </element>
         </element>
         <element id="directory" name="META-INF">
-          <element id="file-copy" path="$PROJECT_DIR$/target/MANIFEST.MF" />
+          <element id="file-copy" path="$PROJECT_DIR$/target/pvt/META-INF/MANIFEST.MF" />
         </element>
         <element id="javaee-facet-resources" facet="pvt/web/Web" />
       </root>
@@ -114,7 +111,7 @@
       <profile default="true" name="Default" enabled="false">
         <processorPath useClasspath="true" />
       </profile>
-      <profile default="false" name="Maven default annotation processors profile" enabled="true">
+      <profile default="false" name="Annotation profile for pvt" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -455,39 +452,6 @@
         <root url="jar://$MAVEN_REPOSITORY$/com/googlecode/wicket-jquery-ui/wicket-jquery-ui/6.19.1/wicket-jquery-ui-6.19.1-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: com.googlecode.wicket-jquery-ui:wicket-kendo-ui-culture:6.19.1">
-      <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/com/googlecode/wicket-jquery-ui/wicket-kendo-ui-culture/6.19.1/wicket-kendo-ui-culture-6.19.1.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/com/googlecode/wicket-jquery-ui/wicket-kendo-ui-culture/6.19.1/wicket-kendo-ui-culture-6.19.1-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/com/googlecode/wicket-jquery-ui/wicket-kendo-ui-culture/6.19.1/wicket-kendo-ui-culture-6.19.1-sources.jar!/" />
-      </SOURCES>
-    </library>
-    <library name="Maven: com.googlecode.wicket-jquery-ui:wicket-kendo-ui-theme-default:6.19.1">
-      <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/com/googlecode/wicket-jquery-ui/wicket-kendo-ui-theme-default/6.19.1/wicket-kendo-ui-theme-default-6.19.1.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/com/googlecode/wicket-jquery-ui/wicket-kendo-ui-theme-default/6.19.1/wicket-kendo-ui-theme-default-6.19.1-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/com/googlecode/wicket-jquery-ui/wicket-kendo-ui-theme-default/6.19.1/wicket-kendo-ui-theme-default-6.19.1-sources.jar!/" />
-      </SOURCES>
-    </library>
-    <library name="Maven: com.googlecode.wicket-jquery-ui:wicket-kendo-ui:6.19.1">
-      <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/com/googlecode/wicket-jquery-ui/wicket-kendo-ui/6.19.1/wicket-kendo-ui-6.19.1.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/com/googlecode/wicket-jquery-ui/wicket-kendo-ui/6.19.1/wicket-kendo-ui-6.19.1-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/com/googlecode/wicket-jquery-ui/wicket-kendo-ui/6.19.1/wicket-kendo-ui-6.19.1-sources.jar!/" />
-      </SOURCES>
-    </library>
     <library name="Maven: com.jcraft:jsch:0.1.50">
       <CLASSES>
         <root url="jar://$MAVEN_REPOSITORY$/com/jcraft/jsch/0.1.50/jsch-0.1.50.jar!/" />
@@ -719,15 +683,15 @@
         <root url="jar://$MAVEN_REPOSITORY$/joda-time/joda-time/2.3/joda-time-2.3-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: junit:junit:4.11">
+    <library name="Maven: junit:junit:4.12">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/junit/junit/4.11/junit-4.11.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/junit/junit/4.11/junit-4.11-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/junit/junit/4.11/junit-4.11-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="Maven: net.jcip:jcip-annotations:1.0">
