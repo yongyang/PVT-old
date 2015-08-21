@@ -10,6 +10,8 @@ public class VersionConventionVerifyTool extends VerifyTool {
 
     private static final long serialVersionUID = 8002107449547514235L;
 
+    private String conventionRegexp;
+
     public static final String LABEL = "Version Convention Check";
 
 
@@ -21,12 +23,12 @@ public class VersionConventionVerifyTool extends VerifyTool {
         return LABEL;
     }
 
-    /* (non-Javadoc)
-     * @see org.jboss.pnc.pvt.model.VerifyTool#getPageVariant()
-     */
-    @Override
-    public String getPageVariant() {
-        return "versionconvention";
+    public String getConventionRegexp() {
+        return conventionRegexp;
+    }
+
+    public void setConventionRegexp(String conventionRegexp) {
+        this.conventionRegexp = conventionRegexp;
     }
 
     @Override

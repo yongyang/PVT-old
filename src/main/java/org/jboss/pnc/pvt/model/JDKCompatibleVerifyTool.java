@@ -15,11 +15,16 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.apache.commons.io.IOUtils;
 
 /**
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
  */
+@JsonAutoDetect
+@JsonSubTypes({@JsonSubTypes.Type(value = JDKCompatibleVerifyTool.class)})
 public class JDKCompatibleVerifyTool extends VerifyTool {
 
     private static final long serialVersionUID = -7513802473705616180L;
@@ -36,14 +41,6 @@ public class JDKCompatibleVerifyTool extends VerifyTool {
     @Override
     public String getLabel() {
         return LABEL;
-    }
-
-    /* (non-Javadoc)
-     * @see org.jboss.pnc.pvt.model.VerifyTool#getPageVariant()
-     */
-    @Override
-    public String getPageVariant() {
-        return "jdktool";
     }
 
     @Override

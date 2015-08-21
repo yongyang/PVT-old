@@ -77,7 +77,7 @@ public class SingleToolPage extends TemplatePage {
         if (tool == null) {
             redirectToInterceptPage(new Page404(pp));
         }
-        this.variant = tool.getPageVariant();
+        this.variant = "tool.getPageVariant()";
         add(createToolForm(tool, pp));
     }
 

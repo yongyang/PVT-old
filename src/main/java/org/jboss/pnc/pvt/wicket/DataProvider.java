@@ -43,7 +43,7 @@ public final class DataProvider {
     static {
 
         SimpleJenkinsVerifyTool simpleJenkinsTool = new SimpleJenkinsVerifyTool();
-        simpleJenkinsTool.setId(1L);
+//        simpleJenkinsTool.setId(1L);
         simpleJenkinsTool.setName("Simple Jenkins Tool");
         simpleJenkinsTool.setDescription("Simple jenkins tool which just specify the Jenkins Job ID");
         simpleJenkinsTool.setJobId("testJob");
@@ -51,13 +51,13 @@ public final class DataProvider {
 
         JDKCompatibleVerifyTool jdkTool = new JDKCompatibleVerifyTool();
         jdkTool.setName("JDK-1.8-Check");
-        jdkTool.setId(2L);
+//        jdkTool.setId(2L);
         jdkTool.setExpectJDKVersion("1.8");
         jdkTool.setDescription("JDK 1.8 compatible verify tool.");
         tools.add(jdkTool);
 
         TemplateJenkinsVerifyTool templateJenkinsTool = new TemplateJenkinsVerifyTool();
-        templateJenkinsTool.setId(3L);
+//        templateJenkinsTool.setId(3L);
         templateJenkinsTool.setName("Template Jenkins Tool");
         templateJenkinsTool.setDescription("Template jenkins tool which specify the config.xml to execute");
         templateJenkinsTool.setJenkinsConfigXML("<?xml version='1.0' encoding='UTF-8'?><project><actions/><description>Run ${toolName} verification test on ${projectName}.&lt;br&gt;&#xd;</description></project>");
@@ -65,13 +65,13 @@ public final class DataProvider {
 
         ScriptJenkinsVerifyTool scriptJenkinsTool = new ScriptJenkinsVerifyTool();
         scriptJenkinsTool.setScript("java -jar tool.jar SecMain ${args1} ${args2}");
-        scriptJenkinsTool.setId(4L);
+//        scriptJenkinsTool.setId(4L);
         scriptJenkinsTool.setName("Script Jenkins Tool");
         scriptJenkinsTool.setDescription("Script Jenkins tool which you can specify the basic shell script only");
         tools.add(scriptJenkinsTool);
 
         VersionConventionVerifyTool versionVerifyTool = new VersionConventionVerifyTool();
-        versionVerifyTool.setId(5L);
+//        versionVerifyTool.setId(5L);
         versionVerifyTool.setDescription("Version Convention Verify Tool");
         versionVerifyTool.setName("VersionConversionVerify");
         tools.add(versionVerifyTool);

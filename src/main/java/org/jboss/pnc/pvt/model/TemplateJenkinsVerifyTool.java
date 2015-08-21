@@ -35,11 +35,4 @@ public class TemplateJenkinsVerifyTool extends VerifyTool {
         return LABEL;
     }
 
-    /* (non-Javadoc)
-     * @see org.jboss.pnc.pvt.model.VerifyTool#getPageVariant()
-     */
-    @Override
-    public String getPageVariant() {
-        return "templatejenkins";
-    }
 }

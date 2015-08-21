@@ -1,10 +1,10 @@
 package org.jboss.pnc.pvt.model;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * The base verify tool definition.
@@ -13,11 +13,13 @@ import java.util.Set;
  *
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
  */
+@JsonAutoDetect
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
 public abstract class VerifyTool implements Serializable {
 
     private static final long serialVersionUID = -5353557149342108021L;
 
-    private long id;
+    private String id = UUID.randomUUID().toString() ;
 
     private String name;
 
@@ -26,14 +28,14 @@ public abstract class VerifyTool implements Serializable {
     /**
      * @return the id
      */
-    public long getId() {
+    public String getId() {
         return id;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -115,11 +117,6 @@ public abstract class VerifyTool implements Serializable {
      * @return the Label to distinguish the tool
      */
     public abstract String getLabel();
-
-    /**
-     * @return the variant used for wicket page
-     */
-    public abstract String getPageVariant();
 
     /**
      * Register all sub class of VerifyTool here

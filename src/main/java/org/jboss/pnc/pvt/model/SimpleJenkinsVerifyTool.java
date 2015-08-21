@@ -1,10 +1,15 @@
 package org.jboss.pnc.pvt.model;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+
 /**
  * A jenkins verify tool to call a defined/existed jenkins job
  *
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
  */
+@JsonAutoDetect
+@JsonSubTypes({ @JsonSubTypes.Type(value = SimpleJenkinsVerifyTool.class)})
 public class SimpleJenkinsVerifyTool extends VerifyTool {
 
     private static final long serialVersionUID = -8291271547157028632L;
@@ -35,11 +40,4 @@ public class SimpleJenkinsVerifyTool extends VerifyTool {
         return LABEL;
     }
 
-    /* (non-Javadoc)
-     * @see org.jboss.pnc.pvt.model.VerifyTool#getPageVariant()
-     */
-    @Override
-    public String getPageVariant() {
-        return "simplejenkins";
-    }
 }

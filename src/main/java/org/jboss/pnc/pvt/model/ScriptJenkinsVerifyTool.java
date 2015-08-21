@@ -62,14 +62,6 @@ public class ScriptJenkinsVerifyTool extends TemplateJenkinsVerifyTool implement
         return LABEL;
     }
 
-    /* (non-Javadoc)
-     * @see org.jboss.pnc.pvt.model.TemplateJenkinsVerifyTool#getPageVariant()
-     */
-    @Override
-    public String getPageVariant() {
-        return "scriptjenkins";
-    }
-
     /**
 	 * @return the script
 	 */
