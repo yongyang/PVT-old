@@ -41,7 +41,6 @@ public class ToolsPage extends TemplatePage {
                     @Override
                     public void onClick() {
                         PageParameters pp = new PageParameters();
-                        pp.add("mode", SingleToolPage.MODE_CREATE + "");
                         pp.add("label", item.getModelObject());
 
                         String implClass = item.getModel().getObject().getImplClass();
@@ -76,8 +75,8 @@ public class ToolsPage extends TemplatePage {
                     public void onClick() {
                     	PageParameters pp = new PageParameters();
                         pp.add("id", item.getModel().getObject().getId());
-                        pp.add("mode", SingleToolPage.MODE_EDIT + "");
-                        setResponsePage(SingleToolPage.class, pp);
+                        //TODO: set correct ToolEditPage
+//                        setResponsePage(SingleToolPage.class, pp);
                     }
 
                     @Override
