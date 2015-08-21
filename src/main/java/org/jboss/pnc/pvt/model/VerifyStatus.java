@@ -5,7 +5,7 @@ package org.jboss.pnc.pvt.model;
  */
 public enum VerifyStatus {
     IN_PROGRESS,
-    NEED_INSPECT,
     PASSED,
-    REJECTED
+    REJECTED,
+    NEED_INSPECT
 }
