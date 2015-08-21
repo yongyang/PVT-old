@@ -6,28 +6,31 @@ import java.util.Properties;
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
  */
 public class VerifyParameter {
-    private String previousRelease;
-    private String currentRelease;
 
-    private String[] previousDistributionZips;
-    private String[] currentDistributionZips;
+    private Release previousRelease;
+    private Release currentRelease;
 
     private Properties properties = new Properties();
 
 
-    public VerifyParameter(String previousRelease, String currentRelease, String[] previousDistributionZips, String[] currentDistributionZips) {
-        this(previousRelease, currentRelease, previousDistributionZips, currentDistributionZips, null);
+    public VerifyParameter(Release previousRelease, Release currentRelease) {
+        this(previousRelease, currentRelease, null);
     }
 
-    public VerifyParameter(String previousRelease, String currentRelease, String[] previousDistributionZips, String[] currentDistributionZips, Properties properties) {
+    public VerifyParameter(Release previousRelease, Release currentRelease, Properties properties) {
         this.previousRelease = previousRelease;
         this.currentRelease = currentRelease;
-        this.previousDistributionZips = previousDistributionZips;
-        this.currentDistributionZips = currentDistributionZips;
         if(properties != null && !properties.isEmpty()) {
             this.properties = properties;
         }
+    }
 
+    public Release getPreviousRelease() {
+        return previousRelease;
+    }
+
+    public Release getCurrentRelease() {
+        return currentRelease;
     }
 
     public void addProperty(String name, String value) {
@@ -40,22 +43,6 @@ public class VerifyParameter {
 
     public boolean hasProperty(String name) {
         return properties.containsKey(name);
-    }
-
-    public String getPreviousRelease() {
-        return previousRelease;
-    }
-
-    public String getCurrentRelease() {
-        return currentRelease;
-    }
-
-    public String[] getPreviousDistributionZips() {
-        return previousDistributionZips;
-    }
-
-    public String[] getCurrentDistributionZips() {
-        return currentDistributionZips;
     }
 
     public Properties getProperties() {

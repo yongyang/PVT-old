@@ -17,6 +17,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.jboss.pnc.pvt.model.Release;
+import org.jboss.pnc.pvt.model.VerifyParameter;
 import org.jboss.pnc.pvt.model.VerifyTool;
 
 import java.util.*;
@@ -139,7 +140,7 @@ public class ReleasesPage extends TemplatePage{
     void verifyRelease(Release release) {
         for(String toolId : release.getTools()) {
             VerifyTool tool = ((PVTApplication) Application.get()).getDAO().getPvtModel().getToolById(toolId);
-//            tool.verify();
+            tool.verify(new VerifyParameter(null, release));
         }
     }
 }
