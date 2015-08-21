@@ -23,6 +23,9 @@ public class Verification<T extends Serializable> {
     private String id = UUID.randomUUID().toString();
     private String toolId;
 
+    private String previousReleaseId;
+    private String currentReleaseId;
+
     private long startTime;
     private VerifyStatus status = VerifyStatus.IN_PROGRESS;
 
@@ -30,7 +33,17 @@ public class Verification<T extends Serializable> {
 
     private T resultObject;
 
-    public Verification() {
+    public Verification(String previousReleaseId, String currentReleaseId) {
+        this.previousReleaseId = previousReleaseId;
+        this.currentReleaseId = currentReleaseId;
+    }
+
+    public String getPreviousReleaseId() {
+        return previousReleaseId;
+    }
+
+    public String getCurrentReleaseId() {
+        return currentReleaseId;
     }
 
     public String getId() {
