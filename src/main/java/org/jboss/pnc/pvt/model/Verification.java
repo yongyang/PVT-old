@@ -88,6 +88,7 @@ public abstract class Verification<T extends Serializable> {
      * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
      */
     public static enum Status {
+        NEW, // Add tool, but not start to verify
         IN_PROGRESS,
         PASSED,
         REJECTED,
