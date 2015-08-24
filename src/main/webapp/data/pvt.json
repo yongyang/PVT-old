@@ -77,9 +77,6 @@
       "name": "1.0.0.DR1",
       "distributions": "http://abc.com/a.zip\r\nhttp://abc.com/b.zip",
       "tools": [
-        "ZipDiff",
-        "Version convention",
-        "JDK version compatible"
       ],
       "description": "BRMS 1.0.0.DR1 release",
       "status": "NEW",

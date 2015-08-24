@@ -1,8 +1,6 @@
 package org.jboss.pnc.pvt.model;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 import java.util.*;
@@ -100,7 +98,7 @@ public class PVTModel implements Serializable {
 		return Arrays.asList(tools.values().toArray(new VerifyTool[tools.size()]));
 	}
 
-	public VerifyTool getToolById(String id) {
+	public VerifyTool getVerifyToolById(String id) {
 		return tools.get(id);
 	}
 
@@ -120,5 +118,30 @@ public class PVTModel implements Serializable {
 		verifications.put(verification.getId(), verification);
 	}
 
+	public List<VerifyTool> getVerifyTools(String... toolsId) {
+		if(toolsId == null || toolsId.length == 0) {
+			return Collections.EMPTY_LIST;
+		}
+		else {
+			List<VerifyTool> tools = new ArrayList<>(toolsId.length);
+			for(String id : toolsId) {
+				tools.add(getVerifyToolById(id));
+			}
+			return tools;
+		}
+	}
+
+	public List<VerifyTool> getVerifyTools(List<String> toolsId) {
+		if(toolsId == null || toolsId.size() == 0) {
+			return Collections.EMPTY_LIST;
+		}
+		else {
+			List<VerifyTool> tools = new ArrayList<>(toolsId.size());
+			for(String id : toolsId) {
+				tools.add(getVerifyToolById(id));
+			}
+			return tools;
+		}
+	}
 
 }

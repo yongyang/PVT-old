@@ -137,7 +137,7 @@ public class ReleasesPage extends TemplatePage{
     private void verifyRelease(Release release) {
         for(String toolId : release.getTools()) {
             PVTModel pvtModel = ((PVTApplication) Application.get()).getDAO().getPvtModel();
-            VerifyTool tool = pvtModel.getToolById(toolId);
+            VerifyTool tool = pvtModel.getVerifyToolById(toolId);
             // start verification and link to Release
             Verification verification = tool.verify(new VerifyParameter(tool.getId(), null, release));
             release.addVerification(verification.getToolId(), verification.getId());
