@@ -41,7 +41,8 @@ public class ReleasesPage extends TemplatePage{
             }
         });
 
-        List<Release> releases = ((PVTApplication) Application.get()).getDAO().getPvtModel().getReleases();
+        PVTModel pvtModel = ((PVTApplication) Application.get()).getDAO().getPvtModel();
+        List<Release> releases = pvtModel.getReleases();
         add(new Label("releases_count", Model.of("" + releases.size())));
 
         add(new ListView<Release>("release_rows", releases) {
@@ -88,7 +89,7 @@ public class ReleasesPage extends TemplatePage{
 
                             @Override
                             public IModel<?> getBody() {
-                                return Model.of(item.getModelObject());
+                                return Model.of(pvtModel.getVerifyToolById(item.getModelObject()).getName());
                             }
                         };
                         item.add(jobLink);
