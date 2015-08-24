@@ -155,4 +155,10 @@ public class PVTModel implements Serializable {
 		}
 	}
 
+	public Release getPreviousRelease(String productId, String releaseId) {
+		//TODO:
+		return  null;
+	}
+
+
 }

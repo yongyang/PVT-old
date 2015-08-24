@@ -25,7 +25,7 @@ import java.util.*;
 public class ReleasesPage extends TemplatePage{
 
     public ReleasesPage(PageParameters pp) {
-        this(pp,"PVT releases loaded.");
+        this(pp, "PVT releases loaded.");
     }
 
     public ReleasesPage(PageParameters pp,String info) {
@@ -48,6 +48,7 @@ public class ReleasesPage extends TemplatePage{
         add(new ListView<Release>("release_rows", releases) {
             @Override
             protected void populateItem(ListItem<Release> item) {
+                Release release = item.getModelObject();
                 Link product_link = new Link("product_link") {
                     @Override
                     public void onClick() {
@@ -81,7 +82,8 @@ public class ReleasesPage extends TemplatePage{
                 item.add(new ListView<String>("release_tools", item.getModelObject().getTools()) {
                     @Override
                     protected void populateItem(ListItem<String> item) {
-                        Link<String> jobLink = new Link<String>("release_tool", Model.of(item.getModelObject())) {
+                        String toolId = item.getModelObject();
+                        Link<String> jobLink = new Link<String>("release_tool", Model.of(pvtModel.getVerifyToolById(toolId).getName())) {
                             @Override
                             public void onClick() {
                                 //TODO: open tool
@@ -89,10 +91,15 @@ public class ReleasesPage extends TemplatePage{
 
                             @Override
                             public IModel<?> getBody() {
-                                return Model.of(pvtModel.getVerifyToolById(item.getModelObject()).getName());
+                                return Model.of(pvtModel.getVerifyToolById(toolId).getName());
                             }
                         };
+
+                        String verificationId = release.getVerificationIdByToolId(toolId);
+
+                        Label toolStatus= new Label("release_verification_status", (verificationId != null) ? pvtModel.getVerificationById(verificationId).getStatus().toString() : "NEW");
                         item.add(jobLink);
+                        item.add(toolStatus);
                     }
                 });
                 item.add(new ListView<String>("release_distributions", Arrays.asList(item.getModelObject().getDistributionArray())) {
@@ -147,6 +154,8 @@ public class ReleasesPage extends TemplatePage{
             ((PVTApplication) Application.get()).getDAO().persist();
         }
     }
+
+
 }
 
 

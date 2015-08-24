@@ -39,12 +39,8 @@ public class JDKCompatibleVerifyTool extends VerifyTool<Boolean> {
 
     @Override
     public Verification<Boolean> verify(VerifyParameter param) {
-        return new Verification<Boolean>(param.getToolId(), param.getPreviousRelease().getId(), param.getCurrentRelease().getId()) {
-            @Override
-            public Boolean getResultObject() {
-                return true;
-            }
-        };
+        //TODO: do verify
+        return newDefaultVerification(param, true);
 /*
         if (getExpectJDKVersion() == null || getExpectJDKVersion().trim().length() == 0) {
             throw new IllegalStateException("Please set expect JDK version first!");

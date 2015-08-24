@@ -18,7 +18,7 @@ import java.util.UUID;
  */
 @JsonAutoDetect
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
-public abstract class Verification<T extends Serializable> {
+public class Verification<T extends Serializable> implements Serializable{
 
     private String id = UUID.randomUUID().toString();
     private String toolId;
@@ -26,16 +26,32 @@ public abstract class Verification<T extends Serializable> {
     private String previousReleaseId;
     private String currentReleaseId;
 
-    private long startTime;
+    private long startTime = System.currentTimeMillis();
     private Status status = Status.IN_PROGRESS;
 
     private Exception exception;
 
+    private T resultObject;
+
+    public Verification() {
+
+    }
+
+    public void setPreviousReleaseId(String previousReleaseId) {
+        this.previousReleaseId = previousReleaseId;
+    }
+
+    public void setCurrentReleaseId(String currentReleaseId) {
+        this.currentReleaseId = currentReleaseId;
+    }
+
+/*
     public Verification(String toolId, String previousReleaseId, String currentReleaseId) {
         this.toolId = toolId;
         this.previousReleaseId = previousReleaseId;
         this.currentReleaseId = currentReleaseId;
     }
+*/
 
     public String getPreviousReleaseId() {
         return previousReleaseId;
@@ -82,7 +98,13 @@ public abstract class Verification<T extends Serializable> {
         this.status = status;
     }
 
-    public abstract T getResultObject();
+    public void setResultObject(T resultObject) {
+        this.resultObject = resultObject;
+    }
+
+    public T getResultObject() {
+        return resultObject;
+    }
 
     /**
      * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
