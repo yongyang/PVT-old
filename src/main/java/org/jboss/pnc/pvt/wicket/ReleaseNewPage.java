@@ -30,6 +30,7 @@ public class ReleaseNewPage extends TemplatePage {
     TextField<String> nameTextField;
 
     protected DropDownChoice<Product> productDropDownChoice;
+    protected CheckBoxMultipleChoice<VerifyTool> checkBoxMultipleChoice;
     protected Button resetButton;
     protected Button backButton;
     protected Button removeButton;
@@ -84,7 +85,7 @@ public class ReleaseNewPage extends TemplatePage {
         releaseForm.add(new TextArea<String>("distributions"));
         releaseForm.add(new TextArea<String>("description"));
 
-        CheckBoxMultipleChoice<VerifyTool> checkBoxMultipleChoice = new CheckBoxMultipleChoice<VerifyTool>(
+        checkBoxMultipleChoice = new CheckBoxMultipleChoice<VerifyTool>(
                 "tools",
                 new ListModel<VerifyTool>(dao.getPvtModel().getVerifyTools(release.getTools())),
                 dao.getPvtModel().getToolsList(),

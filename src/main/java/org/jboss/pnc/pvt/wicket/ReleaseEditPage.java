@@ -5,6 +5,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.jboss.pnc.pvt.dao.PVTDataAccessObject;
 import org.jboss.pnc.pvt.model.Release;
 
+import java.util.Arrays;
+
 /**
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
  */
@@ -23,6 +25,7 @@ public class ReleaseEditPage extends ReleaseNewPage {
     public void doSubmit() {
         PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
         release.setProductId(productDropDownChoice.getModelObject().getId());
+        release.setTools(Arrays.asList(checkBoxMultipleChoice.getInputAsArray()));
         dao.getPvtModel().updateRelease(release);
         dao.persist();
         setInfo("Release: " + release.getName() + " is Updated.");
