@@ -7,5 +7,5 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
  */
 @JsonAutoDetect
 public enum  PVTStatus {
-    NEW, ANALYZING, VERIFYING, PASSED, REJECTED
+    NEW, VERIFYING, NEED_INSPECT, PASSED, REJECTED
 }

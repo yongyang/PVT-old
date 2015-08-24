@@ -91,7 +91,7 @@ public abstract class Verification<T extends Serializable> {
         NEW, // Add tool, but not start to verify
         IN_PROGRESS,
         PASSED,
-        REJECTED,
+        NOT_PASSED,
         NEED_INSPECT;
     }
 }
