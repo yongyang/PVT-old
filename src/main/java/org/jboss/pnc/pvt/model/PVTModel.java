@@ -1,6 +1,7 @@
 package org.jboss.pnc.pvt.model;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.Serializable;
 import java.util.*;
@@ -94,7 +95,12 @@ public class PVTModel implements Serializable {
 		return toolTypes;
 	}
 
-	public List<VerifyTool> getTools() {
+	public Map<String, VerifyTool> getTools() {
+		return tools;
+	}
+
+	@JsonIgnore
+	public List<VerifyTool> getToolsList() {
 		return Arrays.asList(tools.values().toArray(new VerifyTool[tools.size()]));
 	}
 
@@ -108,6 +114,11 @@ public class PVTModel implements Serializable {
 
 	public Map<String, Verification<?>> getVerifications() {
 		return verifications;
+	}
+
+	@JsonIgnore
+	public List<Verification<?>> getVerificationsList() {
+		return Arrays.asList(verifications.values().toArray(new Verification[tools.size()]));
 	}
 
 	public Verification<?> getVerificationById(String id) {

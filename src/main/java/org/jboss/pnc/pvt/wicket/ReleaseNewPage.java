@@ -6,7 +6,6 @@ import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.validation.IFormValidator;
-import org.apache.wicket.markup.html.list.ListItemModel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
@@ -85,12 +84,10 @@ public class ReleaseNewPage extends TemplatePage {
         releaseForm.add(new TextArea<String>("distributions"));
         releaseForm.add(new TextArea<String>("description"));
 
-
-        List<VerifyTool> tools = dao.getPvtModel().getTools();
         CheckBoxMultipleChoice<VerifyTool> checkBoxMultipleChoice = new CheckBoxMultipleChoice<VerifyTool>(
                 "tools",
                 new ListModel<VerifyTool>(dao.getPvtModel().getVerifyTools(release.getTools())),
-                dao.getPvtModel().getTools(),
+                dao.getPvtModel().getToolsList(),
                 new IChoiceRenderer<VerifyTool>() {
                     @Override
                     public Object getDisplayValue(VerifyTool object) {
