@@ -15,7 +15,7 @@ import java.util.*;
  */
 @JsonAutoDetect
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
-public abstract class VerifyTool implements Serializable {
+public abstract class VerifyTool<T extends Serializable> implements Serializable {
 
     private static final long serialVersionUID = -5353557149342108021L;
 
@@ -111,7 +111,7 @@ public abstract class VerifyTool implements Serializable {
      *
      * @param param @return result, maybe a handle for asynchronous job, such a jenkins job
      */
-    public abstract <T extends Serializable> Verification<T> verify(VerifyParameter param);
+    public abstract Verification<T> verify(VerifyParameter param);
 
     /**
      * Register all sub class of VerifyTool here

@@ -18,7 +18,7 @@ import java.util.UUID;
  */
 @JsonAutoDetect
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
-public class Verification<T extends Serializable> {
+public abstract class Verification<T extends Serializable> {
 
     private String id = UUID.randomUUID().toString();
     private String toolId;
@@ -30,8 +30,6 @@ public class Verification<T extends Serializable> {
     private Status status = Status.IN_PROGRESS;
 
     private Exception exception;
-
-    private T resultObject;
 
     public Verification(String toolId, String previousReleaseId, String currentReleaseId) {
         this.toolId = toolId;
@@ -59,17 +57,10 @@ public class Verification<T extends Serializable> {
         this.exception = exception;
     }
 
-    public T getResultObject() {
-        return resultObject;
-    }
-
-    public void setResultObject(T resultObject) {
-        this.resultObject = resultObject;
-    }
-
     public String getToolId() {
         return toolId;
     }
+
 
     public void setToolId(String toolId) {
         this.toolId = toolId;
@@ -91,6 +82,8 @@ public class Verification<T extends Serializable> {
         this.status = status;
     }
 
+    public abstract T getResultObject();
+
     /**
      * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
      */
@@ -98,6 +91,6 @@ public class Verification<T extends Serializable> {
         IN_PROGRESS,
         PASSED,
         REJECTED,
-        NEED_INSPECT
+        NEED_INSPECT;
     }
 }

@@ -24,7 +24,7 @@ import org.apache.commons.io.IOUtils;
  */
 @JsonAutoDetect
 @JsonSubTypes({@JsonSubTypes.Type(value = JDKCompatibleVerifyTool.class)})
-public class JDKCompatibleVerifyTool extends VerifyTool {
+public class JDKCompatibleVerifyTool extends VerifyTool<Boolean> {
 
     private static final long serialVersionUID = -7513802473705616180L;
 
@@ -38,7 +38,14 @@ public class JDKCompatibleVerifyTool extends VerifyTool {
     }
 
     @Override
-    public Verification verify(VerifyParameter param) {
+    public Verification<Boolean> verify(VerifyParameter param) {
+        return new Verification<Boolean>(param.getToolId(), param.getPreviousRelease().getId(), param.getCurrentRelease().getId()) {
+            @Override
+            public Boolean getResultObject() {
+                return true;
+            }
+        };
+/*
         if (getExpectJDKVersion() == null || getExpectJDKVersion().trim().length() == 0) {
             throw new IllegalStateException("Please set expect JDK version first!");
         }
@@ -99,6 +106,7 @@ public class JDKCompatibleVerifyTool extends VerifyTool {
             e.printStackTrace();
         }
         return null;
+*/
     }
 
     public static boolean checkClassVersion(InputStream classInputStream, String expectJDKVersion) throws Exception {
