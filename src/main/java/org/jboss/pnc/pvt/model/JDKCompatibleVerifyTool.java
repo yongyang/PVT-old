@@ -55,6 +55,8 @@ public class JDKCompatibleVerifyTool extends VerifyTool<Execution> {
                 return execution;
             }
         };
+        verification.setCurrentReleaseId(param.getCurrentRelease().getId());
+        verification.setToolId(getId());
 
         execution.addCallBack(new Execution.CallBack() {
 
