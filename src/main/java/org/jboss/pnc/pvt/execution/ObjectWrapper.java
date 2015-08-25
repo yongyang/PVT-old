@@ -17,42 +17,28 @@
 
 package org.jboss.pnc.pvt.execution;
 
+
 /**
- * @author <a href="mailto:lgao@redhat.com">Lin Gao</a>
- *
- * Keep it ordered
- *
+ * Copied from `https://github.com/project-ncl/pnc/blob/master/common/src/main/java/org/jboss/pnc/common/util/ObjectWrapper.java`
+ * 
+ * Created by <a href="mailto:matejonnet@gmail.com">Matej Lazar</a> on 2014-12-09.
  */
-public enum Stage {
-    
-    /** initial stage **/
-    Initial,
-    
-    /**
-     * Submitted for execution, but may not started yet.
-     * 
-     * This means the real action has been submitted to the execution phase
-     * 
-     **/
-    Submit,
-    
-    /**
-     * Preparation for execution, like check running environment, required libraries.
-     * 
-     * Preparation stage is done by the execution tools framework, it can jump to <code>Complete</code>
-     * stage in case some prerequisites are not satisfied.
-     * 
-     */
-    Prepare,
-    
-    /**
-     * Running means it starts the verification task
-     * 
-     */
-    Running,
-    
-    /**
-     * It can be either Success result or Failure result.
-     */
-    Complet
+class ObjectWrapper<T> {
+    private T obj;
+
+    public ObjectWrapper() {
+    }
+
+    public ObjectWrapper(T obj) {
+        this.obj = obj;
+    }
+
+    public void set(T obj) {
+        this.obj = obj;
+    }
+
+    public T get() {
+        return obj;
+    }
+
 }

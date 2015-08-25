@@ -17,14 +17,17 @@ import java.util.zip.ZipInputStream;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
-import org.apache.commons.io.IOUtils;
+
+import org.jboss.pnc.pvt.execution.Execution;
+import org.jboss.pnc.pvt.execution.ExecutionException;
+import org.jboss.pnc.pvt.execution.Executor;
 
 /**
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
  */
 @JsonAutoDetect
 @JsonSubTypes({@JsonSubTypes.Type(value = JDKCompatibleVerifyTool.class)})
-public class JDKCompatibleVerifyTool extends VerifyTool<Boolean> {
+public class JDKCompatibleVerifyTool extends VerifyTool<Execution> {
 
     private static final long serialVersionUID = -7513802473705616180L;
 
@@ -38,9 +41,43 @@ public class JDKCompatibleVerifyTool extends VerifyTool<Boolean> {
     }
 
     @Override
-    public Verification<Boolean> verify(VerifyParameter param) {
+    public Verification<Execution> verify(VerifyParameter param) {
+        
+        final String name = "JDK-Check-For-" + param.getCurrentRelease().getName();
+        final Runnable run = () -> {
+            
+        };
+        final Execution execution = Execution.createJVMExecution(name, run);
+        final Verification<Execution> verification = new Verification<Execution>() {
+
+            @Override
+            public Execution getResultObject() {
+                return execution;
+            }
+        };
+
+        execution.addCallBack(new Execution.CallBack() {
+
+            @Override
+            public void onStatus(Execution execution) {
+                // TODO update DB about the execution result !?
+            }
+
+            @Override
+            public void onLogChanged(Execution execution) {
+                // TODO update DB about the execution result !?
+
+            }
+        });
+        try {
+            Executor.getJVMExecutor().execute(execution);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return verification;
+        
         //TODO: do verify
-        return newDefaultVerification(param, true);
+//        return newDefaultVerification(param, true);
 /*
         if (getExpectJDKVersion() == null || getExpectJDKVersion().trim().length() == 0) {
             throw new IllegalStateException("Please set expect JDK version first!");

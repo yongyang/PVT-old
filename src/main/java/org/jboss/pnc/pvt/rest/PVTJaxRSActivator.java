@@ -18,7 +18,8 @@ public class PVTJaxRSActivator extends Application {
             beanConfig.setVersion(props.getProperty("apiVersion"));
             beanConfig.setTitle(props.getProperty("title"));
             beanConfig.setDescription(props.getProperty("description"));
-            beanConfig.setBasePath(props.getProperty("baseUrl", "http://localhost:8080/pvt/rest"));
+            beanConfig.setBasePath("/pvt/rest");
+            beanConfig.setPrettyPrint(true);
             beanConfig.setResourcePackage(props.getProperty("resourcepackages"));
             beanConfig.setScan(true);
         } catch (IOException e) {

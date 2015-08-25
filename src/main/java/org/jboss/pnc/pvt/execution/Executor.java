@@ -17,122 +17,102 @@
 
 package org.jboss.pnc.pvt.execution;
 
-import java.util.Map;
-import java.util.concurrent.Future;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
-
+    
 /**
  *
- * <code>Executor</code> is responsible to start a verification action 
- *
- * Implementation of this interface should be state-less.
+ * <code>Executor</code> is responsible to start a execution.
  * 
+ * It does not care about which product/version the execution is for.
+ *
  * @author <a href="mailto:lgao@redhat.com">Lin Gao</a>
  */
-public interface Executor {
+public abstract class Executor {
+
+    /** System property key for thread pool size for PVT to check status of a running execution. **/
+    public static final String KEY_PVT_CHECK_POOL_SIZE = "pvt.check.pool.size";
+
+    /** System property key for thread pool size for PVT to run a execution inside current JVM. **/
+    public static final String KEY_PVT_JVM_POOL_SIZE = "pvt.jvm.pool.size";
 
     /**
-     * Executes a tool by the tool name
+     * Starts an execution either to a Jenkins server or running inside the JVM.
      * 
      * Returns immediately after sending execution message.
      * 
-     * @param productName the product name
-     * @param version the product version
-     * @param toolName name of the execution tool. Globally unique.
-     * @return an Execution which contains the execution information.
+     * @param execution the execution.
      * @throws ExecutionException on any exception
      */
-    Execution execute(String productName, String version, String toolName) throws ExecutionException;
+    public abstract void execute(Execution execution) throws ExecutionException;
 
     /**
-     * Executes a tool by the tool name
-     * 
-     * Returns the Future instance immediately. This can be used by waiting on a Stage on.
-     * 
-     * @param the product name
-     * @param the product version
-     * @param toolName the tool name. Globally unique.
-     * @param stage which stage this should wait for.
-     * @return A Future instance with Execution information
-     * @throws ExecutionException on any exception
+     * @return the ScheduledExecutorService used to check the Execution
      */
-    Future<Execution> execute(String productName, String version, String toolName, Stage stage) throws ExecutionException;
+    ScheduledExecutorService getCheckingExecutorService() {
+        return CHECKING_EXESERVICE;
+    }
 
     /**
-     * Executes a job by the job name.
-     * 
-     * Returns immediately after sending execution message.
-     * 
-     * @param jobName name of the execution job. Globally unique.
-     * @return an Execution which contains the execution information.
-     * @throws ExecutionException on any exception
+     * @return the Thread Pool Size. Default to current available processors count.
      */
-    Execution execute(String jobName) throws ExecutionException;
+    static int getCheckThreadPoolSize() {
+        return Integer.getInteger(KEY_PVT_CHECK_POOL_SIZE, Runtime.getRuntime().availableProcessors());
+    }
 
     /**
-     * Executes a job by the job name.
-     * 
-     * Returns the Future instance immediately. This can be used by waiting on a Stage on.
-     * 
-     * @param jobName the job name. Globally unique.
-     * @param stage which stage this should wait for.
-     * @return A Future instance with Execution information
-     * @throws ExecutionException on any exception
+     * @return the Thread Pool Size. Default to current available processors count.
      */
-    Future<Execution> execute(String jobName, Stage stage) throws ExecutionException;
+    static int getJVMThreadPoolSize() {
+        return Integer.getInteger(KEY_PVT_JVM_POOL_SIZE, Runtime.getRuntime().availableProcessors());
+    }
 
     /**
-     * Executes a tool by the tool name.
-     * 
-     * Returns immediately after sending execution message.
-     * 
-     * @param the product name
-     * @param the product version
-     * @param toolName name of the execution job. Globally unique.
-     * @param params Parameters send to the job
-     * @return an Execution which contains the execution information.
-     * @throws ExecutionException on any exception
+     * @return the ExecutorService used to run the JVM execution
      */
-    Execution execute(String productName, String version, String toolName, Map<String, String> params) throws ExecutionException;
+    ExecutorService getJVMExecutorService() {
+        return JVM_EXESERVICE;
+    }
 
+    private static ScheduledExecutorService CHECKING_EXESERVICE = Executors.newScheduledThreadPool(getCheckThreadPoolSize());
+
+    private static ExecutorService JVM_EXESERVICE = Executors.newFixedThreadPool(getJVMThreadPoolSize());
 
     /**
-     * Executes a tool by the tool name
+     * Gets a Jenkins <code>Executor</code> instance.
      * 
-     * Returns the Future instance immediately. This can be used by waiting on a Stage on.
+     * Each call produces the same instance with default configuration.
      * 
-     * @param the product name
-     * @param the product version
-     * @param toolName the tool name. Globally unique.
-     * @param params Parameters send to the job
-     * @param stage which stage this should wait for.
-     * @return A Future instance with Execution information
-     * @throws ExecutionException on any exception
+     * The default jenkins configuration comes from 'jenkins.properties' in classpath.
+     * 
+     * @return an instance of a Jenkins <code>Executor</code>
      */
-    Future<Execution> execute(String productName, String version, String toolName, Map<String, String> params, Stage stage) throws ExecutionException;
+    public static Executor getJenkinsExecutor() {
+        return JenkinsExecutor.INSTANCE;
+    }
 
     /**
-     * Executes a job by the job name.
+     * Gets a Jenkins <code>Executor</code> instance with a specified JenkinsConfiguration.
      * 
-     * Returns immediately after sending execution message.
+     * Each call produces a new instance with specified Jenkins configuration
      * 
-     * @param jobName name of the execution job. Globally unique.
-     * @param params Parameters send to the job
-     * @return an Execution which contains the execution information.
-     * @throws ExecutionException on any exception
+     * @return an instance of a <code>Executor</code>
      */
-    Execution execute(String jobName, Map<String, String> params) throws ExecutionException;
+    public static Executor getJenkinsExecutor(JenkinsConfiguration jenkinsConfig) {
+        return new JenkinsExecutor(jenkinsConfig);
+    }
 
     /**
-     * Executes a job by the job name.
+     * Gets a JVM <code>Executor</code> instance.
      * 
-     * Returns the Future instance immediately. This can be used by waiting on a Stage on.
+     * This type of Executor will execute inside the JVM of PVT instance, it is not recommended though.
      * 
-     * @param jobName the job name. Globally unique.
-     * @param params Parameters send to the job
-     * @param stage which stage this should wait for.
-     * @return A Future instance with Execution information
-     * @throws ExecutionException on any exception
+     * @return a JVM <code>Executor</code> instance 
      */
-    Future<Execution> execute(String jobName, Map<String, String> params, Stage stage) throws ExecutionException;
+    public static Executor getJVMExecutor() {
+        return JVMExecutor.INSTANCE;
+    }
+
 }
