@@ -47,6 +47,7 @@ public class JDKCompatibleVerifyTool extends VerifyTool<Execution> {
         final Runnable run = () -> {
             
         };
+
         final Execution execution = Execution.createJVMExecution(name, run);
         final Verification<Execution> verification = new Verification<Execution>() {
 

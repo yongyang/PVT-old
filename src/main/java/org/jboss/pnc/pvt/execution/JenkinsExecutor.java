@@ -25,7 +25,6 @@ import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import org.jboss.logging.Logger;
@@ -83,14 +82,6 @@ class JenkinsExecutor extends Executor {
 
     }
 
-    private JenkinsConfiguration getDefaultJenkinsProps() throws IOException {
-        Properties props = new Properties();
-        try (InputStream input = getClass().getResourceAsStream("/jenkins.properties")) {
-            props.load(input);
-        }
-        return JenkinsConfiguration.fromProperty(props);
-    }
-
     private void checkJenkinsCrumbFlag() {
         if (this.crumbFlag != null) {
             return;
@@ -130,67 +121,68 @@ class JenkinsExecutor extends Executor {
     }
 
     private void startMonitor(String jobName, int buildNumber, final Execution execution) {
-        final ObjectWrapper<ScheduledFuture<?>> objectHolder = new ObjectWrapper<>();
-        Runnable checking = () -> {
-            long start = System.currentTimeMillis();
+        final Runnable checking = new Runnable() {
 
-            try {
-                Build jenkinsBuild = getBuild(jobName, buildNumber);
-                if (jenkinsBuild == null) {
-                    return;
-                }
+            @Override
+            public void run() {
+                long start = System.currentTimeMillis();
 
-                BuildWithDetails jenkinsBuildDetails = jenkinsBuild.details();
-                String log = jenkinsBuildDetails.getConsoleOutputText();
-                if (log != null) {
-                    execution.setLog(log);
+                try {
+                    Build jenkinsBuild = getBuild(jobName, buildNumber);
+                    if (jenkinsBuild == null) {
+                        getCheckingExecutorService().schedule(this, 10L, TimeUnit.SECONDS);
+                        return;
+                    }
+
+                    BuildWithDetails jenkinsBuildDetails = jenkinsBuild.details();
+                    String log = jenkinsBuildDetails.getConsoleOutputText();
+                    if (log != null) {
+                        execution.setLog(log);
+                    }
+                    BuildResult result = jenkinsBuildDetails.getResult();
+                    long timeout = jenkinsConfig.getJobTimeOut();
+                    if (timeout > 0) {
+                        long end = System.currentTimeMillis();
+                        if (end - start >= timeout) {
+                            throw new RuntimeException("Timeout to check build status of Jenkins job: " + jobName);
+                        }
+                    }
+                    if (result == null) {
+                        getCheckingExecutorService().schedule(this, 10L, TimeUnit.SECONDS);
+                        return;
+                    }
+                    switch (result) {
+                        case BUILDING:
+                        case REBUILDING:
+                        {
+                            execution.setStatus(Execution.Status.RUNNING);
+                            getCheckingExecutorService().schedule(this, 10L, TimeUnit.SECONDS);
+                            break;
+                        }
+                        case FAILURE:
+                        case UNSTABLE:
+                        case ABORTED:
+                        {
+                            execution.setStatus(Execution.Status.FAILED);
+                            break;
+                        }
+                        case SUCCESS:
+                        {
+                            execution.setStatus(Execution.Status.SUCCEEDED);
+                            break;
+                        }
+                        default:
+                        {
+                            execution.setStatus(Execution.Status.UNKNOWN);
+                            break;
+                        }
+                    }
+                } catch (IOException e) {
+                    logger.info("Failed to check Build Detail, continue...", e);
                 }
-                BuildResult result = jenkinsBuildDetails.getResult();
-                long timeout = this.jenkinsConfig.getJobTimeOut();
-                if (timeout > 0) {
-                    long end = System.currentTimeMillis();
-                    if (end - start >= timeout) {
-                        throw new RuntimeException("Timeout to check build status of Jenkins job: " + jobName);
-                    }
-                }
-                if (result == null) {
-                    return;
-                }
-                switch (result) {
-                    case BUILDING:
-                    case REBUILDING:
-                    {
-                        execution.setStatus(Execution.Status.RUNNING);
-                        break;
-                    }
-                    case FAILURE:
-                    case UNSTABLE:
-                    case ABORTED:
-                    {
-                        execution.setStatus(Execution.Status.FAILED);
-                        objectHolder.get().cancel(false);
-                        break;
-                    }
-                    case SUCCESS:
-                    {
-                        execution.setStatus(Execution.Status.SUCCEEDED);
-                        objectHolder.get().cancel(false);
-                        break;
-                    }
-                    default:
-                    {
-                        execution.setStatus(Execution.Status.UNKNOWN);
-                        objectHolder.get().cancel(false);
-                        break;
-                    }
-                }
-            } catch (IOException e) {
-                logger.info("Failed to check Build Detail, continue...", e);
             }
-            
         };
-        ScheduledFuture<?> future = getCheckingExecutorService().scheduleAtFixedRate(checking, 0, 10L, TimeUnit.SECONDS);
-        objectHolder.set(future);
+        getCheckingExecutorService().schedule(checking, 10L, TimeUnit.SECONDS);
     }
 
     private Build getBuild(String jobName, int buildNumber) throws IOException {

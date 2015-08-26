@@ -3,6 +3,7 @@ package org.jboss.pnc.pvt.rest.endpoints;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -57,6 +58,43 @@ public class JenkinsExecutionEndPoint {
         return Response.ok(execution).build();
     }
 
+    @SuppressWarnings("serial")
+    @ApiOperation(value = "Start a Jenkins Job. Waits until the Jenkins Job is fished.")
+    @POST
+    @Path("/startWait/{jobName}")
+    public Response startAndWait(@ApiParam("The Jenkins Job Name. Make sure the job existed already.") @PathParam("jobName") String jobName)
+             {
+        Execution execution = Execution.createJenkinsExecution(jobName);
+        final CountDownLatch countDownLatch = new CountDownLatch(1);
+        execution.addCallBack(new Execution.CallBack() {
+
+            @Override
+            public void onStatus(Execution execution) {
+                if (Execution.Status.FAILED.equals(execution.getStatus())
+                        || Execution.Status.SUCCEEDED.equals(execution.getStatus())) {
+                    countDownLatch.countDown();
+                }
+            }
+
+            @Override
+            public void onLogChanged(Execution execution) {
+
+            }
+        });
+        try {
+            Executor.getJenkinsExecutor().execute(execution);
+        } catch (ExecutionException e) {
+            return Response.status(Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN).entity(e.getMessage()).build();
+        }
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            ;
+        }
+        return Response.ok(execution).build();
+    }
+
+    @SuppressWarnings("serial")
     @ApiOperation(value = "Start a Jenkins Job, returns ASAP. An URL for the callback when the Jenkins job is completed or failed.")
     @POST
     @Path("/startWithCallback/{jobName}")
@@ -73,10 +111,10 @@ public class JenkinsExecutionEndPoint {
                 if (execution.getStatus().equals(Execution.Status.FAILED)
                         || execution.getStatus().equals(Execution.Status.SUCCEEDED)) {
                     try {
-                        logger.info("Call back to: " + callBackURL);
+                        logger.debug("Call back to: " + callBackURL);
                         HttpPost post = new HttpPost(callBackURL);
                         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-                        nameValuePairs.add(new BasicNameValuePair("Status", execution.getStatus().name())); //TODO more params to be sent ??
+                        nameValuePairs.add(new BasicNameValuePair("Status", execution.getStatus().name())); //TODO adds more params ??
 
                         post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
@@ -93,7 +131,7 @@ public class JenkinsExecutionEndPoint {
 
             @Override
             public void onLogChanged(Execution execution) {
-                logger.info("Log is: " + execution.getLog());
+                logger.debug("Log changed.");
             }
         });
         try {

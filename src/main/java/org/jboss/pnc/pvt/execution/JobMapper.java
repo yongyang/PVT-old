@@ -32,9 +32,9 @@ import org.jboss.pnc.pvt.util.StringFormatter;
  * @author <a href="mailto:lgao@redhat.com">Lin Gao</a>
  *
  */
-abstract class JobMapper {
+public abstract class JobMapper {
 
-    static JobMapper DEFAULT = new DefaultJobMapper();
+    public static JobMapper DEFAULT = new DefaultJobMapper();
 
     /**
      * Gets the job configuration according to the tool name.
@@ -42,7 +42,7 @@ abstract class JobMapper {
      * @param toolName the tool name
      * @return the job content, null if no mapping found
      */
-    abstract String getJobXMLContent(String toolName);
+    public abstract String getJobXMLContent(String toolName);
     /**
      * 
      * @param productName the product name which the job will be executed for.
@@ -50,7 +50,7 @@ abstract class JobMapper {
      * @param toolName the concrete tool name.
      * @return the jenkins job name
      */
-    String getJobName(String productName, String version, String toolName) {
+    public String getJobName(String productName, String version, String toolName) {
         StringBuilder sb = new StringBuilder();
         sb.append(productName);
         sb.append("-");
@@ -59,12 +59,12 @@ abstract class JobMapper {
         sb.append(toolName);
         return sb.toString();
     }
-    
+
     /*Load default jenkins.template*/
-    public static class DefaultJobMapper extends JobMapper {
+    private static class DefaultJobMapper extends JobMapper {
 
         @Override
-        String getJobXMLContent(String toolName) {
+        public String getJobXMLContent(String toolName) {
             InputStream in = getClass().getResourceAsStream("/jenkins.template");
             StringWriter writer = new StringWriter();
             try {
@@ -94,9 +94,6 @@ abstract class JobMapper {
         	
         	return StringFormatter.format(theContent, variableMap);
         }
-        
 
     }
-    
 }
-

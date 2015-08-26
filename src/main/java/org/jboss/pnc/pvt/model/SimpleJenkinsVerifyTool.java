@@ -28,6 +28,7 @@ public class SimpleJenkinsVerifyTool extends VerifyTool<Execution> {
         this.jobId = jobId;
     }
 
+    @SuppressWarnings("serial")
     @Override
     public Verification<Execution> verify(VerifyParameter param) {
         final Execution execution = Execution.createJenkinsExecution(getJobId(), null, null);

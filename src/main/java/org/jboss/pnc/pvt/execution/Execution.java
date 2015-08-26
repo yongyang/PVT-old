@@ -119,7 +119,7 @@ public abstract class Execution implements Serializable {
         }
     }
 
-    public static interface CallBack {
+    public static interface CallBack extends Serializable {
 
         void onStatus(Execution execution);
 
@@ -181,9 +181,13 @@ public abstract class Execution implements Serializable {
         }
 
     }
-    
+
     public static Execution createJenkinsExecution(final String jobId) {
         return new JenkinsExecution(jobId, null, null);
+    }
+
+    public static Execution createJenkinsExecution(final String jobId, final Map<String, String> jobParams) {
+        return new JenkinsExecution(jobId, null, jobParams);
     }
 
     public static Execution createJenkinsExecution(final String jobId, final String jobContent, final Map<String, String> jobParams) {

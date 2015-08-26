@@ -19,7 +19,6 @@ package org.jboss.pnc.pvt.execution;
 
 import java.util.concurrent.Future;
 
-import org.jboss.logging.Logger;
 import org.jboss.pnc.pvt.execution.Execution.JVMExecution;
 
 /**
@@ -29,8 +28,6 @@ import org.jboss.pnc.pvt.execution.Execution.JVMExecution;
 class JVMExecutor extends Executor {
 
     static JVMExecutor INSTANCE = new JVMExecutor();
-    
-    private static final Logger logger = Logger.getLogger(JVMExecutor.class);
     
     JVMExecutor() {
         super();

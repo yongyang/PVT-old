@@ -17,6 +17,9 @@
 
 package org.jboss.pnc.pvt.execution;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -74,6 +77,19 @@ public abstract class Executor {
      */
     ExecutorService getJVMExecutorService() {
         return JVM_EXESERVICE;
+    }
+
+    /**
+     * @return Default Jenkins Property.
+     * 
+     * @throws IOException
+     */
+    public static JenkinsConfiguration getDefaultJenkinsProps() throws IOException {
+        Properties props = new Properties();
+        try (InputStream input = Executor.class.getResourceAsStream("/jenkins.properties")) {
+            props.load(input);
+        }
+        return JenkinsConfiguration.fromProperty(props);
     }
 
     private static ScheduledExecutorService CHECKING_EXESERVICE = Executors.newScheduledThreadPool(getCheckThreadPoolSize());
