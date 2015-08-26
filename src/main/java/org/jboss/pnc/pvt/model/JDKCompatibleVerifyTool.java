@@ -127,7 +127,7 @@ public class JDKCompatibleVerifyTool extends VerifyTool<Execution> {
             }
 
             final boolean p = passed;
-            Verification<Boolean> verification = new Verification<Boolean>(param.getToolId(), param.getPreviousRelease()!= null ? param.getPreviousRelease().getId() : "", param.getCurrentRelease().getId()) {
+            Verification<Boolean> verification = new Verification<Boolean>(param.getToolId(), param.getReferenceRelease()!= null ? param.getReferenceRelease().getId() : "", param.getCurrentRelease().getId()) {
                 @Override
                 public Boolean getResultObject() {
                     //TODO: return the detail info
