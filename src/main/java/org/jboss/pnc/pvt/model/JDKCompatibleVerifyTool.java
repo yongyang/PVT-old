@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
@@ -40,11 +41,13 @@ public class JDKCompatibleVerifyTool extends VerifyTool<Execution> {
         return this.getClass().getSimpleName() + " [name=" + getName() + ", expectJDKVersion=" + getExpectJDKVersion() + "]";
     }
 
+    private static interface WicketRunnable extends Runnable, Serializable{}
+    
     @Override
     public Verification<Execution> verify(VerifyParameter param) {
         
         final String name = "JDK-Check-For-" + param.getCurrentRelease().getName();
-        final Runnable run = () -> {
+        final WicketRunnable run = () -> {
             
         };
 

@@ -18,13 +18,11 @@
 package org.jboss.pnc.pvt.execution;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.Map;
-import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import org.jboss.logging.Logger;
@@ -178,7 +176,7 @@ class JenkinsExecutor extends Executor {
                         }
                     }
                 } catch (IOException e) {
-                    logger.info("Failed to check Build Detail, continue...", e);
+                    logger.warn("Failed to check Build Detail.", e);
                 }
             }
         };
