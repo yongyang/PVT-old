@@ -20,6 +20,8 @@ public class Release implements Serializable {
     // release name ex: 7.0.0.DR1
     private String name;
 
+    private String referenceReleaseId;
+
     // the distribution zips, urls to download, separate by space
     // ex: http://download.devel.redhat.com/devel/candidates/JBEAP/JBEAP-7.0.0.DR6/jboss-eap-7.0.0.DR6.zip
     private String distributions;
@@ -115,5 +117,13 @@ public class Release implements Serializable {
 
     public void addVerification(String toolId, String verificationId) {
         verifications.put(toolId, verificationId);
+    }
+
+    public String getReferenceReleaseId() {
+        return referenceReleaseId;
+    }
+
+    public void setReferenceReleaseId(String referenceReleaseId) {
+        this.referenceReleaseId = referenceReleaseId;
     }
 }

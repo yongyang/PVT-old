@@ -9,27 +9,27 @@ public class VerifyParameter {
 
     private String toolId;
 
-    private Release previousRelease;
+    private Release referenceRelease;
     private Release currentRelease;
 
     private Properties properties = new Properties();
 
 
-    public VerifyParameter(String toolId, Release previousRelease, Release currentRelease) {
-        this(toolId, previousRelease, currentRelease, null);
+    public VerifyParameter(String toolId, Release referenceRelease, Release currentRelease) {
+        this(toolId, referenceRelease, currentRelease, null);
     }
 
-    public VerifyParameter(String toolId,Release previousRelease, Release currentRelease, Properties properties) {
+    public VerifyParameter(String toolId,Release referenceRelease, Release currentRelease, Properties properties) {
         this.toolId = toolId;
-        this.previousRelease = previousRelease;
+        this.referenceRelease = referenceRelease;
         this.currentRelease = currentRelease;
         if(properties != null && !properties.isEmpty()) {
             this.properties = properties;
         }
     }
 
-    public Release getPreviousRelease() {
-        return previousRelease;
+    public Release getReferenceRelease() {
+        return referenceRelease;
     }
 
     public Release getCurrentRelease() {

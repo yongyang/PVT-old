@@ -28,8 +28,13 @@
           </tr>
 
           <tr id='name' >
-            <td class="header-label" width = "150">Release Name:</td>
+            <td class="header-label" width = "100">Release Name:</td>
             <td><input wicket:id="name" id="advisory_synopsis" maxlength="78" name="advisory[synopsis]" size="60" type="text" /> NOTE: unique, not null</td>
+          </tr>
+
+          <tr>
+            <td class="header-label" width = "100">Reference Release:</td>
+            <td><select wicket:id="previous_release_id" id="previous_release_id" maxlength="78" name="productNames" size="1"/> NOTE: the reference release used to compare</td>
           </tr>
 
           <tr id='topic' >

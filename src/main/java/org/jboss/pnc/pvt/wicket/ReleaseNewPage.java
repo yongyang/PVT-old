@@ -43,11 +43,39 @@ public class ReleaseNewPage extends TemplatePage {
         super(pp,info);
         
         setActiveMenu("releases");
+        release = getRelease(pp);
+
         add(new FeedbackPanel("feedbackMessage"));
         
         PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
 
         add(new Label("release_summary", getTitle()));
+
+
+        releaseForm = new Form("form-release", new CompoundPropertyModel(release)) {
+            @Override
+            protected void onSubmit() {
+                doSubmit();
+            }
+
+        };
+
+        DropDownChoice<Release> previousReleaseIdDropDownChoice = new DropDownChoice<Release>("previous_release_id",
+                Model.of(),
+                dao.getPvtModel().getReleasesByProduct(release.getProductId()),
+                new IChoiceRenderer<Release>() {
+                    @Override
+                    public Object getDisplayValue(Release object) {
+                        return object.getName();
+                    }
+
+                    @Override
+                    public String getIdValue(Release object, int index) {
+                        return object.getId();
+                    }
+                });
+        releaseForm.add(previousReleaseIdDropDownChoice);
+
 
         Model<Product> listModel = new Model<Product>();
         ChoiceRenderer<Product> productRender = new ChoiceRenderer<Product>("name");
@@ -61,24 +89,24 @@ public class ReleaseNewPage extends TemplatePage {
     		protected boolean wantOnSelectionChangedNotifications() {
     			return true;
     		}
+
+            @Override
+            protected void onSelectionChanged(Product newSelection) {
+                super.onSelectionChanged(newSelection);
+                String productId = newSelection.getId();
+                previousReleaseIdDropDownChoice.setModel(Model.of());
+                previousReleaseIdDropDownChoice.setChoices(Model.ofList(dao.getPvtModel().getReleasesByProduct(productId)));
+            }
         };
         productDropDownChoice.setRequired(true);
 
-        release = getRelease(pp);
-
-        if (release != null)
-        	productDropDownChoice.setModelObject(dao.getPvtModel().getProductbyId(release.getProductId()));
-        
-        
-        releaseForm = new Form("form-release", new CompoundPropertyModel(release)) {
-        	@Override
-            protected void onSubmit() {
-                doSubmit();
-            }
-        	
-        };
+        if (release != null) {
+            productDropDownChoice.setModelObject(dao.getPvtModel().getProductbyId(release.getProductId()));
+        }
 
         releaseForm.add(productDropDownChoice);
+
+
         nameTextField = new TextField<String>("name");
         nameTextField.setRequired(true);
         releaseForm.add(nameTextField);
