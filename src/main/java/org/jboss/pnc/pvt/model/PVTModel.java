@@ -87,6 +87,25 @@ public class PVTModel implements Serializable {
     	return release;
     }
 
+	public List<Release> getReleasesByProduct(String productId) {
+		List<Release> releases = new ArrayList<>();
+		if(productId == null || productId.trim().isEmpty()) {
+			return releases;
+		}
+		for(Release release : this.releases) {
+			if(release.getProductId().equals(productId)) {
+				releases.add(release);
+			}
+		}
+		Collections.sort(releases, new Comparator<Release>() {
+			@Override
+			public int compare(Release o1, Release o2) {
+				return o1.getName().compareTo(o2.getName());
+			}
+		});
+		return releases;
+	}
+
     public List<Release> getReleases() {
         return releases;
     }
