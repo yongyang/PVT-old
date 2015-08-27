@@ -1,5 +1,6 @@
 package org.jboss.pnc.pvt.wicket;
 
+import org.apache.wicket.Application;
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
@@ -13,6 +14,8 @@ public class PVTApplication extends WebApplication
 {
 
     public static final MetaDataKey<? extends PVTDataAccessObject> DAO_KEY = new MetaDataKey<JSONDataAccessObject> (){};
+
+    public static PVTApplication pvtApplication;
 
     /**
      * @see org.apache.wicket.Application#getHomePage()
@@ -34,11 +37,21 @@ public class PVTApplication extends WebApplication
         dao.load();
         setMetaData(DAO_KEY, dao);
 
+        pvtApplication = (PVTApplication)Application.get();
+
         // add your configuration here
     }
 
     public PVTDataAccessObject getDAO() {
         return getMetaData(DAO_KEY);
+    }
+
+    public static PVTApplication get(){
+        return pvtApplication;
+    }
+
+    public static PVTDataAccessObject getDataAccessObject() {
+        return get().getDAO();
     }
 }
 
