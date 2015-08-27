@@ -19,8 +19,17 @@ public class PVTModel implements Serializable {
 
 	private List<VerifyToolType> toolTypes = new ArrayList<>();
 
+	/** 
+	 * Tools Map, which contains all Tool instances.
+	 * Key of the map is the tool id. 
+	 *  
+	 */
 	private Map<String, VerifyTool> tools = new HashMap<>();
 
+	/**
+	 * Verification map, which contains all Verification instances inside PVT.
+	 * Key of the map is the Verification id.
+	 */
 	private Map<String,Verification<?>> verifications = new HashMap<>();
 
     public void addProduct(Product product) {
@@ -137,7 +146,7 @@ public class PVTModel implements Serializable {
 
 	@JsonIgnore
 	public List<Verification<?>> getVerificationsList() {
-		return Arrays.asList(verifications.values().toArray(new Verification[tools.size()]));
+		return Arrays.asList(verifications.values().toArray(new Verification[verifications.size()]));
 	}
 
 	public Verification<?> getVerificationById(String id) {
