@@ -1,7 +1,10 @@
 package org.jboss.pnc.pvt.wicket;
 
+import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.jboss.pnc.pvt.dao.PVTDataAccessObject;
 import org.jboss.pnc.pvt.model.TemplateJenkinsVerifyTool;
 import org.jboss.pnc.pvt.model.VerifyTool;
 
@@ -24,6 +27,7 @@ public class TemplateJenkinsVerifyToolNewPage extends AbstractVerifyToolPage {
     public TemplateJenkinsVerifyToolNewPage(PageParameters pp, String info) {
         super(pp, info);
         form.add(new TextArea<String>("jenkinsConfigXML"));
+        form.add(new TextField<String>("jobId"));
     }
 
     @Override
@@ -37,7 +41,11 @@ public class TemplateJenkinsVerifyToolNewPage extends AbstractVerifyToolPage {
     }
 
     @Override
-    protected void doSubmit() {
-
+    protected void doSubmit(PageParameters pp) {
+        PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
+        dao.getPvtModel().addTool(tool);
+        dao.persist();
+        pp.add("id", tool.getId());
+        setResponsePage(new TemplateJenkinsVerifyToolEditPage(pp, "Tool: " + form.getModelObject().getName() + " is created."));
     }
 }

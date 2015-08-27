@@ -1,9 +1,12 @@
 package org.jboss.pnc.pvt.wicket;
 
+import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.basic.MultiLineLabel;
 import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.jboss.pnc.pvt.dao.PVTDataAccessObject;
 import org.jboss.pnc.pvt.model.ScriptJenkinsVerifyTool;
 import org.jboss.pnc.pvt.model.VerifyTool;
 
@@ -34,6 +37,7 @@ public class ScriptJenkinsVerifyToolNewPage extends AbstractVerifyToolPage {
                 configModel.setObject(form.getModelObject());
             }
         });
+        form.add(new TextField<String>("jobId"));
     }
 
     @Override
@@ -47,7 +51,11 @@ public class ScriptJenkinsVerifyToolNewPage extends AbstractVerifyToolPage {
     }
 
     @Override
-    protected void doSubmit() {
-
+    protected void doSubmit(PageParameters pp) {
+        PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
+        dao.getPvtModel().addTool(tool);
+        dao.persist();
+        pp.add("id", tool.getId());
+        setResponsePage(new ScriptJenkinsVerifyToolEditPage(pp, "Tool: " + form.getModelObject().getName() + " is created."));
     }
 }

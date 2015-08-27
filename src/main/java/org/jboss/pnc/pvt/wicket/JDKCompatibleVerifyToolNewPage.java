@@ -4,7 +4,8 @@ import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.jboss.pnc.pvt.dao.PVTDataAccessObject;
-import org.jboss.pnc.pvt.model.*;
+import org.jboss.pnc.pvt.model.JDKCompatibleVerifyTool;
+import org.jboss.pnc.pvt.model.VerifyTool;
 
 
 /**
@@ -38,9 +39,11 @@ public class JDKCompatibleVerifyToolNewPage extends AbstractVerifyToolPage {
     }
 
     @Override
-    protected void doSubmit() {
+    protected void doSubmit(PageParameters pp) {
         PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
         dao.getPvtModel().addTool(tool);
         dao.persist();
+        pp.add("id", tool.getId());
+        setResponsePage(new JDKCompatibleVerifyToolEditPage(pp, "Tool: " + form.getModelObject().getName() + " is created."));
     }
 }

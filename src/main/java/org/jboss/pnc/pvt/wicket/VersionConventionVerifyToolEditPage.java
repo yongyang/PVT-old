@@ -2,6 +2,7 @@ package org.jboss.pnc.pvt.wicket;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.jboss.pnc.pvt.model.VerifyTool;
+import org.jboss.pnc.pvt.model.VersionConventionVerifyTool;
 
 
 /**
@@ -11,15 +12,15 @@ import org.jboss.pnc.pvt.model.VerifyTool;
  *
  */
 @SuppressWarnings({ "serial"})
-public class JDKCompatibleVerifyToolEditPage extends JDKCompatibleVerifyToolNewPage {
+public class VersionConventionVerifyToolEditPage extends VersionConventionVerifyToolNewPage {
 
     private static final long serialVersionUID = 1L;
 
-    public JDKCompatibleVerifyToolEditPage(PageParameters pp) {
+    public VersionConventionVerifyToolEditPage(PageParameters pp) {
         this(pp, null);
     }
 
-    public JDKCompatibleVerifyToolEditPage(PageParameters pp, String info) {
+    public VersionConventionVerifyToolEditPage(PageParameters pp, String info) {
         super(pp, info);
     }
 
@@ -30,7 +31,7 @@ public class JDKCompatibleVerifyToolEditPage extends JDKCompatibleVerifyToolNewP
 
     @Override
     protected String getTitle() {
-        return "Edit JDK compatible verify tool";
+        return "Edit version convention verify tool";
     }
 
     @Override
@@ -41,6 +42,6 @@ public class JDKCompatibleVerifyToolEditPage extends JDKCompatibleVerifyToolNewP
     @Override
     protected void doSubmit(PageParameters pp) {
         //TODO nothing to do with DB yet
-        setResponsePage(new JDKCompatibleVerifyToolEditPage(pp, "Tool: " + form.getModelObject().getName() + " is updated."));
+        setResponsePage(new VersionConventionVerifyToolEditPage(pp, "Tool: " + form.getModelObject().getName() + " is updated."));
     }
 }

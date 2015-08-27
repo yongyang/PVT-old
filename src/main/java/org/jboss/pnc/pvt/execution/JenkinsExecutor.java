@@ -114,6 +114,7 @@ class JenkinsExecutor extends Executor {
             execution.setLink(url.toString());
             startMonitor(jobId, buildNumber, execution);
         } catch (IOException e) {
+            execution.setException(e);
             throw new ExecutionException(String.format("Failed to execute Jenkins job: %s", jobId), e);
         }
     }
@@ -176,6 +177,7 @@ class JenkinsExecutor extends Executor {
                         }
                     }
                 } catch (IOException e) {
+                    execution.setException(e);
                     logger.warn("Failed to check Build Detail.", e);
                 }
             }

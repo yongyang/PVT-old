@@ -5,6 +5,11 @@
 <wicket:extend>
 
           <tr>
+            <td class="header-label" width = "150">Jenkins Job ID:</td>
+            <td><input wicket:id="jobId" maxlength="80" size="30" type="text" /> Optional</td>
+          </tr>
+
+          <tr>
             <td class="header-label" width = "150">Command:</td>
             <td>
               <textarea wicket:id="script" cols="75" id="script" rows="5" wrap="soft"></textarea>

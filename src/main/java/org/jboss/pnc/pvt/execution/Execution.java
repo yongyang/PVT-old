@@ -26,6 +26,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author <a href="mailto:lgao@redhat.com">Lin Gao</a>
@@ -44,6 +45,9 @@ public abstract class Execution implements Serializable {
     /** Each execution should have an external link. **/
     private String link;
 
+    /** Exception when there is an Exception occured. **/
+    private Exception exception;
+
     /**
      * Log of the execution, maybe changed constantly before execution is finished.
      */
@@ -58,34 +62,59 @@ public abstract class Execution implements Serializable {
 
     public Execution(final String name) {
         super();
+        Objects.requireNonNull(name, "Each Execution should have a non empty name.");
         this.name = name;
     }
 
-    public void addCallBack(CallBack callBack) {
+    /**
+     * @return the exception
+     */
+    public synchronized Exception getException() {
+        return exception;
+    }
+
+    /**
+     * @param exception the exception to set
+     */
+    public synchronized Execution setException(Exception exception) {
+        if (exception != null && ! exception.equals(this.exception)) {
+            this.exception = exception;
+            for (CallBack callBack: callBacks) {
+                callBack.onException(this);
+            }
+        }
+        return this;
+    }
+
+    public Execution addCallBack(CallBack callBack) {
         if (callBack != null) {
             callBacks.add(callBack);
         }
+        return this;
     }
 
-    public void removeCallBack(CallBack callBack) {
+    public Execution removeCallBack(CallBack callBack) {
         callBacks.remove(callBack);
+        return this;
     }
 
-    public void cleanCallBacks() {
+    public Execution cleanCallBacks() {
         callBacks.clear();
+        return this;
     }
 
-    public String getLog() {
+    public synchronized String getLog() {
         return log;
     }
 
-    public void setLog(String log) {
+    public synchronized Execution setLog(String log) {
         if (log != null && !log.equals(this.log)) {
             this.log = log;
             for (CallBack callBack: callBacks) {
                 callBack.onLogChanged(this);
             }
         }
+        return this;
     }
 
     public String getName() {
@@ -96,34 +125,40 @@ public abstract class Execution implements Serializable {
         return link;
     }
 
-    public void setLink(String link) {
+    public Execution setLink(String link) {
         this.link = link;
+        return this;
     }
 
     /**
      * @return the status
      */
-    public Status getStatus() {
+    public synchronized Status getStatus() {
         return status;
     }
 
     /**
      * @param status the status to set
      */
-    public void setStatus(Status status) {
+    public synchronized Execution setStatus(Status status) {
         if (status != null && ! status.equals(this.status)) {
             this.status = status;
             for (CallBack callBack: callBacks) {
                 callBack.onStatus(this);
             }
         }
+        return this;
     }
 
-    public static interface CallBack extends Serializable {
+    public static abstract class CallBack implements Serializable {
 
-        void onStatus(Execution execution);
+        private static final long serialVersionUID = 3921755061713069600L;
 
-        void onLogChanged(Execution execution);
+        public void onStatus(Execution execution){};
+
+        public void onLogChanged(Execution execution){};
+
+        public void onException(Execution execution){};
     }
 
     public static enum Status {
@@ -182,6 +217,12 @@ public abstract class Execution implements Serializable {
 
     }
 
+    /**
+     * Creates a Jenkins Execution with a jobId.
+     * 
+     * @param jobId the Jenkins job name. Not null
+     * @return a Jenkins Execution which handles the status changes.
+     */
     public static Execution createJenkinsExecution(final String jobId) {
         return new JenkinsExecution(jobId, null, null);
     }

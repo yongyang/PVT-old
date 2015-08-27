@@ -1,7 +1,9 @@
 package org.jboss.pnc.pvt.wicket;
 
+import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.jboss.pnc.pvt.dao.PVTDataAccessObject;
 import org.jboss.pnc.pvt.model.SimpleJenkinsVerifyTool;
 import org.jboss.pnc.pvt.model.VerifyTool;
 
@@ -37,7 +39,11 @@ public class SimpleJenkinsVerifyToolNewPage extends AbstractVerifyToolPage {
     }
 
     @Override
-    protected void doSubmit() {
-
+    protected void doSubmit(PageParameters pp) {
+        PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
+        dao.getPvtModel().addTool(tool);
+        dao.persist();
+        pp.add("id", tool.getId());
+        setResponsePage(new SimpleJenkinsVerifyToolEditPage(pp, "Tool: " + form.getModelObject().getName() + " is created."));
     }
 }

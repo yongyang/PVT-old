@@ -1,6 +1,5 @@
 package org.jboss.pnc.pvt.wicket;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.wicket.Application;
@@ -13,6 +12,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.jboss.pnc.pvt.dao.PVTDataAccessObject;
 import org.jboss.pnc.pvt.model.VerifyTool;
 import org.jboss.pnc.pvt.model.VerifyToolType;
 
@@ -71,12 +71,20 @@ public class ToolsPage extends TemplatePage {
             @Override
             protected void populateItem(ListItem<VerifyTool> item) {
                 item.add(new Link<String>("tool_link") {
+                    @SuppressWarnings("unchecked")
                     @Override
                     public void onClick() {
                     	PageParameters pp = new PageParameters();
                         pp.add("id", item.getModel().getObject().getId());
-                        //TODO: set correct ToolEditPage
-//                        setResponsePage(SingleToolPage.class, pp);
+                        String toolClsName = item.getModel().getObject().getClass().getSimpleName();
+                        String editPageClsName = ToolsPage.class.getPackage().getName() + "." + toolClsName + "EditPage";
+                        try {
+                            Class editPageCls = getClass().getClassLoader().loadClass(editPageClsName);
+                            setResponsePage(editPageCls, pp);
+                        }
+                        catch (ClassNotFoundException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
 
                     @Override
@@ -104,7 +112,8 @@ public class ToolsPage extends TemplatePage {
      */
     private List<VerifyTool> getTools(PageParameters pp) {
         //TODO no filter yet
-        return DataProvider.getAllTools();
+        PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
+        return dao.getPvtModel().getToolsList();
     }
 
 }

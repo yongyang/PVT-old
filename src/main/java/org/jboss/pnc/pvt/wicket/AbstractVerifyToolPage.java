@@ -1,16 +1,16 @@
 package org.jboss.pnc.pvt.wicket;
 
+import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.jboss.pnc.pvt.model.PVTModel;
 import org.jboss.pnc.pvt.model.VerifyTool;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
@@ -28,7 +28,7 @@ public abstract class AbstractVerifyToolPage extends TemplatePage {
         this(pp, null);
     }
 
-    public AbstractVerifyToolPage(PageParameters pp, String info) {
+    public AbstractVerifyToolPage(final PageParameters pp, String info) {
         super(pp, info);
         setActiveMenu("tools");
 
@@ -41,8 +41,7 @@ public abstract class AbstractVerifyToolPage extends TemplatePage {
         form = new Form<VerifyTool>("form-tool"){
             @Override
             protected void onSubmit() {
-                doSubmit();
-                setResponsePage(new ToolsPage(pp, "Tool: " + getModelObject().getName() + " is created."));
+                doSubmit(pp);
             }
 
         };
@@ -70,9 +69,10 @@ public abstract class AbstractVerifyToolPage extends TemplatePage {
         resetButton = new Button("reset") {
             @Override
             public void onSubmit() {
-                doReset();
+                doReset(pp);
             }
         };
+        resetButton.setDefaultFormProcessing(false);
 
         form.add(resetButton);
 
@@ -86,6 +86,7 @@ public abstract class AbstractVerifyToolPage extends TemplatePage {
             }
 
         };
+        removeButton.setDefaultFormProcessing(false);
 //        removeButton.setVisible(mode == MODE_EDIT || mode == MODE_VIEW);
         form.add(removeButton);
 
@@ -99,17 +100,27 @@ public abstract class AbstractVerifyToolPage extends TemplatePage {
 
     protected abstract VerifyTool getVerifyTool(PageParameters pp);
 
-    protected abstract void doSubmit();
+    protected abstract void doSubmit(PageParameters pp);
 
-    protected void doReset() {
-        form.getModel().setObject(getVerifyTool(null));
+    protected void doReset(PageParameters pp) {
+        form.getModel().setObject(getVerifyTool(pp));
     }
 
     protected void doRemove(VerifyTool tool) {
-        DataProvider.getAllTools().remove(tool);
+        PVTModel pvtModel = ((PVTApplication) Application.get()).getDAO().getPvtModel();
+        pvtModel.getTools().entrySet().removeIf(p -> p.getValue().equals(tool));
     }
 
     protected String getTitle() {
         return "Define A JDK compatible verify tool";
     }
+
+    protected VerifyTool searchVerifyTool(PageParameters pp) {
+        if (pp == null || pp.isEmpty()) {
+            return null;
+        }
+        PVTModel pvtModel = ((PVTApplication) Application.get()).getDAO().getPvtModel();
+        return pvtModel.getToolsList().stream().filter(p -> p.getId().equals(pp.get("id").toString())).findFirst().get();
+    }
+
 }

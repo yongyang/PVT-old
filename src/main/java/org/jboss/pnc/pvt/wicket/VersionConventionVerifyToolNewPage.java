@@ -1,6 +1,8 @@
 package org.jboss.pnc.pvt.wicket;
 
+import org.apache.wicket.Application;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.jboss.pnc.pvt.dao.PVTDataAccessObject;
 import org.jboss.pnc.pvt.model.VerifyTool;
 import org.jboss.pnc.pvt.model.VersionConventionVerifyTool;
 
@@ -36,7 +38,11 @@ public class VersionConventionVerifyToolNewPage extends AbstractVerifyToolPage {
     }
 
     @Override
-    protected void doSubmit() {
-
+    protected void doSubmit(PageParameters pp) {
+        PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
+        dao.getPvtModel().addTool(tool);
+        dao.persist();
+        pp.add("id", tool.getId());
+        setResponsePage(new VersionConventionVerifyToolEditPage(pp, "Tool: " + form.getModelObject().getName() + " is created."));
     }
 }

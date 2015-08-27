@@ -11,15 +11,15 @@ import org.jboss.pnc.pvt.model.VerifyTool;
  *
  */
 @SuppressWarnings({ "serial"})
-public class JDKCompatibleVerifyToolEditPage extends JDKCompatibleVerifyToolNewPage {
+public class TemplateJenkinsVerifyToolEditPage extends TemplateJenkinsVerifyToolNewPage {
 
     private static final long serialVersionUID = 1L;
 
-    public JDKCompatibleVerifyToolEditPage(PageParameters pp) {
+    public TemplateJenkinsVerifyToolEditPage(PageParameters pp) {
         this(pp, null);
     }
 
-    public JDKCompatibleVerifyToolEditPage(PageParameters pp, String info) {
+    public TemplateJenkinsVerifyToolEditPage(PageParameters pp, String info) {
         super(pp, info);
     }
 
@@ -30,7 +30,7 @@ public class JDKCompatibleVerifyToolEditPage extends JDKCompatibleVerifyToolNewP
 
     @Override
     protected String getTitle() {
-        return "Edit JDK compatible verify tool";
+        return "Edit template jenkins verify tool";
     }
 
     @Override
@@ -41,6 +41,6 @@ public class JDKCompatibleVerifyToolEditPage extends JDKCompatibleVerifyToolNewP
     @Override
     protected void doSubmit(PageParameters pp) {
         //TODO nothing to do with DB yet
-        setResponsePage(new JDKCompatibleVerifyToolEditPage(pp, "Tool: " + form.getModelObject().getName() + " is updated."));
+        setResponsePage(new TemplateJenkinsVerifyToolEditPage(pp, "Tool: " + form.getModelObject().getName() + " is updated."));
     }
 }
