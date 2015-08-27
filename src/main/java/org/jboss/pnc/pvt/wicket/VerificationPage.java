@@ -1,5 +1,6 @@
 package org.jboss.pnc.pvt.wicket;
 
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 /**
@@ -14,6 +15,10 @@ public class VerificationPage extends TemplatePage {
         super(pp, info);
 
         setActiveMenu(Menu.VERIFICATIONS);
+
+        String releaseId = pp.get(0).toString();
+
+        add(new Label("id", releaseId));
 
     }
 }
