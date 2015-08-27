@@ -30,7 +30,7 @@ public class ToolsPage extends TemplatePage {
 
     public ToolsPage(PageParameters pp, String info) {
         super(pp, info);
-        setActiveMenu("tools");
+        setActiveMenu(Menu.TOOLS);
 
         List<VerifyToolType> toolTypes = ((PVTApplication) Application.get()).getDAO().getPvtModel().getToolTypes();
 

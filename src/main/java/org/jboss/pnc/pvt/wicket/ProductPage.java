@@ -18,7 +18,7 @@ public class ProductPage extends TemplatePage {
     private Product product = new Product();
 
     public ProductPage() {
-        setActiveMenu("products");
+        setActiveMenu(Menu.PRODUCTS);
         product = (Product) Session.get().getAttribute("product");
         
         Button editButton = new Button("edit")

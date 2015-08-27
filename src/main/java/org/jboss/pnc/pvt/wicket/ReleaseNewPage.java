@@ -42,7 +42,7 @@ public class ReleaseNewPage extends TemplatePage {
     public ReleaseNewPage(PageParameters pp, String info) {
         super(pp,info);
         
-        setActiveMenu("releases");
+        setActiveMenu(Menu.RELEASES);
         release = getRelease(pp);
 
         add(new FeedbackPanel("feedbackMessage"));

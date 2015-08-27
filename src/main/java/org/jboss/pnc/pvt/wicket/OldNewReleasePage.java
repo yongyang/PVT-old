@@ -30,7 +30,7 @@ public class OldNewReleasePage extends TemplatePage {
     public OldNewReleasePage(PageParameters pp, String info) {
     	super(pp,info);
     	
-        setActiveMenu("releases");
+        setActiveMenu(Menu.RELEASES);
         add(new FeedbackPanel("feedbackMessage"));
 
         Form newReleaseForm = new Form("form-newrelease", new CompoundPropertyModel(newRelease)) {

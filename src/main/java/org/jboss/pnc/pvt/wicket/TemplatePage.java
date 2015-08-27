@@ -1,5 +1,6 @@
 package org.jboss.pnc.pvt.wicket;
 
+import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -10,6 +11,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.time.Duration;
+import org.jboss.pnc.pvt.model.Verification;
 
 import java.util.Calendar;
 
@@ -21,6 +23,7 @@ public abstract class TemplatePage extends WebPage {
     private WebMarkupContainer releasesLi;
     private WebMarkupContainer productsLi;
     private WebMarkupContainer toolsLi;
+    private WebMarkupContainer verificationsLi;
 
     private final WebMarkupContainer messagePanel = new WebMarkupContainer("messagePanel");
     private final Model<String> infoModel = Model.of();
@@ -81,6 +84,15 @@ public abstract class TemplatePage extends WebPage {
             }
         });
 
+        add(verificationsLi = new WebMarkupContainer("li-verifications"));
+        verificationsLi.add(new Link<String>("link-verifications") {
+            @Override
+            public void onClick() {
+                setResponsePage(ToolsPage.class);
+            }
+        });
+
+
         messagePanel.add( new Link("closeButton") {
             @Override
             public void onClick() {
@@ -94,23 +106,28 @@ public abstract class TemplatePage extends WebPage {
         add(messagePanel);
         setInfo(info);
 
-        setActiveMenu("releases");
+        setActiveMenu(Menu.RELEASES);
     }
 
-    public void setActiveMenu(String menu) {
+    public void setActiveMenu(Menu menu) {
         releasesLi.add(AttributeModifier.remove("class"));
         switch (menu) {
-            case "releases":
+            case RELEASES:
                 releasesLi.add(AttributeModifier.replace("class", "active"));
                 break;
-            case "products":
+            case PRODUCTS:
                 productsLi.add(AttributeModifier.replace("class", "active"));
                 break;
-            case "tools":
+            case TOOLS:
                 toolsLi.add(AttributeModifier.replace("class", "active"));
                 break;
+            case VERIFICATIONS:
+                verificationsLi.add(AttributeModifier.replace("class", "active"));
+                break;
+
             default:
                 releasesLi.add(AttributeModifier.replace("class", "active"));
+
 
         }
     }
@@ -120,6 +137,10 @@ public abstract class TemplatePage extends WebPage {
             infoModel.setObject(info);
         }
         messagePanel.setVisible(info != null && info.length() > 0);
+    }
+
+    public static enum Menu {
+        RELEASES, PRODUCTS, TOOLS, VERIFICATIONS
     }
 
 }

@@ -25,7 +25,7 @@ public class ProductsPage extends TemplatePage{
 
     public ProductsPage(PageParameters pp, String info) {
     	super(pp, info);
-        setActiveMenu("products");
+        setActiveMenu(Menu.PRODUCTS);
 /*
         add(new Link<String>("link-product") {
             @Override

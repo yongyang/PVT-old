@@ -30,7 +30,7 @@ public abstract class AbstractVerifyToolPage extends TemplatePage {
 
     public AbstractVerifyToolPage(final PageParameters pp, String info) {
         super(pp, info);
-        setActiveMenu("tools");
+        setActiveMenu(Menu.TOOLS);
 
         add(new FeedbackPanel("feedbackMessage"));
 

@@ -30,7 +30,7 @@ public class ReleasesPage extends TemplatePage{
 
     public ReleasesPage(PageParameters pp,String info) {
         super(pp,info);
-        setActiveMenu("releases");
+        setActiveMenu(Menu.RELEASES);
 
         add(new Link<String>("link-newrelease") {
             @Override

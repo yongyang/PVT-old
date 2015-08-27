@@ -28,7 +28,7 @@ public class ProductEditPage extends TemplatePage {
     public ProductEditPage(PageParameters pp, String info) {
     	super(pp, info);
     	
-        setActiveMenu("products");
+        setActiveMenu(Menu.PRODUCTS);
         add(feedBackPanel);
         
         PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();

@@ -29,7 +29,7 @@ public class ProductNewPage extends TemplatePage {
     public ProductNewPage(PageParameters pp, String info) {
     	super(pp, info);
     	
-        setActiveMenu("products");
+        setActiveMenu(Menu.PRODUCTS);
         add(feedBackPanel);
         
         if (pp != null) {
