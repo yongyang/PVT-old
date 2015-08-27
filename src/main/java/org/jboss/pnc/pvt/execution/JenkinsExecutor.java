@@ -24,6 +24,7 @@ import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.jboss.logging.Logger;
 import org.jboss.pnc.pvt.execution.Execution.JenkinsExecution;
@@ -120,6 +121,7 @@ class JenkinsExecutor extends Executor {
     }
 
     private void startMonitor(String jobName, int buildNumber, final Execution execution) {
+        AtomicInteger statusRetrieveFailed = new AtomicInteger(0);
         final Runnable checking = new Runnable() {
 
             @Override
@@ -173,14 +175,24 @@ class JenkinsExecutor extends Executor {
                         default:
                         {
                             execution.setStatus(Execution.Status.UNKNOWN);
+                            getCheckingExecutorService().schedule(this, 10L, TimeUnit.SECONDS);
                             break;
                         }
                     }
                 } catch (IOException e) {
                     execution.setException(e);
-                    logger.warn("Failed to check Build Detail.", e);
+                    int failed = statusRetrieveFailed.getAndIncrement();
+                    if (failed >= getMaxRetryTime()) {
+                        logger.warn("Failed to check Build Detail.", e);
+                    } else {
+                        logger.debug("Continue checking.", e);
+                        getCheckingExecutorService().schedule(this, 10L, TimeUnit.SECONDS);
+                    }
+                } catch (Throwable t) {
+                    logger.warn("Failed to Monitor the execution.", t);
                 }
             }
+
         };
         getCheckingExecutorService().schedule(checking, 10L, TimeUnit.SECONDS);
     }

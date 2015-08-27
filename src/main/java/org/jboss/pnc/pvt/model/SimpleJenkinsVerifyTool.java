@@ -1,6 +1,5 @@
 package org.jboss.pnc.pvt.model;
 
-import org.apache.wicket.Application;
 import org.jboss.pnc.pvt.execution.Execution;
 import org.jboss.pnc.pvt.execution.ExecutionException;
 import org.jboss.pnc.pvt.execution.Executor;
@@ -66,6 +65,7 @@ public class SimpleJenkinsVerifyTool extends VerifyTool<Execution> {
             Executor.getJenkinsExecutor().execute(execution);
             verification.setStatus(Verification.Status.IN_PROGRESS);
         } catch (ExecutionException e) {
+            verification.setStatus(Verification.Status.NOT_PASSED);
             verification.setException(e);
         }
     }
@@ -94,10 +94,14 @@ public class SimpleJenkinsVerifyTool extends VerifyTool<Execution> {
                 verification.setStatus(Verification.Status.IN_PROGRESS);
                 break;
             }
-            case FAILED:
             case UNKNOWN:
             {
                 verification.setStatus(Verification.Status.NEED_INSPECT);
+                break;
+            }
+            case FAILED:
+            {
+                verification.setStatus(Verification.Status.NOT_PASSED);
                 break;
             }
             case SUCCEEDED:
@@ -110,5 +114,10 @@ public class SimpleJenkinsVerifyTool extends VerifyTool<Execution> {
 //        pvtModel.updateVerification(verification); TODO
 //        (PVTApplication.getDAO().persist();
     }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + " [name=" + getName() + ", jobId=" + getJobId() + "]";
+     }
 
 }

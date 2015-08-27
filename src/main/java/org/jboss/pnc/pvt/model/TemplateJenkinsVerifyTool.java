@@ -1,7 +1,6 @@
 package org.jboss.pnc.pvt.model;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 

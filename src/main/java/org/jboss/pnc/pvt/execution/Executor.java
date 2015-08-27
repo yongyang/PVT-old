@@ -40,6 +40,9 @@ public abstract class Executor {
 
     /** System property key for thread pool size for PVT to run a execution inside current JVM. **/
     public static final String KEY_PVT_JVM_POOL_SIZE = "pvt.jvm.pool.size";
+    
+    /** System property key for max retry times on IOException **/
+    public static final String KEY_PVT_MAX_RETRY = "pvt.max.retry.time";
 
     /**
      * Starts an execution either to a Jenkins server or running inside the JVM.
@@ -70,6 +73,10 @@ public abstract class Executor {
      */
     static int getJVMThreadPoolSize() {
         return Integer.getInteger(KEY_PVT_JVM_POOL_SIZE, Runtime.getRuntime().availableProcessors());
+    }
+
+    static int getMaxRetryTime() {
+        return Integer.getInteger(KEY_PVT_MAX_RETRY, 5);
     }
 
     /**
