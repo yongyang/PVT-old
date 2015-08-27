@@ -3,6 +3,8 @@ package org.jboss.pnc.pvt.dao;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.apache.wicket.Application;
+import org.apache.wicket.protocol.http.WebApplication;
 import org.jboss.pnc.pvt.model.PVTModel;
 import org.jboss.pnc.pvt.model.Product;
 import org.jboss.pnc.pvt.model.VerifyTool;
@@ -25,7 +27,7 @@ public class JSONDataAccessObject extends PVTDataAccessObject implements Seriali
 
     private PVTModel pvtModel;
 
-    private static File jsonFile = new File(PVTApplication.get().getServletContext().getRealPath("/data"), "pvt.json");
+    private final File jsonFile = new File(((WebApplication)Application.get()).getServletContext().getRealPath("/data"), "pvt.json");
 
     public void load() {
         try {
