@@ -17,7 +17,7 @@ import java.util.UUID;
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
  */
 @JsonAutoDetect
-@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
+//@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
 public class Verification<T extends Serializable> implements Serializable{
 
     private String id = UUID.randomUUID().toString();

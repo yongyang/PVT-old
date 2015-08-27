@@ -83,7 +83,7 @@ public class ReleasesPage extends TemplatePage{
                     @Override
                     protected void populateItem(ListItem<String> item) {
                         String toolId = item.getModelObject();
-                        Link<String> jobLink = new Link<String>("release_tool", Model.of(pvtModel.getVerifyToolById(toolId).getName())) {
+                        Link<String> toolLink = new Link<String>("release_tool", Model.of(pvtModel.getVerifyToolById(toolId).getName())) {
                             @Override
                             public void onClick() {
                                 //TODO: open tool
@@ -94,12 +94,25 @@ public class ReleasesPage extends TemplatePage{
                                 return Model.of(pvtModel.getVerifyToolById(toolId).getName());
                             }
                         };
+                        item.add(toolLink);
 
                         String verificationId = release.getVerificationIdByToolId(toolId);
 
-                        Label toolStatus= new Label("release_verification_status", (verificationId != null) ? pvtModel.getVerificationById(verificationId).getStatus().toString() : "NEW");
-                        item.add(jobLink);
-                        item.add(toolStatus);
+                        Link<String> verificationLink = new Link<String>("verification-link") {
+                            @Override
+                            public void onClick() {
+                                PageParameters pageParameters = new PageParameters();
+                                pageParameters.set(0, verificationId);
+                                setResponsePage(VerificationPage.class, pageParameters);
+                            }
+                        };
+                        Label verificationStatus= new Label("release_verification_status", (verificationId != null) ? pvtModel.getVerificationById(verificationId).getStatus().toString() : "NEW");
+                        item.add(verificationLink);
+                        verificationLink.add(verificationStatus);
+                        if(verificationId == null) {
+                            // Hide verification if can not get verificationId
+                            verificationLink.setVisible(false);
+                        }
                     }
                 });
                 item.add(new ListView<String>("release_distributions", Arrays.asList(item.getModelObject().getDistributionArray())) {

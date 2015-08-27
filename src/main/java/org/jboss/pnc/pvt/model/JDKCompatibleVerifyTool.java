@@ -47,13 +47,10 @@ public class JDKCompatibleVerifyTool extends VerifyTool<Execution> {
         };
 
         final Execution execution = Execution.createJVMExecution(name, run);
-        final Verification<Execution> verification = new Verification<Execution>() {
 
-            @Override
-            public Execution getResultObject() {
-                return execution;
-            }
-        };
+        //NOTE: can not use nick class, will cause json deserialize fail
+        final Verification<Execution> verification = new Verification<Execution>();
+        verification.setResultObject(execution);
         verification.setReleaseId(param.getRelease().getId());
         verification.setToolId(getId());
 
