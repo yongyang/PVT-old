@@ -41,7 +41,7 @@ public class ReleasesPage extends TemplatePage{
             }
         });
 
-        PVTModel pvtModel = ((PVTApplication) Application.get()).getDAO().getPvtModel();
+        PVTModel pvtModel = PVTApplication.getDAO().getPvtModel();
         List<Release> releases = pvtModel.getReleases();
         add(new Label("releases_count", Model.of("" + releases.size())));
 
@@ -58,7 +58,7 @@ public class ReleasesPage extends TemplatePage{
                     }
                 };
                 String productId = item.getModel().getObject().getProductId();
-                String productName = ((PVTApplication) Application.get()).getDAO().getPvtModel().getProductbyId(productId).getName();
+                String productName = PVTApplication.getDAO().getPvtModel().getProductbyId(productId).getName();
                 product_link.add(new Label("product_name", productName));
                 item.add(product_link);
 
@@ -157,7 +157,7 @@ public class ReleasesPage extends TemplatePage{
 
     private void verifyRelease(Release release) {
         for(String toolId : release.getTools()) {
-            PVTModel pvtModel = ((PVTApplication) Application.get()).getDAO().getPvtModel();
+            PVTModel pvtModel = PVTApplication.getDAO().getPvtModel();
             VerifyTool tool = pvtModel.getVerifyToolById(toolId);
             // start verification and link to Release
             Verification verification = tool.verify(
@@ -168,7 +168,7 @@ public class ReleasesPage extends TemplatePage{
             release.setStatus(PVTStatus.VERIFYING);
             pvtModel.updateRelease(release);
             pvtModel.addVerification(verification);
-            ((PVTApplication) Application.get()).getDAO().persist();
+            PVTApplication.getDAO().persist();
         }
     }
 

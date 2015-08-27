@@ -32,7 +32,7 @@ public class ToolsPage extends TemplatePage {
         super(pp, info);
         setActiveMenu(Menu.TOOLS);
 
-        List<VerifyToolType> toolTypes = ((PVTApplication) Application.get()).getDAO().getPvtModel().getToolTypes();
+        List<VerifyToolType> toolTypes = PVTApplication.getDAO().getPvtModel().getToolTypes();
 
         add(new ListView<VerifyToolType>("tool_lables", toolTypes) {
             @Override
@@ -112,7 +112,7 @@ public class ToolsPage extends TemplatePage {
      */
     private List<VerifyTool> getTools(PageParameters pp) {
         //TODO no filter yet
-        PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
+        PVTDataAccessObject dao = PVTApplication.getDAO();
         return dao.getPvtModel().getToolsList();
     }
 

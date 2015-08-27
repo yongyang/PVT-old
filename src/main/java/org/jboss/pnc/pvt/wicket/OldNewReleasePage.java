@@ -37,7 +37,7 @@ public class OldNewReleasePage extends TemplatePage {
             @Override
             protected void onSubmit() {
                 System.out.println("Submit: " + newRelease);
-                PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
+                PVTDataAccessObject dao = PVTApplication.getDAO();
                 dao.getPvtModel().addRelease(newRelease);
                 dao.persist();
 
@@ -47,7 +47,7 @@ public class OldNewReleasePage extends TemplatePage {
 
 
         List<String> productNames = new ArrayList<>();
-        for(Product p : ((PVTApplication) Application.get()).getDAO().getPvtModel().getProducts()) {
+        for(Product p : PVTApplication.getDAO().getPvtModel().getProducts()) {
             productNames.add(p.getName());
         }
 
@@ -76,7 +76,7 @@ public class OldNewReleasePage extends TemplatePage {
             }
 
             public void validate(Form<?> form) {
-                PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
+                PVTDataAccessObject dao = PVTApplication.getDAO();
                 boolean existed = false;
                 for(Release rel : dao.getPvtModel().getReleases()){
                     if(rel.getName().equalsIgnoreCase(nameTextField.getInput()) && rel.getProductId().equalsIgnoreCase(productDropDownChoice.getInput())) {

@@ -47,7 +47,7 @@ public class ReleaseNewPage extends TemplatePage {
 
         add(new FeedbackPanel("feedbackMessage"));
         
-        PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
+        PVTDataAccessObject dao = PVTApplication.getDAO();
 
         add(new Label("release_summary", getTitle()));
 
@@ -79,7 +79,7 @@ public class ReleaseNewPage extends TemplatePage {
 
         Model<Product> listModel = new Model<Product>();
         ChoiceRenderer<Product> productRender = new ChoiceRenderer<Product>("name");
-        List<Product> loadProducts = ((PVTApplication) Application.get()).getDAO().getPvtModel().getProducts();
+        List<Product> loadProducts = PVTApplication.getDAO().getPvtModel().getProducts();
         productDropDownChoice = new DropDownChoice<Product>("products", listModel, loadProducts , productRender){
         	@Override
             public boolean isNullValid() {
@@ -171,7 +171,7 @@ public class ReleaseNewPage extends TemplatePage {
             }
 
             public void validate(Form<?> form) {
-                PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
+                PVTDataAccessObject dao = PVTApplication.getDAO();
                 boolean existed = false;
                 for (Release rel : dao.getPvtModel().getReleases()) {
                     if ((!rel.getId().equalsIgnoreCase(release.getId())) && rel.getName().equalsIgnoreCase(nameTextField.getInput()) && rel.getProductId().equalsIgnoreCase(productDropDownChoice.getInput())) {
@@ -199,7 +199,7 @@ public class ReleaseNewPage extends TemplatePage {
 
     public void doSubmit() {
 
-        PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
+        PVTDataAccessObject dao = PVTApplication.getDAO();
 
         release.setProductId(productDropDownChoice.getModelObject().getId());
         dao.getPvtModel().addRelease(release);

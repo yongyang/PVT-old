@@ -42,7 +42,7 @@ public class ProductPage extends TemplatePage {
         Button removeButton = new Button("remove"){
         	@Override
 			public void onSubmit() {   
-        		PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
+        		PVTDataAccessObject dao = PVTApplication.getDAO();
                 dao.getPvtModel().removeProduct(product);
                 dao.persist();
                 setResponsePage(ProductsPage.class);

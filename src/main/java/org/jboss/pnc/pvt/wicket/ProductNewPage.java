@@ -34,7 +34,7 @@ public class ProductNewPage extends TemplatePage {
         
         if (pp != null) {
             String id = pp.get("productId").toString();
-        	PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
+        	PVTDataAccessObject dao = PVTApplication.getDAO();
         	product = dao.getPvtModel().getProductbyId(id);
         }
         
@@ -51,7 +51,7 @@ public class ProductNewPage extends TemplatePage {
             @Override
             public void validate(IValidatable<String> validatable) {
                 String inputName = validatable.getValue();
-                PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
+                PVTDataAccessObject dao = PVTApplication.getDAO();
                 boolean existed = false;
                 for(Product p : dao.getPvtModel().getProducts()){
                     if(p.getName().equalsIgnoreCase(inputName)) {
@@ -78,7 +78,7 @@ public class ProductNewPage extends TemplatePage {
     
     protected void doSubmit(){
     	PageParameters pp = new PageParameters();
-        PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
+        PVTDataAccessObject dao = PVTApplication.getDAO();
         dao.getPvtModel().addProduct(product);
         dao.persist();
         setResponsePage(new ProductsPage(pp,("Product: " + product.getName() + " Created.")));

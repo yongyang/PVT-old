@@ -81,7 +81,7 @@ public class SimpleJenkinsVerifyTool extends VerifyTool<Execution> {
         }
         String releaseName = param.getRelease().getName();
         String prdId = param.getRelease().getProductId();
-        PVTModel pvtModel = ((PVTApplication) Application.get()).getDAO().getPvtModel();
+        PVTModel pvtModel = PVTApplication.getDAO().getPvtModel();
         String prdName = pvtModel.getProductbyId(prdId).getName();
         return prdName + "-" + releaseName + "-" + getName();
     }
@@ -106,9 +106,9 @@ public class SimpleJenkinsVerifyTool extends VerifyTool<Execution> {
                 break;
             }
         }
-        PVTModel pvtModel = ((PVTApplication) Application.get()).getDAO().getPvtModel();
+        PVTModel pvtModel = PVTApplication.getDAO().getPvtModel();
 //        pvtModel.updateVerification(verification); TODO
-//        ((PVTApplication) Application.get()).getDAO().persist();
+//        (PVTApplication.getDAO().persist();
     }
 
 }

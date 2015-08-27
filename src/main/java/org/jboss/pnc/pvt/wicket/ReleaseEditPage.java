@@ -23,7 +23,7 @@ public class ReleaseEditPage extends ReleaseNewPage {
 
     @Override
     public void doSubmit() {
-        PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
+        PVTDataAccessObject dao = PVTApplication.getDAO();
         release.setProductId(productDropDownChoice.getModelObject().getId());
         release.setTools(Arrays.asList(checkBoxMultipleChoice.getInputAsArray()));
         dao.getPvtModel().updateRelease(release);
@@ -37,7 +37,7 @@ public class ReleaseEditPage extends ReleaseNewPage {
     }
 
     public void doRemove() {
-        PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
+        PVTDataAccessObject dao = PVTApplication.getDAO();
         dao.getPvtModel().removeRelease(release);
         dao.persist();
         PageParameters pp = new PageParameters();
@@ -61,7 +61,7 @@ public class ReleaseEditPage extends ReleaseNewPage {
     protected Release getRelease(PageParameters pp) {
         if (pp != null) {
             if (!pp.get("releaseId").isNull()) {
-                PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
+                PVTDataAccessObject dao = PVTApplication.getDAO();
                 return dao.getPvtModel().getReleasebyId(pp.get("releaseId").toString());
             }
         }

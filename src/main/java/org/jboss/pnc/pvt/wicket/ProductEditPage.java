@@ -31,7 +31,7 @@ public class ProductEditPage extends TemplatePage {
         setActiveMenu(Menu.PRODUCTS);
         add(feedBackPanel);
         
-        PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
+        PVTDataAccessObject dao = PVTApplication.getDAO();
         if (pp != null) {
         	if (!pp.get("productId").isNull())
         		product = dao.getPvtModel().getProductbyId(pp.get("productId").toString());
@@ -67,7 +67,7 @@ public class ProductEditPage extends TemplatePage {
         	@Override
 			public void onSubmit() {  
         		PageParameters pp = new PageParameters();
-        		PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
+        		PVTDataAccessObject dao = PVTApplication.getDAO();
                 dao.getPvtModel().removeProduct(product);
                 dao.persist();
                 setResponsePage(ProductsPage.class, pp);

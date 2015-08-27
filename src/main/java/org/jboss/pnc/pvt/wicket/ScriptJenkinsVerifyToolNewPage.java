@@ -52,7 +52,7 @@ public class ScriptJenkinsVerifyToolNewPage extends AbstractVerifyToolPage {
 
     @Override
     protected void doSubmit(PageParameters pp) {
-        PVTDataAccessObject dao = ((PVTApplication) Application.get()).getDAO();
+        PVTDataAccessObject dao = PVTApplication.getDAO();
         dao.getPvtModel().addTool(tool);
         dao.persist();
         pp.add("id", tool.getId());

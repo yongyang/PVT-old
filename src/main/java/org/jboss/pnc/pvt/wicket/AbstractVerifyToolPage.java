@@ -107,7 +107,7 @@ public abstract class AbstractVerifyToolPage extends TemplatePage {
     }
 
     protected void doRemove(VerifyTool tool) {
-        PVTModel pvtModel = ((PVTApplication) Application.get()).getDAO().getPvtModel();
+        PVTModel pvtModel = PVTApplication.getDAO().getPvtModel();
         pvtModel.getTools().entrySet().removeIf(p -> p.getValue().equals(tool));
     }
 
@@ -119,7 +119,7 @@ public abstract class AbstractVerifyToolPage extends TemplatePage {
         if (pp == null || pp.isEmpty()) {
             return null;
         }
-        PVTModel pvtModel = ((PVTApplication) Application.get()).getDAO().getPvtModel();
+        PVTModel pvtModel = PVTApplication.getDAO().getPvtModel();
         return pvtModel.getToolsList().stream().filter(p -> p.getId().equals(pp.get("id").toString())).findFirst().get();
     }
 

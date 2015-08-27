@@ -42,16 +42,13 @@ public class PVTApplication extends WebApplication
         // add your configuration here
     }
 
-    public PVTDataAccessObject getDAO() {
-        return getMetaData(DAO_KEY);
+    public static PVTDataAccessObject getDAO() {
+        return get().getMetaData(DAO_KEY);
     }
 
     public static PVTApplication get(){
         return pvtApplication;
     }
 
-    public static PVTDataAccessObject getDataAccessObject() {
-        return get().getDAO();
-    }
 }
 
