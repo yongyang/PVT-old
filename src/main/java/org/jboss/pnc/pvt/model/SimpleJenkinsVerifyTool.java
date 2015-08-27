@@ -79,8 +79,8 @@ public class SimpleJenkinsVerifyTool extends VerifyTool<Execution> {
         if (jobId != null && jobId.trim().length() > 0) {
             return jobId;
         }
-        String releaseName = param.getCurrentRelease().getName();
-        String prdId = param.getCurrentRelease().getProductId();
+        String releaseName = param.getRelease().getName();
+        String prdId = param.getRelease().getProductId();
         PVTModel pvtModel = ((PVTApplication) Application.get()).getDAO().getPvtModel();
         String prdName = pvtModel.getProductbyId(prdId).getName();
         return prdName + "-" + releaseName + "-" + getName();

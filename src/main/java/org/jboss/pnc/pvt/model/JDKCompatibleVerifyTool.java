@@ -3,18 +3,13 @@ package org.jboss.pnc.pvt.model;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
-import java.net.URL;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
@@ -46,7 +41,7 @@ public class JDKCompatibleVerifyTool extends VerifyTool<Execution> {
     @Override
     public Verification<Execution> verify(VerifyParameter param) {
         
-        final String name = "JDK-Check-For-" + param.getCurrentRelease().getName();
+        final String name = "JDK-Check-For-" + param.getRelease().getName();
         final WicketRunnable run = () -> {
             
         };
@@ -59,7 +54,7 @@ public class JDKCompatibleVerifyTool extends VerifyTool<Execution> {
                 return execution;
             }
         };
-        verification.setCurrentReleaseId(param.getCurrentRelease().getId());
+        verification.setReleaseId(param.getRelease().getId());
         verification.setToolId(getId());
 
         execution.addCallBack(new Execution.CallBack() {
@@ -88,7 +83,7 @@ public class JDKCompatibleVerifyTool extends VerifyTool<Execution> {
         if (getExpectJDKVersion() == null || getExpectJDKVersion().trim().length() == 0) {
             throw new IllegalStateException("Please set expect JDK version first!");
         }
-        String[] zipUrls = param.getCurrentRelease().getDistributionArray();
+        String[] zipUrls = param.getRelease().getDistributionArray();
 
         //TODO: foreach zipUrls
         String zipUrl = zipUrls[0];
@@ -131,7 +126,7 @@ public class JDKCompatibleVerifyTool extends VerifyTool<Execution> {
             }
 
             final boolean p = passed;
-            Verification<Boolean> verification = new Verification<Boolean>(param.getToolId(), param.getReferenceRelease()!= null ? param.getReferenceRelease().getId() : "", param.getCurrentRelease().getId()) {
+            Verification<Boolean> verification = new Verification<Boolean>(param.getToolId(), param.getReferenceRelease()!= null ? param.getReferenceRelease().getId() : "", param.getRelease().getId()) {
                 @Override
                 public Boolean getResultObject() {
                     //TODO: return the detail info

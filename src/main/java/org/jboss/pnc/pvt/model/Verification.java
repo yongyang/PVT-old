@@ -23,8 +23,8 @@ public class Verification<T extends Serializable> implements Serializable{
     private String id = UUID.randomUUID().toString();
     private String toolId;
 
-    private String previousReleaseId;
-    private String currentReleaseId;
+    private String referenceReleaseId;
+    private String releaseId;
 
     private long startTime = System.currentTimeMillis();
     private Status status = Status.IN_PROGRESS;
@@ -37,28 +37,28 @@ public class Verification<T extends Serializable> implements Serializable{
 
     }
 
-    public void setPreviousReleaseId(String previousReleaseId) {
-        this.previousReleaseId = previousReleaseId;
+    public void setReferenceReleaseId(String referenceReleaseId) {
+        this.referenceReleaseId = referenceReleaseId;
     }
 
-    public void setCurrentReleaseId(String currentReleaseId) {
-        this.currentReleaseId = currentReleaseId;
+    public void setReleaseId(String releaseId) {
+        this.releaseId = releaseId;
     }
 
 /*
-    public Verification(String toolId, String previousReleaseId, String currentReleaseId) {
+    public Verification(String toolId, String referenceReleaseId, String releaseId) {
         this.toolId = toolId;
-        this.previousReleaseId = previousReleaseId;
-        this.currentReleaseId = currentReleaseId;
+        this.referenceReleaseId = referenceReleaseId;
+        this.releaseId = releaseId;
     }
 */
 
-    public String getPreviousReleaseId() {
-        return previousReleaseId;
+    public String getReferenceReleaseId() {
+        return referenceReleaseId;
     }
 
-    public String getCurrentReleaseId() {
-        return currentReleaseId;
+    public String getReleaseId() {
+        return releaseId;
     }
 
     public String getId() {

@@ -149,9 +149,9 @@ public abstract class VerifyTool<T extends Serializable> implements Serializable
 
     public Verification<T> newDefaultVerification(VerifyParameter param, T resultObject) {
         Verification<T> verification = new Verification<>();
-        verification.setCurrentReleaseId(param.getCurrentRelease().getId());
+        verification.setReleaseId(param.getRelease().getId());
         if(param.getReferenceRelease() != null) {
-            verification.setPreviousReleaseId(param.getReferenceRelease().getId());
+            verification.setReferenceReleaseId(param.getReferenceRelease().getId());
         }
         verification.setToolId(param.getToolId());
         verification.setResultObject(resultObject);

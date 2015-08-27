@@ -10,19 +10,19 @@ public class VerifyParameter {
     private String toolId;
 
     private Release referenceRelease;
-    private Release currentRelease;
+    private Release release;
 
     private Properties properties = new Properties();
 
 
-    public VerifyParameter(String toolId, Release referenceRelease, Release currentRelease) {
-        this(toolId, referenceRelease, currentRelease, null);
+    public VerifyParameter(String toolId, Release referenceRelease, Release release) {
+        this(toolId, referenceRelease, release, null);
     }
 
-    public VerifyParameter(String toolId,Release referenceRelease, Release currentRelease, Properties properties) {
+    public VerifyParameter(String toolId,Release referenceRelease, Release release, Properties properties) {
         this.toolId = toolId;
         this.referenceRelease = referenceRelease;
-        this.currentRelease = currentRelease;
+        this.release = release;
         if(properties != null && !properties.isEmpty()) {
             this.properties = properties;
         }
@@ -32,8 +32,8 @@ public class VerifyParameter {
         return referenceRelease;
     }
 
-    public Release getCurrentRelease() {
-        return currentRelease;
+    public Release getRelease() {
+        return release;
     }
 
     public String getToolId() {
