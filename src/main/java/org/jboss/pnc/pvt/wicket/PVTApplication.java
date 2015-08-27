@@ -47,6 +47,9 @@ public class PVTApplication extends WebApplication
     }
 
     public static PVTApplication get(){
+        if(pvtApplication == null) {
+            throw new RuntimeException("Call to early, PVT application not initialized yet!!!");
+        }
         return pvtApplication;
     }
 
