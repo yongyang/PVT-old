@@ -74,6 +74,9 @@
       "tools": [
         "096ffbbe-b7ea-4f36-954a-ea639b7967ad"
       ],
+      "verifications": {
+        "096ffbbe-b7ea-4f36-954a-ea639b7967ad": "7c258a5e-a084-4b82-ab69-2a03c5cae6f1"
+      },
       "description": "JBOSS-EAP 1.0.0.DR1 release",
       "status": "NEW",
       "createTime": 1440062648090
@@ -90,5 +93,23 @@
       "createTime": 1440062648090
     }
   ],
-  "verifications": {}
+  "verifications": {
+    "7c258a5e-a084-4b82-ab69-2a03c5cae6f1": {
+      "id": "7c258a5e-a084-4b82-ab69-2a03c5cae6f1",
+      "toolId": "096ffbbe-b7ea-4f36-954a-ea639b7967ad",
+      "referenceReleaseId": null,
+      "releaseId": "06906f58-bf00-47dd-bde1-18e81f6163a8",
+      "startTime": 1440649501065,
+      "status": "IN_PROGRESS",
+      "exception": null,
+      "resultObject": {
+        "name": "JDK-Check-For-1.0.0.DR1",
+        "link": null,
+        "exception": null,
+        "log": null,
+        "status": "SUCCEEDED",
+        "runnable": {}
+      }
+    }
+  }
 }
