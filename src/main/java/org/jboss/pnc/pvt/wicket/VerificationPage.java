@@ -2,6 +2,7 @@ package org.jboss.pnc.pvt.wicket;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.jboss.pnc.pvt.model.Product;
 import org.jboss.pnc.pvt.model.Release;
 import org.jboss.pnc.pvt.model.Verification;
 import org.jboss.pnc.pvt.model.VerifyTool;
@@ -22,11 +23,14 @@ public class VerificationPage extends TemplatePage {
         setActiveMenu(Menu.VERIFICATIONS);
 
         String verifyId = pp.get(0).toString();
+        Verification verification = PVTApplication.getDAO().getPvtModel().getVerificationById(verifyId);
+        VerifyTool tool = PVTApplication.getDAO().getPvtModel().getVerifyToolById(verification.getToolId());
+        Release release = PVTApplication.getDAO().getPvtModel().getReleasebyId(verification.getReleaseId());
+        Product product = PVTApplication.getDAO().getPvtModel().getProductbyId(release.getProductId());
+//        Release refRelease = PVTApplication.getDAO().getPvtModel().getReleasebyId(verification.getReferenceReleaseId());
 
         add(new Label("id", verifyId));
 
-        Verification verification = PVTApplication.getDAO().getPvtModel().getVerificationById(verifyId);
-        VerifyTool tool = PVTApplication.getDAO().getPvtModel().getVerifyToolById(verification.getToolId());
 
         add(new Label("tool_name", tool.toString()));
 
@@ -34,6 +38,15 @@ public class VerificationPage extends TemplatePage {
         calendar.setTimeInMillis(verification.getStartTime());
         add(new Label("startTime", calendar.getTime().toString()));
 
+        long endTime = verification.getEndTime();
+        Calendar endCalendar = Calendar.getInstance();
+        if(endTime != 0) {
+            calendar.setTimeInMillis(endTime);
+        }
+
+        add(new Label("endTime", endTime == 0 ? " - "  : endCalendar.getTime().toString()));
+
         add(new Label("status", verification.getStatus()));
+        add(new Label("release", product.getName() + " " + release.getName()));
     }
 }
