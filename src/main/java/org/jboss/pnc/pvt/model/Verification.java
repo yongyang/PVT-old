@@ -27,6 +27,7 @@ public class Verification<T extends Serializable> implements Serializable{
     private String releaseId;
 
     private long startTime = System.currentTimeMillis();
+    private long endTime = 0;
     private Status status = Status.IN_PROGRESS;
 
     private Exception exception;
@@ -88,6 +89,14 @@ public class Verification<T extends Serializable> implements Serializable{
 
     public void setStartTime(long startTime) {
         this.startTime = startTime;
+    }
+
+    public long getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(long endTime) {
+        this.endTime = endTime;
     }
 
     public Status getStatus() {
