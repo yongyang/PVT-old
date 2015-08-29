@@ -18,6 +18,7 @@
 package org.jboss.pnc.pvt.execution;
 
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import org.jboss.pnc.pvt.execution.Execution.JVMExecution;
 
@@ -28,26 +29,36 @@ import org.jboss.pnc.pvt.execution.Execution.JVMExecution;
 class JVMExecutor extends Executor {
 
     static JVMExecutor INSTANCE = new JVMExecutor();
-    
+
     JVMExecutor() {
         super();
     }
 
     @Override
-    public void execute(final Execution execution) throws ExecutionException {
-        JVMExecution jvmExec = (JVMExecution)execution;
-        Runnable run = jvmExec.getRunnable();
-        String name = jvmExec.getName();
+    public void execute(final Execution execution, final CallBack callBack) throws ExecutionException {
+        JVMExecution jvmExec = (JVMExecution) execution;
+        ExecutionRunnable run = jvmExec.getRunnable();
+        run.setCallback(callBack);
         jvmExec.setStatus(Execution.Status.RUNNING);
-        Future<?> future = getJVMExecutorService().submit(run);
-        try {
-            future.get();
-            jvmExec.setStatus(Execution.Status.SUCCEEDED);
-        } catch (Exception e) {
-            jvmExec.setStatus(Execution.Status.FAILED);
-            throw new ExecutionException(String.format("Failed to execute Jenkins job: %s", name), e);
+        if (callBack != null) {
+            callBack.onStatus(execution);
         }
+        Future<?> future = getRunnableService().submit(run);
+        startMonitor(future, execution, callBack);
     }
 
-
+    private void startMonitor(Future<?> future, Execution execution, CallBack callBack) {
+        final Runnable monitor = new Runnable() {
+            public void run() {
+                if (future.isDone()) {
+                    if (callBack != null) {
+                        callBack.onTerminated(execution);
+                    }
+                } else {
+                    getMonitorExecutorService().schedule(this, getMonitorInterval(), TimeUnit.SECONDS);
+                }
+            }
+        };
+        getMonitorExecutorService().schedule(monitor, getMonitorInterval(), TimeUnit.SECONDS);
+    }
 }

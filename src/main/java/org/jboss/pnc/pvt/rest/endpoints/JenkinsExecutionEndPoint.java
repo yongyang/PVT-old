@@ -23,6 +23,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.jboss.logging.Logger;
+import org.jboss.pnc.pvt.execution.CallBack;
 import org.jboss.pnc.pvt.execution.Execution;
 import org.jboss.pnc.pvt.execution.ExecutionException;
 import org.jboss.pnc.pvt.execution.Executor;
@@ -47,42 +48,32 @@ public class JenkinsExecutionEndPoint {
     @ApiOperation(value = "Start a Jenkins Job, returns as soon as possible with a link to the Jenkins build.")
     @POST
     @Path("/start/{jobName}")
-    public Response start(@ApiParam("The Jenkins Job Name. Make sure the job existed already.") @PathParam("jobName") String jobName)
-             {
+    public Response start(
+            @ApiParam("The Jenkins Job Name. Make sure the job existed already.") @PathParam("jobName") String jobName) {
         Execution execution = Execution.createJenkinsExecution(jobName);
         try {
-            Executor.getJenkinsExecutor().execute(execution);
+            Executor.getJenkinsExecutor().execute(execution, null);
         } catch (ExecutionException e) {
             return Response.status(Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN).entity(e.getMessage()).build();
         }
         return Response.ok(execution).build();
     }
 
-    @SuppressWarnings("serial")
     @ApiOperation(value = "Start a Jenkins Job. Waits until the Jenkins Job is fished.")
     @POST
     @Path("/startWait/{jobName}")
-    public Response startAndWait(@ApiParam("The Jenkins Job Name. Make sure the job existed already.") @PathParam("jobName") String jobName)
-             {
+    public Response startAndWait(
+            @ApiParam("The Jenkins Job Name. Make sure the job existed already.") @PathParam("jobName") String jobName) {
         Execution execution = Execution.createJenkinsExecution(jobName);
         final CountDownLatch countDownLatch = new CountDownLatch(1);
-        execution.addCallBack(new Execution.CallBack() {
-
+        final CallBack callBack = new CallBack() {
             @Override
-            public void onStatus(Execution execution) {
-                if (Execution.Status.FAILED.equals(execution.getStatus())
-                        || Execution.Status.SUCCEEDED.equals(execution.getStatus())) {
-                    countDownLatch.countDown();
-                }
+            public void onTerminated(Execution execution) {
+                countDownLatch.countDown();
             }
-
-            @Override
-            public void onLogChanged(Execution execution) {
-
-            }
-        });
+        };
         try {
-            Executor.getJenkinsExecutor().execute(execution);
+            Executor.getJenkinsExecutor().execute(execution, callBack);
         } catch (ExecutionException e) {
             return Response.status(Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN).entity(e.getMessage()).build();
         }
@@ -94,18 +85,15 @@ public class JenkinsExecutionEndPoint {
         return Response.ok(execution).build();
     }
 
-    @SuppressWarnings("serial")
     @ApiOperation(value = "Start a Jenkins Job, returns ASAP. An URL for the callback when the Jenkins job is completed or failed.")
     @POST
     @Path("/startWithCallback/{jobName}")
     public Response startWithCallback(
             @ApiParam("The Jenkins Job Name. Make sure the job existed already.") @PathParam("jobName") String jobName,
-            @ApiParam("The Callback URL used to send response to using POST method.") @QueryParam("callBackURL") String callBackURL)
-            {
+            @ApiParam("The Callback URL used to send response to using POST method.") @QueryParam("callBackURL") String callBackURL) {
 
         Execution execution = Execution.createJenkinsExecution(jobName);
-        execution.addCallBack(new Execution.CallBack() {
-
+        final CallBack callBack = new CallBack() {
             @Override
             public void onStatus(Execution execution) {
                 if (execution.getStatus().equals(Execution.Status.FAILED)
@@ -114,28 +102,24 @@ public class JenkinsExecutionEndPoint {
                         logger.debug("Call back to: " + callBackURL);
                         HttpPost post = new HttpPost(callBackURL);
                         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-                        nameValuePairs.add(new BasicNameValuePair("Status", execution.getStatus().name())); //TODO adds more params ??
+                        nameValuePairs.add(new BasicNameValuePair("Status", execution.getStatus().name())); // TODO adds more
+                                                                                                            // params ??
 
                         post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
                         HttpResponse resp = httpClient.execute(post);
                         int statusCode = resp.getStatusLine().getStatusCode();
                         if (statusCode != HttpStatus.SC_OK) {
-                            logger.warn(String.format("Not expected status: %d from URL: %s", statusCode, callBackURL) );
+                            logger.warn(String.format("Not expected status: %d from URL: %s", statusCode, callBackURL));
                         }
                     } catch (IOException e) {
                         logger.warn("Can't call back: " + callBackURL, e);
                     }
                 }
             }
-
-            @Override
-            public void onLogChanged(Execution execution) {
-                logger.debug("Log changed.");
-            }
-        });
+        };
         try {
-            Executor.getJenkinsExecutor().execute(execution);
+            Executor.getJenkinsExecutor().execute(execution, callBack);
         } catch (ExecutionException e) {
             return Response.status(Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN).entity(e.getMessage()).build();
         }
@@ -149,8 +133,7 @@ public class JenkinsExecutionEndPoint {
             @ApiParam("The Jenkins Job Name. Make sure the job existed already in the specified Jenkins Server.") @PathParam("jobName") String jobName,
             @ApiParam("The Jenkins Server URL. Required.") @QueryParam("jenkinsURL") String jenkinsURL,
             @ApiParam("The Jenkins Username. Optional.") @QueryParam("username") String jenkinsUserName,
-            @ApiParam("The Jenkins Password. Optional.") @QueryParam("password") String jenkinsPassword)
-            {
+            @ApiParam("The Jenkins Password. Optional.") @QueryParam("password") String jenkinsPassword) {
 
         if (jenkinsURL == null || jenkinsURL.trim().length() == 0) {
             return Response.status(Status.BAD_REQUEST).entity("Please specify JenkinsURL.").build();
@@ -162,7 +145,7 @@ public class JenkinsExecutionEndPoint {
 
         Execution execution = Execution.createJenkinsExecution(jobName);
         try {
-            Executor.getJenkinsExecutor(jenkinsConfig).execute(execution);
+            Executor.getJenkinsExecutor(jenkinsConfig).execute(execution, null);
         } catch (ExecutionException e) {
             return Response.status(Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN).entity(e.getMessage()).build();
         }

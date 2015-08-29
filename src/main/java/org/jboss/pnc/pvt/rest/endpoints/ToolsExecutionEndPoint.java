@@ -23,6 +23,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.jboss.logging.Logger;
+import org.jboss.pnc.pvt.execution.CallBack;
 import org.jboss.pnc.pvt.execution.Execution;
 import org.jboss.pnc.pvt.execution.ExecutionException;
 import org.jboss.pnc.pvt.execution.Executor;
@@ -62,14 +63,13 @@ public class ToolsExecutionEndPoint {
             JenkinsConfiguration config = Executor.getDefaultJenkinsProps();
             config.setCreateIfJobMissing(true); // create if missing
             config.setOverrideJob(true);
-            Executor.getJenkinsExecutor(config).execute(execution);
+            Executor.getJenkinsExecutor(config).execute(execution, null);
         } catch (ExecutionException | IOException e) {
             return Response.status(Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN).entity(e.getMessage()).build();
         }
         return Response.ok(execution).build();
     }
 
-    @SuppressWarnings("serial")
     @ApiOperation(value = "Start a tool execution(a Jenkins execution tool). Waits until the Jenkins Job is fished.")
     @POST
     @Path("/startWait/{productName}/{version}/{toolName}")
@@ -84,26 +84,17 @@ public class ToolsExecutionEndPoint {
         }
         Execution execution = Execution.createJenkinsExecution(jobName, jobContent, null);
         final CountDownLatch countDownLatch = new CountDownLatch(1);
-        execution.addCallBack(new Execution.CallBack() {
-
+        final CallBack callBack = new CallBack() {
             @Override
-            public void onStatus(Execution execution) {
-                if (Execution.Status.FAILED.equals(execution.getStatus())
-                        || Execution.Status.SUCCEEDED.equals(execution.getStatus())) {
-                    countDownLatch.countDown();
-                }
+            public void onTerminated(Execution execution) {
+                countDownLatch.countDown();
             }
-
-            @Override
-            public void onLogChanged(Execution execution) {
-
-            }
-        });
+        };
         try {
             JenkinsConfiguration config = Executor.getDefaultJenkinsProps();
             config.setCreateIfJobMissing(true); // create if missing
             config.setOverrideJob(true);
-            Executor.getJenkinsExecutor(config).execute(execution);
+            Executor.getJenkinsExecutor(config).execute(execution, callBack);
         } catch (ExecutionException | IOException e) {
             return Response.status(Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN).entity(e.getMessage()).build();
         }
@@ -115,7 +106,6 @@ public class ToolsExecutionEndPoint {
         return Response.ok(execution).build();
     }
 
-    @SuppressWarnings("serial")
     @ApiOperation(value = "Start a tool execution(a Jenkins execution tool). Returns ASAP. An URL for the callback when the Jenkins job is completed or failed.")
     @POST
     @Path("/startWithCallback/{productName}/{version}/{toolName}")
@@ -132,8 +122,7 @@ public class ToolsExecutionEndPoint {
                     .entity("Can't know job content of tool: " + toolName).build();
         }
         Execution execution = Execution.createJenkinsExecution(jobName, jobContent, null);
-        execution.addCallBack(new Execution.CallBack() {
-
+        final CallBack callBack = new CallBack() {
             @Override
             public void onStatus(Execution execution) {
                 if (execution.getStatus().equals(Execution.Status.FAILED)
@@ -157,17 +146,12 @@ public class ToolsExecutionEndPoint {
                     }
                 }
             }
-
-            @Override
-            public void onLogChanged(Execution execution) {
-                logger.debug("Log changed.");
-            }
-        });
+        };
         try {
             JenkinsConfiguration config = Executor.getDefaultJenkinsProps();
             config.setCreateIfJobMissing(true); // create if missing
             config.setOverrideJob(true);
-            Executor.getJenkinsExecutor(config).execute(execution);
+            Executor.getJenkinsExecutor(config).execute(execution, callBack);
         } catch (ExecutionException| IOException e) {
             return Response.status(Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN).entity(e.getMessage()).build();
         }

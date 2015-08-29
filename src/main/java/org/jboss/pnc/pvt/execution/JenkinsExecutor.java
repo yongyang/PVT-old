@@ -95,7 +95,7 @@ class JenkinsExecutor extends Executor {
     }
 
     @Override
-    public void execute(final Execution execution) throws ExecutionException {
+    public void execute(final Execution execution, final CallBack callBack) throws ExecutionException {
         JenkinsExecution jenkinsExe = (JenkinsExecution)execution;
         String jobId = jenkinsExe.getName();
         String jobContent = jenkinsExe.getJobContent();
@@ -113,14 +113,17 @@ class JenkinsExecutor extends Executor {
             url.append(buildNumber);
             url.append("/");
             execution.setLink(url.toString());
-            startMonitor(jobId, buildNumber, execution);
+            startMonitor(jobId, buildNumber, execution, callBack);
         } catch (IOException e) {
             execution.setException(e);
+            if (callBack != null) {
+                callBack.onException(execution);
+            }
             throw new ExecutionException(String.format("Failed to execute Jenkins job: %s", jobId), e);
         }
     }
 
-    private void startMonitor(String jobName, int buildNumber, final Execution execution) {
+    private void startMonitor(String jobName, int buildNumber, final Execution execution, final CallBack callBack) {
         AtomicInteger statusRetrieveFailed = new AtomicInteger(0);
         final Runnable checking = new Runnable() {
 
@@ -131,7 +134,7 @@ class JenkinsExecutor extends Executor {
                 try {
                     Build jenkinsBuild = getBuild(jobName, buildNumber);
                     if (jenkinsBuild == null) {
-                        getCheckingExecutorService().schedule(this, 10L, TimeUnit.SECONDS);
+                        getMonitorExecutorService().schedule(this, getMonitorInterval(), TimeUnit.SECONDS);
                         return;
                     }
 
@@ -139,6 +142,9 @@ class JenkinsExecutor extends Executor {
                     String log = jenkinsBuildDetails.getConsoleOutputText();
                     if (log != null) {
                         execution.setLog(log);
+                        if (callBack != null) {
+                            callBack.onLogChanged(execution);
+                        }
                     }
                     BuildResult result = jenkinsBuildDetails.getResult();
                     long timeout = jenkinsConfig.getJobTimeOut();
@@ -149,7 +155,7 @@ class JenkinsExecutor extends Executor {
                         }
                     }
                     if (result == null) {
-                        getCheckingExecutorService().schedule(this, 10L, TimeUnit.SECONDS);
+                        getMonitorExecutorService().schedule(this, getMonitorInterval(), TimeUnit.SECONDS);
                         return;
                     }
                     switch (result) {
@@ -157,7 +163,10 @@ class JenkinsExecutor extends Executor {
                         case REBUILDING:
                         {
                             execution.setStatus(Execution.Status.RUNNING);
-                            getCheckingExecutorService().schedule(this, 10L, TimeUnit.SECONDS);
+                            if (callBack != null) {
+                                callBack.onStatus(execution);
+                            }
+                            getMonitorExecutorService().schedule(this, getMonitorInterval(), TimeUnit.SECONDS);
                             break;
                         }
                         case FAILURE:
@@ -165,28 +174,40 @@ class JenkinsExecutor extends Executor {
                         case ABORTED:
                         {
                             execution.setStatus(Execution.Status.FAILED);
+                            if (callBack != null) {
+                                callBack.onStatus(execution);
+                            }
                             break;
                         }
                         case SUCCESS:
                         {
                             execution.setStatus(Execution.Status.SUCCEEDED);
+                            if (callBack != null) {
+                                callBack.onStatus(execution);
+                            }
                             break;
                         }
                         default:
                         {
                             execution.setStatus(Execution.Status.UNKNOWN);
-                            getCheckingExecutorService().schedule(this, 10L, TimeUnit.SECONDS);
+                            if (callBack != null) {
+                                callBack.onStatus(execution);
+                            }
+                            getMonitorExecutorService().schedule(this, getMonitorInterval(), TimeUnit.SECONDS);
                             break;
                         }
                     }
                 } catch (IOException e) {
                     execution.setException(e);
+                    if (callBack != null) {
+                        callBack.onException(execution);
+                    }
                     int failed = statusRetrieveFailed.getAndIncrement();
                     if (failed >= getMaxRetryTime()) {
                         logger.warn("Failed to check Build Detail.", e);
                     } else {
                         logger.debug("Continue checking.", e);
-                        getCheckingExecutorService().schedule(this, 10L, TimeUnit.SECONDS);
+                        getMonitorExecutorService().schedule(this, getMonitorInterval(), TimeUnit.SECONDS);
                     }
                 } catch (Throwable t) {
                     logger.warn("Failed to Monitor the execution.", t);
@@ -194,7 +215,7 @@ class JenkinsExecutor extends Executor {
             }
 
         };
-        getCheckingExecutorService().schedule(checking, 10L, TimeUnit.SECONDS);
+        getMonitorExecutorService().schedule(checking, getMonitorInterval(), TimeUnit.SECONDS);
     }
 
     private Build getBuild(String jobName, int buildNumber) throws IOException {

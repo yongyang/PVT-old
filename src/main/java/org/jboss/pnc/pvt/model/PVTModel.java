@@ -13,6 +13,8 @@ import java.util.*;
 @JsonAutoDetect
 public class PVTModel implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     private List<Product> products = new ArrayList<>();
 
     private List<Release> releases = new ArrayList<>();
@@ -30,7 +32,7 @@ public class PVTModel implements Serializable {
 	 * Verification map, which contains all Verification instances inside PVT.
 	 * Key of the map is the Verification id.
 	 */
-	private Map<String,Verification<?>> verifications = new HashMap<>();
+	private Map<String,Verification> verifications = new HashMap<>();
 
     public void addProduct(Product product) {
         products.add(product);
@@ -140,16 +142,16 @@ public class PVTModel implements Serializable {
 		tools.put(tool.getId(), tool);
 	}
 
-	public Map<String, Verification<?>> getVerifications() {
+	public Map<String, Verification> getVerifications() {
 		return verifications;
 	}
 
 	@JsonIgnore
-	public List<Verification<?>> getVerificationsList() {
+	public List<Verification> getVerificationsList() {
 		return Arrays.asList(verifications.values().toArray(new Verification[verifications.size()]));
 	}
 
-	public Verification<?> getVerificationById(String id) {
+	public Verification getVerificationById(String id) {
 		return verifications.get(id);
 	}
 
@@ -159,7 +161,7 @@ public class PVTModel implements Serializable {
 
 	public List<VerifyTool> getVerifyTools(String... toolsId) {
 		if(toolsId == null || toolsId.length == 0) {
-			return Collections.EMPTY_LIST;
+			return Collections.emptyList();
 		}
 		else {
 			List<VerifyTool> tools = new ArrayList<>(toolsId.length);
@@ -172,7 +174,7 @@ public class PVTModel implements Serializable {
 
 	public List<VerifyTool> getVerifyTools(List<String> toolsId) {
 		if(toolsId == null || toolsId.size() == 0) {
-			return Collections.EMPTY_LIST;
+			return Collections.emptyList();
 		}
 		else {
 			List<VerifyTool> tools = new ArrayList<>(toolsId.size());

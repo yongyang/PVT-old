@@ -18,13 +18,12 @@
 package org.jboss.pnc.pvt.execution;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -58,12 +57,10 @@ public abstract class Execution implements Serializable {
      */
     private Status status = Status.RUNNING;
 
-    private final List<CallBack> callBacks = new ArrayList<>();
-
-    public Execution(final String name) {
+    public Execution(String name) {
         super();
-        Objects.requireNonNull(name, "Each Execution should have a non empty name.");
         this.name = name;
+        Objects.requireNonNull(name, "Each Execution must have a name.");
     }
 
     /**
@@ -77,29 +74,7 @@ public abstract class Execution implements Serializable {
      * @param exception the exception to set
      */
     public synchronized Execution setException(Exception exception) {
-        if (exception != null && ! exception.equals(this.exception)) {
-            this.exception = exception;
-            for (CallBack callBack: callBacks) {
-                callBack.onException(this);
-            }
-        }
-        return this;
-    }
-
-    public Execution addCallBack(CallBack callBack) {
-        if (callBack != null) {
-            callBacks.add(callBack);
-        }
-        return this;
-    }
-
-    public Execution removeCallBack(CallBack callBack) {
-        callBacks.remove(callBack);
-        return this;
-    }
-
-    public Execution cleanCallBacks() {
-        callBacks.clear();
+        this.exception = exception;
         return this;
     }
 
@@ -108,12 +83,7 @@ public abstract class Execution implements Serializable {
     }
 
     public synchronized Execution setLog(String log) {
-        if (log != null && !log.equals(this.log)) {
-            this.log = log;
-            for (CallBack callBack: callBacks) {
-                callBack.onLogChanged(this);
-            }
-        }
+        this.log = log;
         return this;
     }
 
@@ -141,24 +111,8 @@ public abstract class Execution implements Serializable {
      * @param status the status to set
      */
     public synchronized Execution setStatus(Status status) {
-        if (status != null && ! status.equals(this.status)) {
-            this.status = status;
-            for (CallBack callBack: callBacks) {
-                callBack.onStatus(this);
-            }
-        }
+        this.status = status;
         return this;
-    }
-
-    public static abstract class CallBack implements Serializable {
-
-        private static final long serialVersionUID = 3921755061713069600L;
-
-        public void onStatus(Execution execution){};
-
-        public void onLogChanged(Execution execution){};
-
-        public void onException(Execution execution){};
     }
 
     public static enum Status {
@@ -184,14 +138,14 @@ public abstract class Execution implements Serializable {
         /**
          * @return the jobContent
          */
-        public String getJobContent() {
+        String getJobContent() {
             return jobContent;
         }
 
         /**
          * @return the jobParams
          */
-        public Map<String, String> getJobParams() {
+        Map<String, String> getJobParams() {
             return jobParams;
         }
 
@@ -201,17 +155,19 @@ public abstract class Execution implements Serializable {
 
         private static final long serialVersionUID = 1L;
 
-        private final Runnable runnable;
+        private final transient ExecutionRunnable runnable;
 
-        JVMExecution(final String name, final Runnable runnable) {
+        JVMExecution(final String name, final ExecutionRunnable runnable) {
             super(name);
             this.runnable = runnable;
+            this.runnable.setExecution(this);
         }
 
         /**
          * @return the runnable
          */
-        public Runnable getRunnable() {
+        @JsonIgnore
+        ExecutionRunnable getRunnable() {
             return runnable;
         }
 
@@ -235,7 +191,7 @@ public abstract class Execution implements Serializable {
         return new JenkinsExecution(jobId, jobContent, jobParams);
     }
 
-    public static Execution createJVMExecution(final String name, final Runnable runnable) {
+    public static Execution createJVMExecution(final String name, final ExecutionRunnable runnable) {
         return new JVMExecution(name, runnable);
     }
 }

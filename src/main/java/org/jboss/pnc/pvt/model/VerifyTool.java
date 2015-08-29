@@ -6,6 +6,10 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.io.Serializable;
 import java.util.*;
 
+import org.jboss.pnc.pvt.execution.CallBack;
+import org.jboss.pnc.pvt.execution.Execution;
+import org.jboss.pnc.pvt.wicket.PVTApplication;
+
 /**
  * The base verify tool definition.
  * 
@@ -15,11 +19,11 @@ import java.util.*;
  */
 @JsonAutoDetect
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
-public abstract class VerifyTool<T extends Serializable> implements Serializable {
+public abstract class VerifyTool implements Serializable {
 
     private static final long serialVersionUID = -5353557149342108021L;
 
-    private String id = UUID.randomUUID().toString() ;
+    private String id = UUID.randomUUID().toString();
 
     private String name;
 
@@ -67,7 +71,9 @@ public abstract class VerifyTool<T extends Serializable> implements Serializable
         this.description = description;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Object#hashCode()
      */
     @Override
@@ -78,7 +84,9 @@ public abstract class VerifyTool<T extends Serializable> implements Serializable
         return result;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
@@ -98,12 +106,14 @@ public abstract class VerifyTool<T extends Serializable> implements Serializable
         return true;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Object#toString()
      */
     @Override
     public String toString() {
-        return "VerifyTool [id=" + id + ", name=" + name + "]";
+        return getClass().getSimpleName() + " [id=" + id + ", name=" + name + "]";
     }
 
     /**
@@ -111,50 +121,68 @@ public abstract class VerifyTool<T extends Serializable> implements Serializable
      *
      * @param param @return result, maybe a handle for asynchronous job, such a jenkins job
      */
-    public abstract Verification<T> verify(VerifyParameter param);
+    public abstract Verification verify(VerifyParameter param);
 
     /**
-     * Register all sub class of VerifyTool here
-     */
-    private static final Map<String, Class<? extends VerifyTool>> toolsMap = new HashMap<>();
-    static {
-//        toolsMap.put(JDKCompatibleVerifyTool.LABEL, JDKCompatibleVerifyTool.class);
-//        toolsMap.put(VersionConventionVerifyTool.LABEL, VersionConventionVerifyTool.class);
-//        toolsMap.put(SimpleJenkinsVerifyTool.LABEL, SimpleJenkinsVerifyTool.class);
-//        toolsMap.put(TemplateJenkinsVerifyTool.LABEL, TemplateJenkinsVerifyTool.class);
-//        toolsMap.put(ScriptJenkinsVerifyTool.LABEL, ScriptJenkinsVerifyTool.class);
-    }
-
-    /**
-     * Creates a VerifyTool instance according to the tool label.
+     * New Default Verification.
      * 
-     * @param toolLabel usually comes from 'LABEL' class variant of each VerifyTool implementation.
-     * @return a VerifyTool instance which has the label specified.
-     * @throws RuntimeException if it can't create such a instance for any reason.
+     * After this method returns, the Verification has been persisted in DB model.
+     * 
+     * @param param the VerifyParam
+     * @param execution the Execution
+     * @return a new Verification instance
      */
-    public static VerifyTool createVerifyTool(String toolLabel) {
-        if (toolLabel == null) {
-            throw new IllegalArgumentException("Can't create the verify tool instance without knowing the type of it.");
-        }
-        Class<? extends VerifyTool> toolCls = toolsMap.get(toolLabel);
-        if (toolCls == null) {
-            throw new IllegalArgumentException("Unknown tool label: " + toolLabel);
-        }
-        try {
-            return toolCls.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw new IllegalStateException("Can't create the VerifyTool instance.", e);
-        }
-    }
-
-    public Verification<T> newDefaultVerification(VerifyParameter param, T resultObject) {
-        Verification<T> verification = new Verification<>();
+    public Verification newDefaultVerification(VerifyParameter param, Execution execution) {
+        Verification verification = new Verification();
         verification.setReleaseId(param.getRelease().getId());
-        if(param.getReferenceRelease() != null) {
+        if (param.getReferenceRelease() != null) {
             verification.setReferenceReleaseId(param.getReferenceRelease().getId());
         }
         verification.setToolId(param.getToolId());
-        verification.setResultObject(resultObject);
+        verification.setExecution(execution);
+        saveInDB(verification);
         return verification;
+    }
+
+    private void saveInDB(Verification verification) {
+        PVTModel pvtModel = PVTApplication.getDAO().getPvtModel();
+        pvtModel.addVerification(verification);
+    }
+
+    protected Verification getLastVerification(String releaseId) {
+        PVTModel pvtModel = PVTApplication.getDAO().getPvtModel();
+        Optional<Verification> optional = pvtModel.getVerificationsList().stream()
+                .filter(p -> p.getReleaseId().equals(releaseId) && p.getToolId().equals(getId())).limit(1L).findAny();
+        return optional.isPresent() ? optional.get() : null;
+    }
+
+    protected Verification getOrCreateVerification(VerifyParameter param, Execution execution) {
+        Verification verification = getLastVerification(param.getRelease().getId());
+        if (verification != null) {
+            return verification;
+        }
+        return newDefaultVerification(param, execution);
+    }
+
+    protected String getProductName(String productId) {
+        PVTModel pvtModel = PVTApplication.getDAO().getPvtModel();
+        Product prd = pvtModel.getProductbyId(productId);
+        return prd == null ? null : prd.getName();
+    }
+
+    protected CallBack defaultVerificationCallBack(final Verification verification) {
+        return new CallBack() {
+
+            @Override
+            public void onStatus(Execution execution) {
+                verification.syncStauts();
+            }
+
+            @Override
+            public void onTerminated(Execution execution) {
+                verification.setEndTime(System.currentTimeMillis());
+            }
+
+        };
     }
 }

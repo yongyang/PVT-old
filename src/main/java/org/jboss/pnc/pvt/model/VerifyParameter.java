@@ -7,6 +7,9 @@ import java.util.Properties;
  */
 public class VerifyParameter {
 
+    /** Property key which indicates whether skip the passed verification or not. Default false **/
+    public static final String SKIP_PASSED = "skip.passed";
+
     private String toolId;
 
     private Release referenceRelease;
@@ -44,8 +47,12 @@ public class VerifyParameter {
         properties.setProperty(name, value);
     }
 
-    public void getProperty(String name) {
-        properties.getProperty(name);
+    public String getProperty(String name) {
+        return properties.getProperty(name);
+    }
+
+    public String getProperty(String name, String defaultValue) {
+        return properties.getProperty(name, defaultValue);
     }
 
     public boolean hasProperty(String name) {

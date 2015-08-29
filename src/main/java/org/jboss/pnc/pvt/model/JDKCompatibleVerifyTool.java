@@ -6,26 +6,30 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.Serializable;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-
+import org.jboss.logging.Logger;
+import org.jboss.pnc.pvt.execution.CallBack;
 import org.jboss.pnc.pvt.execution.Execution;
 import org.jboss.pnc.pvt.execution.ExecutionException;
+import org.jboss.pnc.pvt.execution.ExecutionRunnable;
 import org.jboss.pnc.pvt.execution.Executor;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
 
 /**
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
  */
 @JsonAutoDetect
-@JsonSubTypes({@JsonSubTypes.Type(value = JDKCompatibleVerifyTool.class)})
-public class JDKCompatibleVerifyTool extends VerifyTool<Execution> {
+@JsonSubTypes({ @JsonSubTypes.Type(value = JDKCompatibleVerifyTool.class) })
+public class JDKCompatibleVerifyTool extends VerifyTool {
 
     private static final long serialVersionUID = -7513802473705616180L;
+
+    private static final Logger logger = Logger.getLogger(JDKCompatibleVerifyTool.class);
 
     private static final int JAVA_CLASS_MAGIC = 0xCAFEBABE;
 
@@ -36,124 +40,90 @@ public class JDKCompatibleVerifyTool extends VerifyTool<Execution> {
         return this.getClass().getSimpleName() + " [name=" + getName() + ", expectJDKVersion=" + getExpectJDKVersion() + "]";
     }
 
-    private static interface WicketRunnable extends Runnable, Serializable{}
-    
     @Override
-    public Verification<Execution> verify(VerifyParameter param) {
-        
-        final String name = "JDK-Check-For-" + param.getRelease().getName();
-        final WicketRunnable run = () -> {
-            
-        };
+    public Verification verify(VerifyParameter param) {
 
+        final String proudctName = getProductName(param.getRelease().getProductId());
+        final String name = "JDK-Check-For-" + proudctName + "-" + param.getRelease().getName();
+        final ExecutionRunnable run = jdkCheckRunnable(param);
         final Execution execution = Execution.createJVMExecution(name, run);
 
-        //NOTE: can not use nick class, will cause json deserialize fail
-        final Verification<Execution> verification = new Verification<Execution>();
-        verification.setResultObject(execution);
-        verification.setReleaseId(param.getRelease().getId());
-        verification.setToolId(getId());
-
-        execution.addCallBack(new Execution.CallBack() {
-
-            @Override
-            public void onStatus(Execution execution) {
-                // TODO update DB about the execution result !?
+        final Verification verification = getOrCreateVerification(param, execution);
+        if (Verification.Status.PASSED.equals(verification.getStatus())) {
+            // has passed already, should we re start it again?
+            if (Boolean.valueOf(param.getProperty(VerifyParameter.SKIP_PASSED, "False"))) {
+                return verification;
             }
-
-            @Override
-            public void onLogChanged(Execution execution) {
-                // TODO update DB about the execution result !?
-
-            }
-        });
+        }
         try {
-            Executor.getJVMExecutor().execute(execution);
+            Executor.getJVMExecutor().execute(execution, defaultVerificationCallBack(verification));
         } catch (ExecutionException e) {
-            e.printStackTrace();
+            verification.setStatus(Verification.Status.NOT_PASSED);
+            logger.error("Failed to execute the Jenkins job: " + execution.getName(), e);
         }
         return verification;
-        
-        //TODO: do verify
-//        return newDefaultVerification(param, true);
-/*
-        if (getExpectJDKVersion() == null || getExpectJDKVersion().trim().length() == 0) {
-            throw new IllegalStateException("Please set expect JDK version first!");
-        }
-        String[] zipUrls = param.getRelease().getDistributionArray();
 
-        //TODO: foreach zipUrls
-        String zipUrl = zipUrls[0];
+        // TODO: do verify
+        // return newDefaultVerification(param, true);
+        /*
+         * if (getExpectJDKVersion() == null || getExpectJDKVersion().trim().length() == 0) { throw new
+         * IllegalStateException("Please set expect JDK version first!"); } String[] zipUrls =
+         * param.getRelease().getDistributionArray();
+         * 
+         * //TODO: foreach zipUrls String zipUrl = zipUrls[0];
+         * 
+         * boolean passed = true; try(ZipInputStream zipInputStream = new ZipInputStream(new URL(zipUrl).openStream())) {
+         * 
+         * File zip = File.createTempFile(zipUrl, "zip"); IOUtils.copy(new URL(zipUrl).openStream(), new FileWriter(zip));
+         * 
+         * ZipFile zipFile = new ZipFile(zip); for( Enumeration<? extends ZipEntry> entries = zipFile.entries();
+         * entries.hasMoreElements(); ) { ZipEntry zipEntry = entries.nextElement(); if(zipEntry.getName().endsWith(".jar")) {
+         * JarEntry jarEntry = new JarEntry(zipEntry); InputStream in = zipFile.getInputStream(jarEntry); // IOUtils.copy()
+         * //TODO: read class from each jars if(!checkClassVersion(in, expectJDKVersion)) { passed =false; break; } }
+         * 
+         * 
+         * }
+         * 
+         * 
+         * ZipEntry zipEntry = zipInputStream.getNextEntry(); while(zipEntry != null) { if(zipEntry.getName().endsWith(".jar"))
+         * { JarEntry jarEntry = new JarEntry(zipEntry); //TODO: read class from each jars if(!checkClassVersion(null,
+         * expectJDKVersion)) { passed =false; break; } } zipEntry = zipInputStream.getNextEntry(); }
+         * 
+         * final boolean p = passed; Verification<Boolean> verification = new Verification<Boolean>(param.getToolId(),
+         * param.getReferenceRelease()!= null ? param.getReferenceRelease().getId() : "", param.getRelease().getId()) {
+         * 
+         * @Override public Boolean getResultObject() { //TODO: return the detail info return p; } }; verification.setStatus(p ?
+         * Verification.Status.PASSED : Verification.Status.REJECTED); return verification; } catch (Exception e) {
+         * e.printStackTrace(); } return null;
+         */
+    }
 
-        boolean passed = true;
-        try(ZipInputStream zipInputStream = new ZipInputStream(new URL(zipUrl).openStream())) {
+    private ExecutionRunnable jdkCheckRunnable(VerifyParameter param) {
+        return new ExecutionRunnable() {
 
-            File zip = File.createTempFile(zipUrl, "zip");
-            IOUtils.copy(new URL(zipUrl).openStream(), new FileWriter(zip));
-
-            ZipFile zipFile = new ZipFile(zip);
-            for( Enumeration<? extends ZipEntry> entries = zipFile.entries(); entries.hasMoreElements(); ) {
-                ZipEntry zipEntry = entries.nextElement();
-                if(zipEntry.getName().endsWith(".jar")) {
-                    JarEntry jarEntry = new JarEntry(zipEntry);
-                    InputStream in = zipFile.getInputStream(jarEntry);
-//                    IOUtils.copy()
-                    //TODO: read class from each jars
-                    if(!checkClassVersion(in, expectJDKVersion)) {
-                        passed =false;
-                        break;
-                    }
-                }
-
-
+            @Override
+            public void doRun() throws Exception {
+                // TODO Auto-generated method stub
+                System.err.println("JDK CHECKING...... ");
             }
 
-
-            ZipEntry zipEntry = zipInputStream.getNextEntry();
-            while(zipEntry != null) {
-                if(zipEntry.getName().endsWith(".jar")) {
-                    JarEntry jarEntry = new JarEntry(zipEntry);
-                    //TODO: read class from each jars
-                    if(!checkClassVersion(null, expectJDKVersion)) {
-                        passed =false;
-                        break;
-                    }
-                }
-                zipEntry = zipInputStream.getNextEntry();
-            }
-
-            final boolean p = passed;
-            Verification<Boolean> verification = new Verification<Boolean>(param.getToolId(), param.getReferenceRelease()!= null ? param.getReferenceRelease().getId() : "", param.getRelease().getId()) {
-                @Override
-                public Boolean getResultObject() {
-                    //TODO: return the detail info
-                    return p;
-                }
-            };
-            verification.setStatus(p ? Verification.Status.PASSED : Verification.Status.REJECTED);
-            return verification;
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-*/
+        };
     }
 
     public static boolean checkClassVersion(InputStream classInputStream, String expectJDKVersion) throws Exception {
         try {
             DataInputStream dis = new DataInputStream(classInputStream);
             int magic = dis.readInt();
-            if(magic == JAVA_CLASS_MAGIC){
+            if (magic == JAVA_CLASS_MAGIC) {
                 int minorVersion = dis.readUnsignedShort();
                 int majorVersion = dis.readUnsignedShort();
 
-//      Java 1.2 uses major version 46
-//      Java 1.3 uses major version 47
-//      Java 1.4 uses major version 48
-//      Java 5 uses major version 49
-//      Java 6 uses major version 50
-//      Java 7 uses major version 51
+                // Java 1.2 uses major version 46
+                // Java 1.3 uses major version 47
+                // Java 1.4 uses major version 48
+                // Java 5 uses major version 49
+                // Java 6 uses major version 50
+                // Java 7 uses major version 51
 
                 System.out.println("ClassVersionTest.main() " + majorVersion + "." + minorVersion);
 
@@ -161,8 +131,7 @@ public class JDKCompatibleVerifyTool extends VerifyTool<Execution> {
             }
 
             return false;
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -171,10 +140,11 @@ public class JDKCompatibleVerifyTool extends VerifyTool<Execution> {
 
     /**
      * Unpack matching files from a jar. Entries inside the jar that do not match the given pattern will be skipped.
+     * 
      * @param jarFile the .jar file to unpack
      * @param toDir the destination directory into which to unpack the jar
      */
-    public static void unJar(File jarFile,File toDir) throws IOException {
+    public static void unJar(File jarFile, File toDir) throws IOException {
         JarFile jar = new JarFile(jarFile);
         try {
             Enumeration<JarEntry> entries = jar.entries();
@@ -184,10 +154,10 @@ public class JDKCompatibleVerifyTool extends VerifyTool<Execution> {
                     InputStream in = jar.getInputStream(entry);
                     try {
                         File file = new File(toDir, entry.getName());
-//                        ensureDirectory(file.getParentFile());
+                        // ensureDirectory(file.getParentFile());
                         OutputStream out = new FileOutputStream(file);
                         try {
-//                            IOUtils.copyBytes(in,out,8192,false);
+                            // IOUtils.copyBytes(in,out,8192,false);
                         } finally {
                             out.close();
                         }

@@ -6,7 +6,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.wicket.Application;
 import org.jboss.pnc.pvt.wicket.PVTApplication;
 
 @Path("/pvtModel")
@@ -15,7 +14,7 @@ public class PVTModelDump {
 
     @GET
     public Response dump() {
-        return Response.ok(((PVTApplication) Application.get()).getDAO().getPvtModel()).build();
+        return Response.ok(PVTApplication.getDAO().getPvtModel()).build();
     }
 
 }

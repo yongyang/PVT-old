@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.io.Serializable;
 import java.util.UUID;
 
+import org.jboss.pnc.pvt.execution.Execution;
+
 /**
  * Verification used to track a verify result, return by VerifyTool.verify()
  * Verification will be stored to DB once it created.
@@ -18,7 +20,9 @@ import java.util.UUID;
  */
 @JsonAutoDetect
 //@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
-public class Verification<T extends Serializable> implements Serializable{
+public class Verification implements Serializable{
+
+    private static final long serialVersionUID = 1L;
 
     private String id = UUID.randomUUID().toString();
     private String toolId;
@@ -28,11 +32,14 @@ public class Verification<T extends Serializable> implements Serializable{
 
     private long startTime = System.currentTimeMillis();
     private long endTime = 0;
-    private Status status = Status.IN_PROGRESS;
+    private Status status = Status.NEW;
+    
+    private Execution execution;
 
-    private Exception exception;
-
-    private T resultObject;
+    /**
+     * Waive comment in case this Verification is waived.
+     */
+    private String waiveComment;
 
     public Verification() {
 
@@ -46,14 +53,6 @@ public class Verification<T extends Serializable> implements Serializable{
         this.releaseId = releaseId;
     }
 
-/*
-    public Verification(String toolId, String referenceReleaseId, String releaseId) {
-        this.toolId = toolId;
-        this.referenceReleaseId = referenceReleaseId;
-        this.releaseId = releaseId;
-    }
-*/
-
     public String getReferenceReleaseId() {
         return referenceReleaseId;
     }
@@ -66,18 +65,9 @@ public class Verification<T extends Serializable> implements Serializable{
         return id;
     }
 
-    public Exception getException() {
-        return exception;
-    }
-
-    public void setException(Exception exception) {
-        this.exception = exception;
-    }
-
     public String getToolId() {
         return toolId;
     }
-
 
     public void setToolId(String toolId) {
         this.toolId = toolId;
@@ -107,12 +97,55 @@ public class Verification<T extends Serializable> implements Serializable{
         this.status = status;
     }
 
-    public void setResultObject(T resultObject) {
-        this.resultObject = resultObject;
+    /**
+     * @return the execution
+     */
+    public Execution getExecution() {
+        return execution;
     }
 
-    public T getResultObject() {
-        return resultObject;
+    /**
+     * @param execution the execution to set
+     */
+    public void setExecution(Execution execution) {
+        this.execution = execution;
+    }
+
+    /**
+     * @return the waiveComment
+     */
+    public String getWaiveComment() {
+        return waiveComment;
+    }
+
+    /**
+     * @param waiveComment the waiveComment to set
+     */
+    public void setWaiveComment(String waiveComment) {
+        this.waiveComment = waiveComment;
+    }
+
+    public synchronized void syncStauts() {
+        if (this.execution != null) {
+            switch (execution.getStatus()) {
+                case RUNNING: {
+                    setStatus(Verification.Status.IN_PROGRESS);
+                    break;
+                }
+                case UNKNOWN: {
+                    setStatus(Verification.Status.NEED_INSPECT);
+                    break;
+                }
+                case FAILED: {
+                    setStatus(Verification.Status.NOT_PASSED);
+                    break;
+                }
+                case SUCCEEDED: {
+                    setStatus(Verification.Status.PASSED);
+                    break;
+                }
+            }
+        }
     }
 
     /**

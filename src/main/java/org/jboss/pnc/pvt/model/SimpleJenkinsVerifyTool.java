@@ -1,8 +1,11 @@
 package org.jboss.pnc.pvt.model;
 
+import org.jboss.logging.Logger;
+import org.jboss.pnc.pvt.execution.CallBack;
 import org.jboss.pnc.pvt.execution.Execution;
 import org.jboss.pnc.pvt.execution.ExecutionException;
 import org.jboss.pnc.pvt.execution.Executor;
+import org.jboss.pnc.pvt.execution.Execution.Status;
 import org.jboss.pnc.pvt.wicket.PVTApplication;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -15,9 +18,11 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
  */
 @JsonAutoDetect
 @JsonSubTypes({ @JsonSubTypes.Type(value = SimpleJenkinsVerifyTool.class) })
-public class SimpleJenkinsVerifyTool extends VerifyTool<Execution> {
+public class SimpleJenkinsVerifyTool extends VerifyTool {
 
     private static final long serialVersionUID = -8291271547157028632L;
+
+    private static final Logger logger = Logger.getLogger(SimpleJenkinsVerifyTool.class);
 
     private String jobId;
 
@@ -29,44 +34,27 @@ public class SimpleJenkinsVerifyTool extends VerifyTool<Execution> {
         this.jobId = jobId;
     }
 
-    @SuppressWarnings("serial")
     @Override
-    public Verification<Execution> verify(VerifyParameter param) {
+    public final Verification verify(VerifyParameter param) {
         final Execution execution = createJenkinsExecution(param);
-
-        //TODO find the Verification from db if it has been executed before ?
-        final Verification<Execution> verification = newDefaultVerification(param, execution);
+        final Verification verification = getOrCreateVerification(param, execution);
+        if (Verification.Status.PASSED.equals(verification.getStatus())) {
+            // has passed already, should we re start it again?
+            if (Boolean.valueOf(param.getProperty(VerifyParameter.SKIP_PASSED, "False"))) {
+                return verification;
+            }
+        }
         verification.setStartTime(System.currentTimeMillis());
-        verification.setResultObject(execution);
-
-        execution.addCallBack(new Execution.CallBack() {
-
-            @Override
-            public void onStatus(Execution execution) {
-                updateInDB(verification);
-            }
-
-            @Override
-            public void onLogChanged(Execution execution) {
-                updateInDB(verification);
-            }
-
-            @Override
-            public void onException(Execution execution) {
-                updateInDB(verification);
-            }
-        });
         doExecute(execution, verification);
         return verification;
     }
 
-    protected void doExecute(final Execution execution, final Verification<Execution> verification) {
+    protected void doExecute(final Execution execution, final Verification verification) {
         try {
-            Executor.getJenkinsExecutor().execute(execution);
-            verification.setStatus(Verification.Status.IN_PROGRESS);
+            Executor.getJenkinsExecutor().execute(execution, defaultVerificationCallBack(verification));
         } catch (ExecutionException e) {
             verification.setStatus(Verification.Status.NOT_PASSED);
-            verification.setException(e);
+            logger.error("Failed to execute the Jenkins job: " + execution.getName(), e);
         }
     }
 
@@ -86,38 +74,9 @@ public class SimpleJenkinsVerifyTool extends VerifyTool<Execution> {
         return prdName + "-" + releaseName + "-" + getName();
     }
 
-    protected void updateInDB(Verification<Execution> verification) {
-        Execution exec = verification.getResultObject();
-        switch (exec.getStatus()) {
-            case RUNNING:
-            {
-                verification.setStatus(Verification.Status.IN_PROGRESS);
-                break;
-            }
-            case UNKNOWN:
-            {
-                verification.setStatus(Verification.Status.NEED_INSPECT);
-                break;
-            }
-            case FAILED:
-            {
-                verification.setStatus(Verification.Status.NOT_PASSED);
-                break;
-            }
-            case SUCCEEDED:
-            {
-                verification.setStatus(Verification.Status.PASSED);
-                break;
-            }
-        }
-        PVTModel pvtModel = PVTApplication.getDAO().getPvtModel();
-//        pvtModel.updateVerification(verification); TODO
-//        (PVTApplication.getDAO().persist();
-    }
-
     @Override
     public String toString() {
         return this.getClass().getSimpleName() + " [name=" + getName() + ", jobId=" + getJobId() + "]";
-     }
+    }
 
 }

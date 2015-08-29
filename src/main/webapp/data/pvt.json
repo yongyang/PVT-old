@@ -101,14 +101,12 @@
       "releaseId": "06906f58-bf00-47dd-bde1-18e81f6163a8",
       "startTime": 1440649501065,
       "status": "IN_PROGRESS",
-      "exception": null,
-      "resultObject": {
+      "execution": {
         "name": "JDK-Check-For-1.0.0.DR1",
         "link": null,
         "exception": null,
         "log": null,
         "status": "SUCCEEDED",
-        "runnable": {}
       }
     }
   }
