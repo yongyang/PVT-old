@@ -22,7 +22,7 @@
       <pvt.rest.api.version>${project.version}</pvt.rest.api.version>
       <!-- Versions of dependencies -->
       <version.fastxml.jackson>2.5.1</version.fastxml.jackson>
-      <version.jenkins.client>0.3.0</version.jenkins.client>
+      <version.jenkins.client>0.3.1</version.jenkins.client>
       <version.javax.enterprise>1.2</version.javax.enterprise>
       <version.javax.servlet>1.0.2.Final</version.javax.servlet>
       <version.javax.websocket>1.0.0.Final</version.javax.websocket>
@@ -406,4 +406,35 @@
       </dependencies>
     </profile>
   </profiles>
+
+    <repositories>
+        <repository>
+            <id>jboss-public-repository-group</id>
+            <name>JBoss Public Repository Group</name>
+            <url>https://oss.sonatype.org/content/repositories/comoffbytwo-1008/</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>jboss-public-repository-group</id>
+            <name>JBoss Public Repository Group</name>
+            <url>https://oss.sonatype.org/content/repositories/comoffbytwo-1008/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 </project>

@@ -4,6 +4,7 @@ import org.jboss.logging.Logger;
 import org.jboss.pnc.pvt.execution.Execution;
 import org.jboss.pnc.pvt.execution.ExecutionException;
 import org.jboss.pnc.pvt.execution.Executor;
+import org.jboss.pnc.pvt.model.Verification.Status;
 import org.jboss.pnc.pvt.wicket.PVTApplication;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -49,6 +50,7 @@ public class SimpleJenkinsVerifyTool extends VerifyTool {
 
     protected void doExecute(final Execution execution, final Verification verification) {
         try {
+            verification.setStatus(Verification.Status.IN_PROGRESS);
             Executor.getJenkinsExecutor().execute(execution, defaultVerificationCallBack(verification));
         } catch (ExecutionException e) {
             verification.setStatus(Verification.Status.NOT_PASSED);

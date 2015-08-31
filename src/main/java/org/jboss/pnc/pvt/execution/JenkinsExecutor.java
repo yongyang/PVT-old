@@ -18,10 +18,8 @@
 package org.jboss.pnc.pvt.execution;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URLEncoder;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -42,16 +40,10 @@ import com.offbytwo.jenkins.model.JobWithDetails;
  */
 class JenkinsExecutor extends Executor {
 
-    
     static JenkinsExecutor INSTANCE = new JenkinsExecutor(null);
-    
+
     private static final Logger logger = Logger.getLogger(JenkinsExecutor.class);
     
-    private final JenkinsHttpClient jenkinsHttpClient;
-    private final JenkinsServer jenkinsServer;
-
-    private Boolean crumbFlag = null;
-
     private final JenkinsConfiguration jenkinsConfig;
 
     JenkinsExecutor(JenkinsConfiguration jenkinsConfig) {
@@ -62,36 +54,31 @@ class JenkinsExecutor extends Executor {
             } else {
                 this.jenkinsConfig = jenkinsConfig;
             }
-            String jenkinsUrl = this.jenkinsConfig.getUrl();
-            String username = this.jenkinsConfig.getUsername();
-            String password = this.jenkinsConfig.getPassword();
-            if (jenkinsUrl == null || jenkinsUrl.trim().length() == 0) {
-                throw new IllegalStateException("Jenkins URL must be specified.");
-            }
-            if (username != null && username.trim().length() > 0
-                    && password != null && password.trim().length() > 0) {
-                this.jenkinsHttpClient = new JenkinsHttpClient(new URI(jenkinsUrl), username, password);
-            } else {
-                this.jenkinsHttpClient = new JenkinsHttpClient(new URI(jenkinsUrl));
-            }
-            this.jenkinsServer = new JenkinsServer(jenkinsHttpClient);
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException e) {
             throw new IllegalStateException("Can't initialize Jenkins Executor.", e);
         }
 
     }
 
-    private void checkJenkinsCrumbFlag() {
-        if (this.crumbFlag != null) {
-            return;
+    private JenkinsServer getJenkinsServer() throws IOException {
+        String jenkinsUrl = this.jenkinsConfig.getUrl();
+        String username = this.jenkinsConfig.getUsername();
+        String password = this.jenkinsConfig.getPassword();
+        if (jenkinsUrl == null || jenkinsUrl.trim().length() == 0) {
+            throw new IllegalStateException("Jenkins URL must be specified.");
         }
+        final JenkinsHttpClient jenkinsHttpClient;
         try {
-            jenkinsHttpClient.get("/crumbIssuer/api/xml");
-            this.crumbFlag = Boolean.TRUE;
-        } catch (IOException e) {
-            logger.debug("Jenkins is not protected with CSRF", e);
-            this.crumbFlag = Boolean.FALSE;
+            if (username != null && username.trim().length() > 0
+                    && password != null && password.trim().length() > 0) {
+                jenkinsHttpClient = new JenkinsHttpClient(new URI(jenkinsUrl), username, password);
+            } else {
+                jenkinsHttpClient = new JenkinsHttpClient(new URI(jenkinsUrl));
+            }
+        } catch (URISyntaxException e) {
+            throw new IOException("Wrong JenkinsURL: " + jenkinsUrl, e);
         }
+        return new JenkinsServer(jenkinsHttpClient);
     }
 
     @Override
@@ -176,6 +163,7 @@ class JenkinsExecutor extends Executor {
                             execution.setStatus(Execution.Status.FAILED);
                             if (callBack != null) {
                                 callBack.onStatus(execution);
+                                callBack.onTerminated(execution);
                             }
                             break;
                         }
@@ -184,6 +172,7 @@ class JenkinsExecutor extends Executor {
                             execution.setStatus(Execution.Status.SUCCEEDED);
                             if (callBack != null) {
                                 callBack.onStatus(execution);
+                                callBack.onTerminated(execution);
                             }
                             break;
                         }
@@ -205,12 +194,18 @@ class JenkinsExecutor extends Executor {
                     int failed = statusRetrieveFailed.getAndIncrement();
                     if (failed >= getMaxRetryTime()) {
                         logger.warn("Failed to check Build Detail.", e);
+                        if (callBack != null) {
+                            callBack.onTerminated(execution);
+                        }
                     } else {
                         logger.debug("Continue checking.", e);
                         getMonitorExecutorService().schedule(this, getMonitorInterval(), TimeUnit.SECONDS);
                     }
                 } catch (Throwable t) {
                     logger.warn("Failed to Monitor the execution.", t);
+                    if (callBack != null) {
+                        callBack.onTerminated(execution);
+                    }
                 }
             }
 
@@ -219,7 +214,8 @@ class JenkinsExecutor extends Executor {
     }
 
     private Build getBuild(String jobName, int buildNumber) throws IOException {
-        JobWithDetails jenkinsJob = this.jenkinsServer.getJob(jobName);
+        JenkinsServer jenkinsServer = getJenkinsServer();
+        JobWithDetails jenkinsJob = jenkinsServer.getJob(jobName);
         if (jenkinsJob != null) {
             for (Build build: jenkinsJob.getBuilds()) {
                 if (buildNumber == build.getNumber()) {
@@ -244,7 +240,8 @@ class JenkinsExecutor extends Executor {
      * Gets or create a job by its name
      */
     private JobWithDetails getOrCreateJenkinsJob(String jobName, String jobContent) throws IOException, ExecutionException {
-        JobWithDetails jenkinsJob = this.jenkinsServer.getJob(jobName);
+        JenkinsServer jenkinsServer = getJenkinsServer();
+        JobWithDetails jenkinsJob = jenkinsServer.getJob(jobName);
         if (jenkinsJob == null && this.jenkinsConfig.isCreateIfJobMissing()) {
             logger.info("Start to create the Jenkins job");
             jenkinsJob = createJenkinsJob(jobName, jobContent);
@@ -257,11 +254,11 @@ class JenkinsExecutor extends Executor {
     }
 
     private JobWithDetails updateJenkinsJob(String jobName, String jobContent) throws IOException, ExecutionException {
-        checkJenkinsCrumbFlag();
+        JenkinsServer jenkinsServer = getJenkinsServer();
         if (jobContent == null) {
             throw new ExecutionException("No job content found for: " + jobName);
         }
-        this.jenkinsServer.updateJob(jobName, jobContent, crumbFlag);
+        jenkinsServer.updateJob(jobName, jobContent, this.jenkinsConfig.isCrumbFlag());
         return jenkinsServer.getJob(jobName);
     }
 
@@ -270,19 +267,12 @@ class JenkinsExecutor extends Executor {
      * 
      */
     private JobWithDetails createJenkinsJob(String jobName, String jobContent) throws IOException, ExecutionException {
-        checkJenkinsCrumbFlag();
+        JenkinsServer jenkinsServer = getJenkinsServer();
         if (jobContent == null) {
             throw new ExecutionException("No job content found for: " + jobName);
         }
-        this.jenkinsHttpClient.post_xml("/createItem?name=" + encode(jobName), jobContent, crumbFlag);
+        jenkinsServer.createJob(jobName, jobContent, this.jenkinsConfig.isCrumbFlag());
         return jenkinsServer.getJob(jobName);
     }
 
-    private String encode(String str) {
-        try {
-            return URLEncoder.encode(str, "UTF-8").replaceAll("\\+", "%20");
-        } catch (UnsupportedEncodingException e) {
-            return str;
-        }
-    }
 }

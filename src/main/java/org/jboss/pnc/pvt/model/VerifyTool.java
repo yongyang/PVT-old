@@ -159,6 +159,7 @@ public abstract class VerifyTool implements Serializable {
     protected Verification getOrCreateVerification(VerifyParameter param, Execution execution) {
         Verification verification = getLastVerification(param.getRelease().getId());
         if (verification != null) {
+            verification.setExecution(execution); // set to the new Execution for existed Verification
             return verification;
         }
         return newDefaultVerification(param, execution);
@@ -176,11 +177,13 @@ public abstract class VerifyTool implements Serializable {
             @Override
             public void onStatus(Execution execution) {
                 verification.syncStauts();
+                PVTApplication.getDAO().persist();
             }
 
             @Override
             public void onTerminated(Execution execution) {
                 verification.setEndTime(System.currentTimeMillis());
+                PVTApplication.getDAO().persist();
             }
 
         };

@@ -33,6 +33,7 @@ public class JenkinsConfiguration {
     public static final String KEY_JENKINS_TIMEOUT = "jenkins.server.timeout";
     public static final String KEY_JENKINS_CREATE_JOB_IF_MISSING = "jenkins.job.create.missing";
     public static final String KEY_JENKINS_OVERRIDE_JOB = "jenkins.job.override";
+    public static final String KEY_JENKINS_CRUMB_FlAG = "jenkins.crumb.flag";
 
     private String url;
     private String username;    
@@ -40,6 +41,7 @@ public class JenkinsConfiguration {
     private long jobTimeOut;
     private boolean createIfJobMissing;
     private boolean overrideJob;
+    private boolean crumbFlag;
 
     public static JenkinsConfiguration fromProperty(Properties props) {
         JenkinsConfiguration config = new JenkinsConfiguration();
@@ -49,8 +51,25 @@ public class JenkinsConfiguration {
         config.setPassword(props.getOrDefault(KEY_JENKINS_PASSWORD, "").toString());
         config.setUrl(props.getOrDefault(KEY_JENKINS_URL, "").toString());
         config.setUsername(props.getOrDefault(KEY_JENKINS_USERNAME, "").toString());
+        config.setCrumbFlag(Boolean.valueOf(props.getOrDefault(KEY_JENKINS_CRUMB_FlAG, "True").toString()));
         return config;
     }
+
+    
+    /**
+     * @return the crumbFlag
+     */
+    public boolean isCrumbFlag() {
+        return crumbFlag;
+    }
+
+    /**
+     * @param crumbFlag the crumbFlag to set
+     */
+    public void setCrumbFlag(boolean crumbFlag) {
+        this.crumbFlag = crumbFlag;
+    }
+
 
     /**
      * @return the url

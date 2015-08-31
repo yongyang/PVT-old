@@ -1,114 +1,213 @@
 {
-  "products": [
-    {
-      "id": "df7a423b-0b4d-40f3-860c-85d178c12cf0",
-      "name": "JBOSS-EAP",
-      "maintainer": "maintainer1@redhat.com",
-      "developer": "developer1@redhat.com",
-      "qe": "qe1@redhat.com",
-      "description": "product1 description"
+  "products" : [ {
+    "id" : "df7a423b-0b4d-40f3-860c-85d178c12cf0",
+    "name" : "JBOSS-EAP",
+    "packages" : null,
+    "maintainer" : "maintainer1@redhat.com",
+    "developer" : "developer1@redhat.com",
+    "qe" : "qe1@redhat.com",
+    "description" : "product1 description"
+  }, {
+    "id" : "df7a423b-0b4d-40f3-860c-85d178c12cf1",
+    "name" : "BRMS",
+    "packages" : null,
+    "maintainer" : "maintainer2@redhat.com",
+    "developer" : "developer2@redhat.com",
+    "qe" : "qe2@redhat.com",
+    "description" : "product2 description"
+  } ],
+  "releases" : [ {
+    "id" : "06906f58-bf00-47dd-bde1-18e81f6163a8",
+    "productId" : "df7a423b-0b4d-40f3-860c-85d178c12cf0",
+    "name" : "1.0.0.DR1",
+    "referenceReleaseId" : null,
+    "distributions" : "http://download.devel.redhat.com/released/JBEAP-6/6.4.3/jboss-eap-6.4.3-full-build.zip",
+    "tools" : [ "096ffbbe-b7ea-4f36-954a-ea639b7967ad", "885db751-6d7f-4682-a9dc-431b2b3e5db8", "7ad56ecf-dbe5-42e3-a508-b7d853e361c5", "7bd1865f-21fd-4ef3-abc9-7dd271667efa", "e44990e5-454b-49c2-870e-963c4015d384" ],
+    "verifications" : {
+      "096ffbbe-b7ea-4f36-954a-ea639b7967ad" : "7c258a5e-a084-4b82-ab69-2a03c5cae6f1",
+      "885db751-6d7f-4682-a9dc-431b2b3e5db8" : "5f6bee6f-7f0d-44b2-bde7-342026d760e4",
+      "7ad56ecf-dbe5-42e3-a508-b7d853e361c5" : "59baa38e-7d86-410f-9f69-7416fe08a6ab",
+      "7bd1865f-21fd-4ef3-abc9-7dd271667efa" : "07f9767c-a9aa-48ab-b1f7-b48eaaf29e5e",
+      "e44990e5-454b-49c2-870e-963c4015d384" : "a54b7f22-43c8-42be-8ef9-96023c484c2d"
     },
-    {
-      "id": "df7a423b-0b4d-40f3-860c-85d178c12cf1",
-      "name": "BRMS",
-      "maintainer": "maintainer2@redhat.com",
-      "developer": "developer2@redhat.com",
-      "qe": "qe2@redhat.com",
-      "description": "product2 description"
-    }
-  ],
-  "toolTypes": [
-    {
-      "id": "df7a423b-0b4d-40f3-860c-85d178c12cf3",
-      "name": "JDKCompatibleVerifyTool",
-      "implClass": "org.jboss.pnc.pvt.model.JDKCompatibleVerifyTool",
-      "description": "A verify tool to check the jdk compatible"
+    "description" : "JBOSS-EAP 6.4.3 release",
+    "status" : "VERIFYING",
+    "createTime" : 1440062648090
+  }, {
+    "id" : "06906f58-bf00-47dd-bde1-18e81f6163a9",
+    "productId" : "df7a423b-0b4d-40f3-860c-85d178c12cf1",
+    "name" : "1.0.0.DR1",
+    "referenceReleaseId" : null,
+    "distributions" : "http://abc.com/a.zip\r\nhttp://abc.com/b.zip",
+    "tools" : [ ],
+    "verifications" : { },
+    "description" : "BRMS 1.0.0.DR1 release",
+    "status" : "NEW",
+    "createTime" : 1440062648090
+  } ],
+  "toolTypes" : [ {
+    "id" : "df7a423b-0b4d-40f3-860c-85d178c12cf3",
+    "name" : "JDKCompatibleVerifyTool",
+    "implClass" : "org.jboss.pnc.pvt.model.JDKCompatibleVerifyTool",
+    "description" : "A verify tool to check the jdk compatible"
+  }, {
+    "id" : "df7a423b-0b4d-40f3-860c-85d178c12cf4",
+    "name" : "VersionConventionVerifyTool",
+    "implClass" : "org.jboss.pnc.pvt.model.VersionConventionVerifyTool",
+    "description" : "A verify tool to check the version convention"
+  }, {
+    "id" : "df7a423b-0b4d-40f3-860c-85d178c12cf5",
+    "name" : "SimpleJenkinsVerifyTool",
+    "implClass" : "org.jboss.pnc.pvt.model.SimpleJenkinsVerifyTool",
+    "description" : "A verify tool based on Jenkins to specify a job id"
+  }, {
+    "id" : "df7a423b-0b4d-40f3-860c-85d178c12cf6",
+    "name" : "TemplateJenkinsVerifyTool",
+    "implClass" : "org.jboss.pnc.pvt.model.TemplateJenkinsVerifyTool",
+    "description" : "A verify tool based on Jenkins to specify a job config template"
+  }, {
+    "id" : "df7a423b-0b4d-40f3-860c-85d178c12cf7",
+    "name" : "ScriptJenkinsVerifyTool",
+    "implClass" : "org.jboss.pnc.pvt.model.ScriptJenkinsVerifyTool",
+    "description" : "A verify tool based on Jenkins to specify a job config template with scripts"
+  } ],
+  "tools" : {
+    "096ffbbe-b7ea-4f36-954a-ea639b7967ad" : {
+      "@class" : "org.jboss.pnc.pvt.model.JDKCompatibleVerifyTool",
+      "id" : "096ffbbe-b7ea-4f36-954a-ea639b7967ad",
+      "name" : "JDK_Compatible_Verify_Tool_1.8",
+      "description" : "jdk version >= 1.8",
+      "expectJDKVersion" : "1.8"
     },
-    {
-      "id": "df7a423b-0b4d-40f3-860c-85d178c12cf4",
-      "name": "VersionConventionVerifyTool",
-      "implClass": "org.jboss.pnc.pvt.model.VersionConventionVerifyTool",
-      "description": "A verify tool to check the version convention"
+    "0c61451b-a883-4b22-bc20-e5d5589e4d82" : {
+      "@class" : "org.jboss.pnc.pvt.model.JDKCompatibleVerifyTool",
+      "id" : "0c61451b-a883-4b22-bc20-e5d5589e4d82",
+      "name" : "JDK_Compatible_Verify_Tool_1.6",
+      "description" : "jdk version >= 1.6",
+      "expectJDKVersion" : "1.6"
     },
-    {
-      "id": "df7a423b-0b4d-40f3-860c-85d178c12cf5",
-      "name": "SimpleJenkinsVerifyTool",
-      "implClass": "org.jboss.pnc.pvt.model.SimpleJenkinsVerifyTool",
-      "description": "A verify tool based on Jenkins to specify a job id"
+    "885db751-6d7f-4682-a9dc-431b2b3e5db8" : {
+      "@class" : "org.jboss.pnc.pvt.model.SimpleJenkinsVerifyTool",
+      "id" : "885db751-6d7f-4682-a9dc-431b2b3e5db8",
+      "name" : "BadJenkinsJob",
+      "description" : "This Jenkins job will fail after 20 seconds",
+      "jobId" : "BadJob"
     },
-    {
-      "id": "df7a423b-0b4d-40f3-860c-85d178c12cf6",
-      "name": "TemplateJenkinsVerifyTool",
-      "implClass": "org.jboss.pnc.pvt.model.TemplateJenkinsVerifyTool",
-      "description": "A verify tool based on Jenkins to specify a job config template"
+    "7ad56ecf-dbe5-42e3-a508-b7d853e361c5" : {
+      "@class" : "org.jboss.pnc.pvt.model.SimpleJenkinsVerifyTool",
+      "id" : "7ad56ecf-dbe5-42e3-a508-b7d853e361c5",
+      "name" : "GoodJenkinsJob",
+      "description" : "This Jenkins job will succeed after 20 seconds.",
+      "jobId" : "GoodJob"
     },
-    {
-      "id": "df7a423b-0b4d-40f3-860c-85d178c12cf7",
-      "name": "ScriptJenkinsVerifyTool",
-      "implClass": "org.jboss.pnc.pvt.model.ScriptJenkinsVerifyTool",
-      "description": "A verify tool based on Jenkins to specify a job config template with scripts"
-    }
-  ],
-  "tools": {
-    "096ffbbe-b7ea-4f36-954a-ea639b7967ad": {
-      "@class": "org.jboss.pnc.pvt.model.JDKCompatibleVerifyTool",
-      "id": "096ffbbe-b7ea-4f36-954a-ea639b7967ad",
-      "name": "JDK_Compatible_Verify_Tool_1.8",
-      "description": "jdk version >= 1.8",
-      "expectJDKVersion": "1.8"
+    "7bd1865f-21fd-4ef3-abc9-7dd271667efa" : {
+      "@class" : "org.jboss.pnc.pvt.model.TemplateJenkinsVerifyTool",
+      "id" : "7bd1865f-21fd-4ef3-abc9-7dd271667efa",
+      "name" : "TempateJenkinsJob",
+      "description" : "This is a template Jenkins job, will execute just like what the 'GoodJob' does.\r\n\r\nIf the optional jobId is not set, it will be created automatically by execution framework.\r\n\r\nIt will override existed job if any",
+      "jobId" : null,
+      "jenkinsConfigXML" : "<project>\r\n<actions/>\r\n<description>This will be Good</description>\r\n<keepDependencies>false</keepDependencies>\r\n<properties/>\r\n<scm class=\"hudson.scm.NullSCM\"/>\r\n<canRoam>true</canRoam>\r\n<disabled>false</disabled>\r\n<blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>\r\n<blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>\r\n<triggers/>\r\n<concurrentBuild>false</concurrentBuild>\r\n<builders>\r\n<hudson.tasks.Shell>\r\n<command>sleep 20; echo -e \"wake up\"</command>\r\n</hudson.tasks.Shell>\r\n</builders>\r\n<publishers/>\r\n<buildWrappers/>\r\n</project>"
     },
-    "0c61451b-a883-4b22-bc20-e5d5589e4d82": {
-      "@class": "org.jboss.pnc.pvt.model.JDKCompatibleVerifyTool",
-      "id": "0c61451b-a883-4b22-bc20-e5d5589e4d82",
-      "name": "JDK_Compatible_Verify_Tool_1.6",
-      "description": null,
-      "expectJDKVersion": "1.6"
+    "e44990e5-454b-49c2-870e-963c4015d384" : {
+      "@class" : "org.jboss.pnc.pvt.model.ScriptJenkinsVerifyTool",
+      "id" : "e44990e5-454b-49c2-870e-963c4015d384",
+      "name" : "ScriptJenkinsTool",
+      "description" : "This is a Script based Jenkins verify tool. \r\n\r\nIt supports bash shell.",
+      "jobId" : null,
+      "jenkinsConfigXML" : "<?xml version='1.0' encoding='UTF-8'?>\n<project>\n<actions/>\n<description></description>\n<keepDependencies>false</keepDependencies>\n<properties/>\n<scm class=\"hudson.scm.NullSCM\"/>\n<canRoam>true</canRoam>\n<disabled>false</disabled>\n<blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>\n<blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>\n<triggers/>\n<concurrentBuild>false</concurrentBuild>\n<builders>\n<hudson.tasks.Shell>\n<command>\n  sleep 20;\r\necho -e \"wake up from a script\";\n</command>\n</hudson.tasks.Shell>\n</builders>\n<publishers/>\n<buildWrappers/>\n</project>",
+      "script" : "sleep 20;\r\necho -e \"wake up from a script\";"
     }
   },
-  "releases": [
-    {
-      "id": "06906f58-bf00-47dd-bde1-18e81f6163a8",
-      "productId": "df7a423b-0b4d-40f3-860c-85d178c12cf0",
-      "name": "1.0.0.DR1",
-      "distributions": "http://abc.com/a.zip\r\nhttp://abc.com/b.zip",
-      "tools": [
-        "096ffbbe-b7ea-4f36-954a-ea639b7967ad"
-      ],
-      "verifications": {
-        "096ffbbe-b7ea-4f36-954a-ea639b7967ad": "7c258a5e-a084-4b82-ab69-2a03c5cae6f1"
+  "verifications" : {
+    "7c258a5e-a084-4b82-ab69-2a03c5cae6f1" : {
+      "id" : "7c258a5e-a084-4b82-ab69-2a03c5cae6f1",
+      "toolId" : "096ffbbe-b7ea-4f36-954a-ea639b7967ad",
+      "referenceReleaseId" : null,
+      "releaseId" : "06906f58-bf00-47dd-bde1-18e81f6163a8",
+      "startTime" : 1440649501065,
+      "endTime" : 1441010074371,
+      "status" : "PASSED",
+      "execution" : {
+        "type" : "jvm",
+        "name" : "JDK-Check-For-JBOSS-EAP-1.0.0.DR1",
+        "link" : null,
+        "exception" : null,
+        "log" : null,
+        "status" : "SUCCEEDED"
       },
-      "description": "JBOSS-EAP 1.0.0.DR1 release",
-      "status": "PASSED",
-      "createTime": 1440062648090
+      "waiveComment" : null
     },
-    {
-      "id": "06906f58-bf00-47dd-bde1-18e81f6163a9",
-      "productId": "df7a423b-0b4d-40f3-860c-85d178c12cf1",
-      "name": "1.0.0.DR1",
-      "distributions": "http://abc.com/a.zip\r\nhttp://abc.com/b.zip",
-      "tools": [
-      ],
-      "description": "BRMS 1.0.0.DR1 release",
-      "status": "NEW",
-      "createTime": 1440062648090
-    }
-  ],
-  "verifications": {
-    "7c258a5e-a084-4b82-ab69-2a03c5cae6f1": {
-      "id": "7c258a5e-a084-4b82-ab69-2a03c5cae6f1",
-      "toolId": "096ffbbe-b7ea-4f36-954a-ea639b7967ad",
-      "referenceReleaseId": null,
-      "releaseId": "06906f58-bf00-47dd-bde1-18e81f6163a8",
-      "startTime": 1440649501065,
-      "status": "PASSED",
-      "execution": {
-        "name": "JDK-Check-For-1.0.0.DR1",
-        "link": null,
-        "type": "jvm",
-        "exception": null,
-        "log": "GOOD!",
-        "status": "SUCCEEDED"
-      }
+    "5f6bee6f-7f0d-44b2-bde7-342026d760e4" : {
+      "id" : "5f6bee6f-7f0d-44b2-bde7-342026d760e4",
+      "toolId" : "885db751-6d7f-4682-a9dc-431b2b3e5db8",
+      "referenceReleaseId" : null,
+      "releaseId" : "06906f58-bf00-47dd-bde1-18e81f6163a8",
+      "startTime" : 1441010064380,
+      "endTime" : 1441010094599,
+      "status" : "NOT_PASSED",
+      "execution" : {
+        "type" : "jenkins",
+        "name" : "BadJob",
+        "link" : "http://localhost:8090/job/BadJob/45/",
+        "exception" : null,
+        "log" : "Started by user anonymous\r\nBuilding in workspace /home/lgao/.jenkins/workspace/BadJob\r\n[BadJob] $ /bin/sh -xe /tmp/hudson851975241393252857.sh\r\n+ sleep 20\r\n+ echo -e 'wake up'\r\nwake up\r\n+ exit 1\r\nBuild step 'Execute shell' marked build as failure\r\nFinished: FAILURE\r\n",
+        "status" : "FAILED"
+      },
+      "waiveComment" : null
+    },
+    "59baa38e-7d86-410f-9f69-7416fe08a6ab" : {
+      "id" : "59baa38e-7d86-410f-9f69-7416fe08a6ab",
+      "toolId" : "7ad56ecf-dbe5-42e3-a508-b7d853e361c5",
+      "referenceReleaseId" : null,
+      "releaseId" : "06906f58-bf00-47dd-bde1-18e81f6163a8",
+      "startTime" : 1441010064889,
+      "endTime" : 1441010095057,
+      "status" : "PASSED",
+      "execution" : {
+        "type" : "jenkins",
+        "name" : "GoodJob",
+        "link" : "http://localhost:8090/job/GoodJob/12/",
+        "exception" : null,
+        "log" : "Started by user anonymous\r\nBuilding in workspace /home/lgao/.jenkins/workspace/GoodJob\r\n[GoodJob] $ /bin/sh -xe /tmp/hudson7589172806153875898.sh\r\n+ sleep 20\r\n+ echo -e 'wake up'\r\nwake up\r\nFinished: SUCCESS\r\n",
+        "status" : "SUCCEEDED"
+      },
+      "waiveComment" : null
+    },
+    "07f9767c-a9aa-48ab-b1f7-b48eaaf29e5e" : {
+      "id" : "07f9767c-a9aa-48ab-b1f7-b48eaaf29e5e",
+      "toolId" : "7bd1865f-21fd-4ef3-abc9-7dd271667efa",
+      "referenceReleaseId" : null,
+      "releaseId" : "06906f58-bf00-47dd-bde1-18e81f6163a8",
+      "startTime" : 1441010064930,
+      "endTime" : 1441010115181,
+      "status" : "PASSED",
+      "execution" : {
+        "type" : "jenkins",
+        "name" : "JBOSS-EAP-1.0.0.DR1-TempateJenkinsJob",
+        "link" : "http://localhost:8090/job/JBOSS-EAP-1.0.0.DR1-TempateJenkinsJob/10/",
+        "exception" : null,
+        "log" : "Started by user anonymous\r\nBuilding in workspace /home/lgao/.jenkins/workspace/JBOSS-EAP-1.0.0.DR1-TempateJenkinsJob\r\n[JBOSS-EAP-1.0.0.DR1-TempateJenkinsJob] $ /bin/sh -xe /tmp/hudson4542818921249520711.sh\r\n+ sleep 20\r\n+ echo -e 'wake up'\r\nwake up\r\nFinished: SUCCESS\r\n",
+        "status" : "SUCCEEDED"
+      },
+      "waiveComment" : null
+    },
+    "a54b7f22-43c8-42be-8ef9-96023c484c2d" : {
+      "id" : "a54b7f22-43c8-42be-8ef9-96023c484c2d",
+      "toolId" : "e44990e5-454b-49c2-870e-963c4015d384",
+      "referenceReleaseId" : null,
+      "releaseId" : "06906f58-bf00-47dd-bde1-18e81f6163a8",
+      "startTime" : 1441010065050,
+      "endTime" : 1441010115295,
+      "status" : "PASSED",
+      "execution" : {
+        "type" : "jenkins",
+        "name" : "JBOSS-EAP-1.0.0.DR1-ScriptJenkinsTool",
+        "link" : "http://localhost:8090/job/JBOSS-EAP-1.0.0.DR1-ScriptJenkinsTool/10/",
+        "exception" : null,
+        "log" : "Started by user anonymous\r\nBuilding in workspace /home/lgao/.jenkins/workspace/JBOSS-EAP-1.0.0.DR1-ScriptJenkinsTool\r\n[JBOSS-EAP-1.0.0.DR1-ScriptJenkinsTool] $ /bin/sh -xe /tmp/hudson1417998216396403393.sh\r\n+ sleep 20\r\n+ echo -e 'wake up from a script'\r\nwake up from a script\r\nFinished: SUCCESS\r\n",
+        "status" : "SUCCEEDED"
+      },
+      "waiveComment" : null
     }
   }
 }
