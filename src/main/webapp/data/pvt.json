@@ -104,9 +104,10 @@
       "execution": {
         "name": "JDK-Check-For-1.0.0.DR1",
         "link": null,
+        "type": "jvm",
         "exception": null,
         "log": null,
-        "status": "SUCCEEDED",
+        "status": "SUCCEEDED"
       }
     }
   }

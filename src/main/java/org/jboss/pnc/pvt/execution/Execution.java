@@ -17,15 +17,24 @@
 
 package org.jboss.pnc.pvt.execution;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.Serializable;
+import java.util.Map;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import java.io.Serializable;
-import java.util.Map;
-import java.util.Objects;
+import org.jboss.pnc.pvt.execution.Execution.JVMExecution;
+import org.jboss.pnc.pvt.execution.Execution.JenkinsExecution;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonCreator.Mode;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
  * @author <a href="mailto:lgao@redhat.com">Lin Gao</a>
@@ -33,6 +42,11 @@ import java.util.Objects;
  */
 @XmlRootElement(name = "execution")
 @JsonAutoDetect
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = JenkinsExecution.class, name="jenkins"),
+        @JsonSubTypes.Type(value=JVMExecution.class, name="jvm"),
+        })
 public abstract class Execution implements Serializable {
 
     private static final long serialVersionUID = 3940491733119462766L;
@@ -57,10 +71,10 @@ public abstract class Execution implements Serializable {
      */
     private Status status = Status.RUNNING;
 
-    public Execution(String name) {
+    private Execution(String name) {
         super();
         this.name = name;
-        Objects.requireNonNull(name, "Each Execution must have a name.");
+        Objects.requireNonNull(name, "Each Execution must have a name");
     }
 
     /**
@@ -122,6 +136,7 @@ public abstract class Execution implements Serializable {
         UNKNOWN
     }
 
+    @JsonTypeName("jenkins")
     static class JenkinsExecution extends Execution {
 
         private static final long serialVersionUID = 1L;
@@ -129,8 +144,9 @@ public abstract class Execution implements Serializable {
         private final String jobContent;
         private final Map<String, String> jobParams;
 
-        JenkinsExecution(String jobId, String jobContent, Map<String, String> jobParams) {
-            super(jobId);
+        @JsonCreator
+        JenkinsExecution(final @JsonProperty("name") String name, @JsonProperty("jobContent") final String jobContent, @JsonProperty("jobParams") final Map<String, String> jobParams) {
+            super(name);
             this.jobContent = jobContent;
             this.jobParams = jobParams;
         }
@@ -151,16 +167,24 @@ public abstract class Execution implements Serializable {
 
     }
 
+    @JsonTypeName("jvm")
     static class JVMExecution extends Execution {
 
         private static final long serialVersionUID = 1L;
 
         private final transient ExecutionRunnable runnable;
 
+        @JsonCreator(mode = Mode.PROPERTIES)
+        JVMExecution(final @JsonProperty("name") String name) {
+            this(name, null);
+        }
+
         JVMExecution(final String name, final ExecutionRunnable runnable) {
             super(name);
             this.runnable = runnable;
-            this.runnable.setExecution(this);
+            if (this.runnable != null) {
+                this.runnable.setExecution(this);
+            }
         }
 
         /**
