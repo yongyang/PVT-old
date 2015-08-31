@@ -1,11 +1,9 @@
 package org.jboss.pnc.pvt.model;
 
 import org.jboss.logging.Logger;
-import org.jboss.pnc.pvt.execution.CallBack;
 import org.jboss.pnc.pvt.execution.Execution;
 import org.jboss.pnc.pvt.execution.ExecutionException;
 import org.jboss.pnc.pvt.execution.Executor;
-import org.jboss.pnc.pvt.execution.Execution.Status;
 import org.jboss.pnc.pvt.wicket.PVTApplication;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;

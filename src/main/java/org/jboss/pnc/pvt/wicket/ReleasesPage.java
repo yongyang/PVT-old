@@ -167,7 +167,7 @@ public class ReleasesPage extends TemplatePage{
             release.addVerification(verification.getToolId(), verification.getId());
             release.setStatus(PVTStatus.VERIFYING);
             pvtModel.updateRelease(release);
-            pvtModel.addVerification(verification);
+//            pvtModel.addVerification(verification); this has been done in toolverify() method
             PVTApplication.getDAO().persist();
         }
     }
