@@ -1,0 +1,27 @@
+{
+  "product" : "Test-Prd",
+  "release" : null,
+  "zipReports" : [ {
+    "zip" : "version-test.zip",
+    "downloadURL" : "file:/sources/productization/pvt/target/test-classes/version-test.zip",
+    "jarReports" : [ {
+      "jar" : "jboss-servlet-api_2.5_spec-1.0.1.Final-redhat-3.jar",
+      "version" : "1.0.1.Final-redhat-3",
+      "valid" : true
+    }, {
+      "jar" : "jboss-modules.jar",
+      "version" : "1.3.6.Final-redhat-1",
+      "valid" : true
+    }, {
+      "jar" : "jansi-1.9.0.redhat-5.jar",
+      "version" : "1.9.0.redhat-5",
+      "valid" : true
+    }, {
+      "jar" : "jbossjts-integration-4.17.29.Final-redhat-1.jar",
+      "version" : "4.17.29.Final-redhat-1",
+      "valid" : true
+    } ],
+    "overAll" : true
+  } ],
+  "overAll" : true
+}

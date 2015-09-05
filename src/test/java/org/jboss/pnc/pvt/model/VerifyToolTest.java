@@ -17,7 +17,17 @@
 
 package org.jboss.pnc.pvt.model;
 
-//import org.jboss.pnc.pvt.model.VerifyTool.UseType;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
+import org.jboss.pnc.pvt.execution.CallBack;
+import org.jboss.pnc.pvt.execution.Execution;
+import org.jboss.pnc.pvt.execution.ExecutionException;
+import org.jboss.pnc.pvt.execution.ExecutionRunnable;
+import org.jboss.pnc.pvt.execution.Executor;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -28,5 +38,69 @@ import org.junit.Test;
  *
  */
 public class VerifyToolTest {
+
+    @Test
+    public void testVersionConventionTool() throws Exception {
+        CountDownLatch latch = new CountDownLatch(1);
+        VersionConventionVerifyTool tool = new VersionConventionVerifyTool() {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public Verification verify(VerifyParameter param) {
+                final String name = "Version-Check-Test-" + param.getRelease().getName();
+                final ExecutionRunnable run = verifyRunnable(param);
+                final Execution execution = Execution.createJVMExecution(name, run);
+                final Verification verification = new Verification();
+                final CallBack callBack = new CallBack() {
+                    @Override
+                    public void onTerminated(Execution execution) {
+                        latch.countDown();
+                    }
+                    @Override
+                    public void onStatus(Execution execution) {
+                        verification.syncStauts();
+                    }
+                    
+                    @Override
+                    public void onException(Execution execution) {
+                        execution.getException().printStackTrace();
+                    }
+                };
+                
+                verification.setReleaseId(param.getRelease().getId());
+                if (param.getReferenceRelease() != null) {
+                    verification.setReferenceReleaseId(param.getReferenceRelease().getId());
+                }
+                verification.setToolId(param.getToolId());
+                verification.setExecution(execution);
+                try {
+                    Executor.getJVMExecutor().execute(execution, callBack);
+                } catch (ExecutionException e) {
+                }
+                return verification;
+            }
+            
+            @Override
+            protected String getVerifiedProductName(VerifyParameter param) {
+                return "Test-Prd";
+            }
+        };
+        Product prd = new Product();
+        prd.setName("Test-Prd");
+        
+        Release release = new Release();
+        release.setProductId(prd.getId());
+        
+        URL zipURL = getClass().getClassLoader().getResource("version-test.zip");
+        release.setDistributions(zipURL.toString());
+        VerifyParameter param = new VerifyParameter("toolId", null, release);
+        Verification verification = tool.verify(param);
+        latch.await(600, TimeUnit.SECONDS); // 10 minutes
+        Assert.assertEquals(Verification.Status.PASSED, verification.getStatus());
+        URL expectedLog = getClass().getClassLoader().getResource("version-test.txt");
+        String expected = new String(Files.readAllBytes(Paths.get(expectedLog.toURI())));
+        Assert.assertEquals(expected, verification.getExecution().getLog());
+    }
 
 }

@@ -18,6 +18,7 @@
 package org.jboss.pnc.pvt.execution;
 
 import org.jboss.logging.Logger;
+import org.jboss.pnc.pvt.execution.Execution;
 
 /**
  * @author <a href="mailto:lgao@redhat.com">Lin Gao</a>
@@ -30,6 +31,10 @@ public abstract class ExecutionRunnable implements Runnable {
     private Execution execution;
 
     private CallBack callBack;
+
+    protected ExecutionRunnable() {
+        
+    }
 
     public Execution getExecution() {
         return this.execution;
@@ -50,33 +55,43 @@ public abstract class ExecutionRunnable implements Runnable {
         logger.debug("Running Execution: " + execution.getName());
         try {
             // before actual starting, set the status to RUNNING
-            this.execution.setStatus(Execution.Status.RUNNING);
-            if (callBack != null) {
-                callBack.onStatus(this.execution);
-            }
+            setStatus(Execution.Status.RUNNING);
             // do run
             doRun();
             // after do run, if the status is still RUNNING, set it to SUCCEEDED
             if (Execution.Status.RUNNING.equals(this.execution.getStatus())) {
-                this.execution.setStatus(Execution.Status.SUCCEEDED);
-                if (callBack != null) {
-                    callBack.onStatus(this.execution);
-                }
+                setStatus(Execution.Status.SUCCEEDED);
             }
         } catch (Exception e) {
-            this.execution.setStatus(Execution.Status.FAILED);
-            if (callBack != null) {
-                callBack.onStatus(this.execution);
-            }
-            this.execution.setException(e);
-            if (callBack != null) {
-                callBack.onException(this.execution);
-            }
+            setStatus(Execution.Status.FAILED);
+            setException(e);
         } catch (Throwable t) {
             throw new RuntimeException("Failed to monitor the Execution: " + execution.getName(), t);
         }
     }
 
     public abstract void doRun() throws Exception;
+
+    public void setStatus(Execution.Status newStatus) {
+        this.execution.setStatus(newStatus);
+        if (callBack != null) {
+            callBack.onStatus(this.execution);
+        }
+    }
+
+    public void setLog(String log) {
+        this.execution.setLog(log);
+        if (callBack != null) {
+            callBack.onLogChanged(this.execution);
+        }
+    }
+
+    public void setException(Exception e) {
+        setStatus(Execution.Status.FAILED);
+        this.execution.setException(e);
+        if (callBack != null) {
+            callBack.onException(this.execution);
+        }
+    }
 
 }

@@ -171,6 +171,11 @@ public abstract class VerifyTool implements Serializable {
         return prd == null ? null : prd.getName();
     }
 
+    protected String getVerifiedProductName(VerifyParameter param) {
+        String prdId = param.getRelease().getProductId();
+        return getProductName(prdId);
+    }
+
     protected CallBack defaultVerificationCallBack(final Verification verification) {
         return new CallBack() {
 
@@ -184,6 +189,11 @@ public abstract class VerifyTool implements Serializable {
             public void onTerminated(Execution execution) {
                 verification.setEndTime(System.currentTimeMillis());
                 PVTApplication.getDAO().persist();
+            }
+
+            @Override
+            public void onLogChanged(Execution execution) {
+                // nothing to do for now ...
             }
 
         };

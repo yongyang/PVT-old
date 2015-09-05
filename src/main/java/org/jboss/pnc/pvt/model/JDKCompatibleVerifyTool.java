@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Path;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -16,6 +17,8 @@ import org.jboss.pnc.pvt.execution.Execution;
 import org.jboss.pnc.pvt.execution.ExecutionException;
 import org.jboss.pnc.pvt.execution.ExecutionRunnable;
 import org.jboss.pnc.pvt.execution.Executor;
+import org.jboss.pnc.pvt.report.ReleaseReport;
+import org.jboss.pnc.pvt.report.ReleaseReport.ZipReport;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
@@ -25,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
  */
 @JsonAutoDetect
 @JsonSubTypes({ @JsonSubTypes.Type(value = JDKCompatibleVerifyTool.class) })
-public class JDKCompatibleVerifyTool extends VerifyTool {
+public class JDKCompatibleVerifyTool extends AbstractZipAnalysisTool {
 
     private static final long serialVersionUID = -7513802473705616180L;
 
@@ -183,6 +186,12 @@ public class JDKCompatibleVerifyTool extends VerifyTool {
      */
     public void setExpectJDKVersion(String expectJDKVersion) {
         this.expectJDKVersion = expectJDKVersion;
+    }
+
+    @Override
+    protected void walkJarFile(Path zipPath, Path jarPath, ReleaseReport releaseReport, ZipReport zipReport) throws IOException {
+        // TODO Auto-generated method stub
+        
     }
 
 }
