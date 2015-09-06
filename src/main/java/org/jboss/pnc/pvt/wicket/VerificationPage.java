@@ -1,6 +1,7 @@
 package org.jboss.pnc.pvt.wicket;
 
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.jboss.pnc.pvt.model.Product;
 import org.jboss.pnc.pvt.model.Release;
@@ -48,5 +49,26 @@ public class VerificationPage extends TemplatePage {
 
         add(new Label("status", verification.getStatus()));
         add(new Label("release", product.getName() + " " + release.getName()));
+
+        if(verification.getExecution().getLink() != null) {
+            add(new ExternalLink("execution_link", verification.getExecution().getLink(), verification.getExecution().getLink()));
+        }
+        else {
+            add(new ExternalLink("execution_link", "#", verification.getExecution().getLink()));
+        }
+
+        if(verification.getExecution().getLog() != null) {
+            add(new Label("execution_log", verification.getExecution().getLog()));
+        }
+        else {
+            add(new Label("execution_log", ""));
+        }
+
+        if(verification.getExecution().getException() != null) {
+            add(new Label("execution_exception", verification.getExecution().getException()));
+        }
+        else {
+            add(new Label("execution_exception", ""));
+        }
     }
 }

@@ -17,23 +17,23 @@
 
         <h2>Verification Summary</h2>
 
-        <table cellspacing="3" cellpadding="3">
+        <table cellspacing="3" cellpadding="3" width="100%">
           <tr>
             <td class="header-label" width = "150">Verification Id:</td>
-            <td>
+            <td width="750">
               <span wicket:id="id" id="advisory_synopsis" maxlength="78" name="advisory[synopsis]" size="60" type="text" />
             </td>
           </tr>
           <tr>
             <td class="header-label" width = "150">Verification Tool:</td>
             <td>
-              <span wicket:id="tool_name" maxlength="78" name="advisory[synopsis]" size="60" type="text" />
+              <span wicket:id="tool_name" name="advisory[synopsis]" size="60" type="text" />
             </td>
           </tr>
           <tr>
             <td class="header-label" width = "150">Release:</td>
             <td>
-              <span wicket:id="release" maxlength="78" name="advisory[synopsis]" size="60" type="text" />
+              <span wicket:id="release" name="advisory[synopsis]" size="60" type="text" />
             </td>
           </tr>
 
@@ -54,7 +54,30 @@
           <tr>
             <td class="header-label" width = "150">Status:</td>
             <td>
-              <span wicket:id="status" maxlength="78" class="state_indicator state_indicator_rel_prep" />
+              <span wicket:id="status" class="state_indicator state_indicator_rel_prep" />
+            </td>
+          </tr>
+
+          <tr>
+            <td class="header-label" width = "150">Execution link: </td>
+            <td>
+              <a wicket:id="execution_link" href="" target="_blank">execution link</a>
+            </td>
+          </tr>
+          <tr>
+            <td class="header-label" width = "150">Execution log: </td>
+            <td>
+              <pre>
+                <span wicket:id="execution_log" />
+              </pre>
+            </td>
+          </tr>
+          <tr>
+            <td class="header-label" width = "150">Execution Exception: </td>
+            <td>
+              <pre>
+                <span wicket:id="execution_exception"/>
+              </pre>
             </td>
           </tr>
 
