@@ -156,6 +156,7 @@ public class ReleasesPage extends TemplatePage{
     }
 
     private void verifyRelease(Release release) {
+        //TODO: detect if the Tool need to run again
         for(String toolId : release.getTools()) {
             PVTModel pvtModel = PVTApplication.getDAO().getPvtModel();
             VerifyTool tool = pvtModel.getVerifyToolById(toolId);

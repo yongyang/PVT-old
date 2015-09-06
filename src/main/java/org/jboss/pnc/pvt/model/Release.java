@@ -38,6 +38,9 @@ public class Release implements Serializable {
 
     private long createTime = System.currentTimeMillis();
 
+    // use to detect if Tools need to run again if release updated
+    private long updateTime = System.currentTimeMillis();
+
     public String getId() {
         return id;
     }
@@ -89,6 +92,14 @@ public class Release implements Serializable {
 
     public void setCreateTime(long createTime) {
         this.createTime = createTime;
+    }
+
+    public long getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(long updateTime) {
+        this.updateTime = updateTime;
     }
 
     public String getDescription() {
