@@ -35,6 +35,8 @@
 
       <wicket.version>6.19.0</wicket.version>
       <wicket-jquery-ui.version>6.19.1</wicket-jquery-ui.version>
+
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <dependencyManagement>
@@ -355,7 +357,9 @@
     </pluginManagement>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
+          <version>2.2</version>
         <configuration>
           <webResources>
             <resource>

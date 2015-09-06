@@ -30,7 +30,7 @@ public class JSONTest {
     public static void testVerifyTool() throws Exception{
         JDKCompatibleVerifyTool jdkTool = new JDKCompatibleVerifyTool();
         jdkTool.setName("jdkverifytool");
-        jdkTool.setExpectJDKVersion("1.8");
+//        jdkTool.setExpectJDKVersion("1.8");
         jdkTool.setDescription("jdk 1.8");
 
         ObjectMapper map = new ObjectMapper();

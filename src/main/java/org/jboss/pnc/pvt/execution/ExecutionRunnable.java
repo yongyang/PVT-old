@@ -65,6 +65,7 @@ public abstract class ExecutionRunnable implements Runnable {
         } catch (Exception e) {
             setStatus(Execution.Status.FAILED);
             setException(e);
+            logger.warn("Failed to Execute the Runnable.", e);
         } catch (Throwable t) {
             throw new RuntimeException("Failed to monitor the Execution: " + execution.getName(), t);
         }

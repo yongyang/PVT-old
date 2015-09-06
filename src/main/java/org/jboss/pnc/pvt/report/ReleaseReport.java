@@ -17,7 +17,6 @@
 
 package org.jboss.pnc.pvt.report;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -124,27 +123,11 @@ public class ReleaseReport implements PlainReport {
         @XmlAttribute(name = "zip")
         private final String zip;
 
-        private String downloadURL;
-
         private final List<JarReport> jarReports = Collections.synchronizedList(new ArrayList<>());
 
         public ZipReport(String zipName) {
             super();
             this.zip = zipName;
-        }
-
-        /**
-         * @return the downloadURL
-         */
-        public String getDownloadURL() {
-            return downloadURL;
-        }
-
-        /**
-         * @param downloadURL the downloadURL to set
-         */
-        public void setDownloadURL(String downloadURL) {
-            this.downloadURL = downloadURL;
         }
 
         public void addJarReport(JarReport jarReport) {

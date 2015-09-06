@@ -10,7 +10,6 @@ import org.jboss.pnc.pvt.model.VerifyTool;
  * @author <a href="mailto:lgao@redhat.com">Lin Gao</a>
  *
  */
-@SuppressWarnings({ "serial"})
 public class JDKCompatibleVerifyToolEditPage extends JDKCompatibleVerifyToolNewPage {
 
     private static final long serialVersionUID = 1L;

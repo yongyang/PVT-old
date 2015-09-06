@@ -5,8 +5,18 @@
 <wicket:extend>
 
           <tr>
-            <td class="header-label" width = "150">Expected JDK Version:</td>
-            <td><input wicket:id="expectJDKVersion" maxlength="30" size="30" type="text" /></td>
+            <td class="header-label" width = "150">Minimum JDK Version:</td>
+            <td><select wicket:id="minJDK" /></td>
+          </tr>
+
+          <tr>
+            <td class="header-label" width = "150">Maximum JDK Version:</td>
+            <td><select wicket:id="maxJDK" /></td>
+          </tr>
+
+          <tr>
+            <td class="header-label" width = "150">Fast Return:</td>
+            <td><input type="checkbox" wicket:id="fastReturn" /></td>
           </tr>
 
 </wicket:extend>

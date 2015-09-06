@@ -65,7 +65,6 @@ public abstract class AbstractZipAnalysisTool extends VerifyTool {
                         logger.debug("Downloaded file: " + remoteZipURL);
                         releaseReport.setStatusMsg("Downloaded file: " + remoteZipURL);
                         ReleaseReport.ZipReport zipReport = new ReleaseReport.ZipReport(downloadedZip.getName());
-                        zipReport.setDownloadURL(remoteZip);
                         releaseReport.addZipReport(zipReport);
                         Path zipPath = Paths.get(downloadedZip.toURI());
                         try (FileSystem zipFS = FileSystems.newFileSystem(zipPath, getClass()
@@ -115,7 +114,7 @@ public abstract class AbstractZipAnalysisTool extends VerifyTool {
     }
 
     protected SimpleFileVisitor<Path> walkZipFile(final Path zipPath, final ReleaseReport releaseReport, final ReleaseReport.ZipReport zipReport,
-            final File zip, final ExecutionRunnable execRun) {
+            final File zip, final ExecutionRunnable execRun) throws IOException {
         return new SimpleFileVisitor<Path>() {
 
             @Override

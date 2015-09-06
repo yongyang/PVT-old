@@ -4,7 +4,6 @@
   "statusMsg" : "COMPLETED",
   "zipReports" : [ {
     "zip" : "version-test.zip",
-    "downloadURL" : "file:/sources/productization/pvt/target/test-classes/version-test.zip",
     "jarReports" : [ {
       "jar" : "jboss-servlet-api_2.5_spec-1.0.1.Final-redhat-3.jar",
       "version" : "1.0.1.Final-redhat-3",

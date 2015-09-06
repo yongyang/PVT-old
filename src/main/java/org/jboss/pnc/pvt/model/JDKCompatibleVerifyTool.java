@@ -1,18 +1,20 @@
 package org.jboss.pnc.pvt.model;
 
 import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Enumeration;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
+import java.nio.file.attribute.BasicFileAttributes;
 
 import org.jboss.logging.Logger;
-import org.jboss.pnc.pvt.execution.CallBack;
 import org.jboss.pnc.pvt.execution.Execution;
 import org.jboss.pnc.pvt.execution.ExecutionException;
 import org.jboss.pnc.pvt.execution.ExecutionRunnable;
@@ -21,6 +23,7 @@ import org.jboss.pnc.pvt.report.ReleaseReport;
 import org.jboss.pnc.pvt.report.ReleaseReport.ZipReport;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 
 /**
@@ -36,11 +39,102 @@ public class JDKCompatibleVerifyTool extends AbstractZipAnalysisTool {
 
     private static final int JAVA_CLASS_MAGIC = 0xCAFEBABE;
 
-    private String expectJDKVersion;
+    public enum JDK {
 
+        JDK1_1(45, 3), JDK1_2(46, 0), JDK1_3(47, 0), JDK1_4(48, 0), JDK5(49, 0), JDK6(50, 0), JDK7(51, 0), JDK8(52, 0);
+
+        private final int major;
+        private final int minor;
+
+        private JDK(int major, int minor) {
+            this.major = major;
+            this.minor = minor;
+        }
+
+        /**
+         * @return the major
+         */
+        public int getMajor() {
+            return major;
+        }
+
+        /**
+         * @return the minor
+         */
+        public int getMinor() {
+            return minor;
+        }
+
+        public static JDK getJDK(int major, int minor) {
+            for (JDK jdk : JDK.values()) {
+                if (jdk.getMajor() == major && jdk.getMinor() == minor) {
+                    return jdk;
+                }
+            }
+            return null;
+        }
+    }
+
+    private JDK minJDK = JDK.JDK1_2;
+
+    private JDK maxJDK = JDK.JDK8;
+
+    /**
+     * Whether returns immediately after the first class analysis.
+     */
+    private boolean fastReturn = true;
+
+    /**
+     * @return the minJDK
+     */
+    public JDK getMinJDK() {
+        return minJDK;
+    }
+
+    /**
+     * @param minJDK the minJDK to set
+     */
+    public void setMinJDK(JDK minJDK) {
+        this.minJDK = minJDK;
+    }
+
+    /**
+     * @return the maxJDK
+     */
+    public JDK getMaxJDK() {
+        return maxJDK;
+    }
+
+    /**
+     * @param maxJDK the maxJDK to set
+     */
+    public void setMaxJDK(JDK maxJDK) {
+        this.maxJDK = maxJDK;
+    }
+
+    /**
+     * @return the fastReturn
+     */
+    public boolean isFastReturn() {
+        return fastReturn;
+    }
+
+    /**
+     * @param fastReturn the fastReturn to set
+     */
+    public void setFastReturn(boolean fastReturn) {
+        this.fastReturn = fastReturn;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + " [name=" + getName() + ", expectJDKVersion=" + getExpectJDKVersion() + "]";
+        return "JDKCompatibleVerifyTool [minJDK=" + minJDK + ", maxJDK=" + maxJDK + ", fastReturn=" + fastReturn
+                + ", getName()=" + getName() + "]";
     }
 
     @Override
@@ -48,7 +142,7 @@ public class JDKCompatibleVerifyTool extends AbstractZipAnalysisTool {
 
         final String proudctName = getProductName(param.getRelease().getProductId());
         final String name = "JDK-Check-For-" + proudctName + "-" + param.getRelease().getName();
-        final ExecutionRunnable run = jdkCheckRunnable(param);
+        final ExecutionRunnable run = verifyRunnable(param);
         final Execution execution = Execution.createJVMExecution(name, run);
 
         final Verification verification = getOrCreateVerification(param, execution);
@@ -65,133 +159,114 @@ public class JDKCompatibleVerifyTool extends AbstractZipAnalysisTool {
             logger.error("Failed to execute the Jenkins job: " + execution.getName(), e);
         }
         return verification;
-
-        // TODO: do verify
-        // return newDefaultVerification(param, true);
-        /*
-         * if (getExpectJDKVersion() == null || getExpectJDKVersion().trim().length() == 0) { throw new
-         * IllegalStateException("Please set expect JDK version first!"); } String[] zipUrls =
-         * param.getRelease().getDistributionArray();
-         * 
-         * //TODO: foreach zipUrls String zipUrl = zipUrls[0];
-         * 
-         * boolean passed = true; try(ZipInputStream zipInputStream = new ZipInputStream(new URL(zipUrl).openStream())) {
-         * 
-         * File zip = File.createTempFile(zipUrl, "zip"); IOUtils.copy(new URL(zipUrl).openStream(), new FileWriter(zip));
-         * 
-         * ZipFile zipFile = new ZipFile(zip); for( Enumeration<? extends ZipEntry> entries = zipFile.entries();
-         * entries.hasMoreElements(); ) { ZipEntry zipEntry = entries.nextElement(); if(zipEntry.getName().endsWith(".jar")) {
-         * JarEntry jarEntry = new JarEntry(zipEntry); InputStream in = zipFile.getInputStream(jarEntry); // IOUtils.copy()
-         * //TODO: read class from each jars if(!checkClassVersion(in, expectJDKVersion)) { passed =false; break; } }
-         * 
-         * 
-         * }
-         * 
-         * 
-         * ZipEntry zipEntry = zipInputStream.getNextEntry(); while(zipEntry != null) { if(zipEntry.getName().endsWith(".jar"))
-         * { JarEntry jarEntry = new JarEntry(zipEntry); //TODO: read class from each jars if(!checkClassVersion(null,
-         * expectJDKVersion)) { passed =false; break; } } zipEntry = zipInputStream.getNextEntry(); }
-         * 
-         * final boolean p = passed; Verification<Boolean> verification = new Verification<Boolean>(param.getToolId(),
-         * param.getReferenceRelease()!= null ? param.getReferenceRelease().getId() : "", param.getRelease().getId()) {
-         * 
-         * @Override public Boolean getResultObject() { //TODO: return the detail info return p; } }; verification.setStatus(p ?
-         * Verification.Status.PASSED : Verification.Status.REJECTED); return verification; } catch (Exception e) {
-         * e.printStackTrace(); } return null;
-         */
     }
 
-    private ExecutionRunnable jdkCheckRunnable(VerifyParameter param) {
-        return new ExecutionRunnable() {
-
-            @Override
-            public void doRun() throws Exception {
-                // TODO Auto-generated method stub
-                System.err.println("JDK CHECKING...... ");
-            }
-
-        };
+    private JDK readClassTargetJDK(InputStream input) throws IOException {
+        DataInputStream dis = new DataInputStream(input);
+        int magic = dis.readInt();
+        if (magic != JAVA_CLASS_MAGIC) {
+            throw new IOException("Invalid magic number for java class file.");
+        }
+        int minor = dis.readUnsignedShort();
+        int major = dis.readUnsignedShort();
+        logger.debug("Major: " + major + ", Minor: " + minor);
+        return JDK.getJDK(major, minor);
     }
 
-    public static boolean checkClassVersion(InputStream classInputStream, String expectJDKVersion) throws Exception {
-        try {
-            DataInputStream dis = new DataInputStream(classInputStream);
-            int magic = dis.readInt();
-            if (magic == JAVA_CLASS_MAGIC) {
-                int minorVersion = dis.readUnsignedShort();
-                int majorVersion = dis.readUnsignedShort();
-
-                // Java 1.2 uses major version 46
-                // Java 1.3 uses major version 47
-                // Java 1.4 uses major version 48
-                // Java 5 uses major version 49
-                // Java 6 uses major version 50
-                // Java 7 uses major version 51
-
-                System.out.println("ClassVersionTest.main() " + majorVersion + "." + minorVersion);
-
-                return ("" + majorVersion).equalsIgnoreCase(expectJDKVersion);
-            }
-
-            return false;
-        } catch (Exception e) {
-            e.printStackTrace();
+    private boolean isJDKOK(JDK jdk) {
+        if (jdk.compareTo(getMinJDK()) < 0) {
             return false;
         }
-
-    }
-
-    /**
-     * Unpack matching files from a jar. Entries inside the jar that do not match the given pattern will be skipped.
-     * 
-     * @param jarFile the .jar file to unpack
-     * @param toDir the destination directory into which to unpack the jar
-     */
-    public static void unJar(File jarFile, File toDir) throws IOException {
-        JarFile jar = new JarFile(jarFile);
-        try {
-            Enumeration<JarEntry> entries = jar.entries();
-            while (entries.hasMoreElements()) {
-                JarEntry entry = (JarEntry) entries.nextElement();
-                if (!entry.isDirectory()) {
-                    InputStream in = jar.getInputStream(entry);
-                    try {
-                        File file = new File(toDir, entry.getName());
-                        // ensureDirectory(file.getParentFile());
-                        OutputStream out = new FileOutputStream(file);
-                        try {
-                            // IOUtils.copyBytes(in,out,8192,false);
-                        } finally {
-                            out.close();
-                        }
-                    } finally {
-                        in.close();
-                    }
-                }
-            }
-        } finally {
-            jar.close();
+        if (jdk.compareTo(getMaxJDK()) > 0) {
+            return false;
         }
-    }
-
-    /**
-     * @return the expectJDKVersion
-     */
-    public String getExpectJDKVersion() {
-        return expectJDKVersion;
-    }
-
-    /**
-     * @param expectJDKVersion the expectJDKVersion to set
-     */
-    public void setExpectJDKVersion(String expectJDKVersion) {
-        this.expectJDKVersion = expectJDKVersion;
+        return true;
     }
 
     @Override
     protected void walkJarFile(Path zipPath, Path jarPath, ReleaseReport releaseReport, ZipReport zipReport) throws IOException {
-        // TODO Auto-generated method stub
-        
+        final JDKVersionJarReport jarReport = new JDKVersionJarReport(jarPath.getFileName().toString());
+        zipReport.addJarReport(jarReport);
+        Path jarCopy = Files.copy(jarPath, Paths.get(zipPath.getParent().toString(), jarPath.getFileName().toString()),
+                StandardCopyOption.REPLACE_EXISTING);
+        logger.debug("Jar: " + jarPath.toString() + " is copied to: " + jarCopy.toString());
+        try (FileSystem jarFS = FileSystems.newFileSystem(jarCopy, getClass().getClassLoader())) {
+            Files.walkFileTree(jarFS.getPath("/"), new SimpleFileVisitor<Path>() {
+
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    if (file.toString().endsWith(".class")) {
+                        try (InputStream input = Files.newInputStream(file, StandardOpenOption.READ)) {
+                            JDK jdk = readClassTargetJDK(input);
+                            if (jdk == null) {
+                                throw new IOException("Unknown JDK version of class: " + file.toString());
+                            }
+                            jarReport.setJdk(jdk);
+                            jarReport.setValid(isJDKOK(jdk));
+                            if (isFastReturn()) {
+                                return FileVisitResult.TERMINATE;
+                            }
+                        }
+                    }
+                    return FileVisitResult.CONTINUE;
+                }
+
+            });
+
+        } finally {
+            if (!jarCopy.toFile().delete()) {
+                jarCopy.toFile().deleteOnExit();
+            }
+        }
     }
 
+    class JDKVersionJarReport extends ReleaseReport.JarReport {
+
+        private JDK jdk;
+
+        private boolean valid;
+
+        public JDKVersionJarReport(String jarName) {
+            super(jarName);
+        }
+
+        /**
+         * @return the jdk
+         */
+        public JDK getJdk() {
+            return jdk;
+        }
+
+        /**
+         * @param jdk the jdk to set
+         */
+        public void setJdk(JDK jdk) {
+            this.jdk = jdk;
+        }
+
+        @JsonProperty
+        public String expectedJDK() {
+            return "[" + getMinJDK().toString() + " - " + getMaxJDK().toString() + "]";
+        }
+
+        /**
+         * @return the valid
+         */
+        public boolean isValid() {
+            return valid;
+        }
+
+        /**
+         * @param valid the valid to set
+         */
+        public void setValid(boolean valid) {
+            this.valid = valid;
+        }
+
+        @Override
+        public boolean overAll() {
+            return isValid();
+        }
+
+    }
 }

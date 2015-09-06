@@ -77,14 +77,18 @@
       "id" : "096ffbbe-b7ea-4f36-954a-ea639b7967ad",
       "name" : "JDK_Compatible_Verify_Tool_1.8",
       "description" : "jdk version >= 1.8",
-      "expectJDKVersion" : "1.8"
+      "minJDK" : "JDK8",
+      "maxJDK" : "JDK8",
+      "fastReturn" : "True"
     },
     "0c61451b-a883-4b22-bc20-e5d5589e4d82" : {
       "@class" : "org.jboss.pnc.pvt.model.JDKCompatibleVerifyTool",
       "id" : "0c61451b-a883-4b22-bc20-e5d5589e4d82",
       "name" : "JDK_Compatible_Verify_Tool_1.6",
       "description" : "jdk version >= 1.6",
-      "expectJDKVersion" : "1.6"
+      "minJDK" : "JDK6",
+      "maxJDK" : "JDK8",
+      "fastReturn" : "True"
     },
     "885db751-6d7f-4682-a9dc-431b2b3e5db8" : {
       "@class" : "org.jboss.pnc.pvt.model.SimpleJenkinsVerifyTool",
