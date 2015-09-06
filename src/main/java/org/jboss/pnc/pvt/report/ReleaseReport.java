@@ -124,7 +124,7 @@ public class ReleaseReport implements PlainReport {
         @XmlAttribute(name = "zip")
         private final String zip;
 
-        private URL downloadURL;
+        private String downloadURL;
 
         private final List<JarReport> jarReports = Collections.synchronizedList(new ArrayList<>());
 
@@ -136,14 +136,14 @@ public class ReleaseReport implements PlainReport {
         /**
          * @return the downloadURL
          */
-        public URL getDownloadURL() {
+        public String getDownloadURL() {
             return downloadURL;
         }
 
         /**
          * @param downloadURL the downloadURL to set
          */
-        public void setDownloadURL(URL downloadURL) {
+        public void setDownloadURL(String downloadURL) {
             this.downloadURL = downloadURL;
         }
 

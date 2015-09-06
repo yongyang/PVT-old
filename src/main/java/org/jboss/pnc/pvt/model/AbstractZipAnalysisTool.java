@@ -65,7 +65,7 @@ public abstract class AbstractZipAnalysisTool extends VerifyTool {
                         logger.debug("Downloaded file: " + remoteZipURL);
                         releaseReport.setStatusMsg("Downloaded file: " + remoteZipURL);
                         ReleaseReport.ZipReport zipReport = new ReleaseReport.ZipReport(downloadedZip.getName());
-                        zipReport.setDownloadURL(remoteZipURL);
+                        zipReport.setDownloadURL(remoteZip);
                         releaseReport.addZipReport(zipReport);
                         Path zipPath = Paths.get(downloadedZip.toURI());
                         try (FileSystem zipFS = FileSystems.newFileSystem(zipPath, getClass()
