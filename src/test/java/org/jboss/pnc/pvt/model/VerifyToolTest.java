@@ -90,6 +90,7 @@ public class VerifyToolTest {
         prd.setName("Test-Prd");
         
         Release release = new Release();
+        release.setName("1.0.0");
         release.setProductId(prd.getId());
         
         URL zipURL = getClass().getClassLoader().getResource("version-test.zip");

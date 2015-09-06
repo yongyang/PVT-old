@@ -5,8 +5,13 @@
 <wicket:extend>
 
           <tr id='convention' >
-            <td class="header-label" width = "150">Convention regex:</td>
-            <td><input maxlength="78" size="30" type="text" /> NOTE: not null</td>
+            <td class="header-label" width = "150">Check OSGI compatible</td>
+            <td><input type="checkbox" wicket:id="checkOSGI" /></td>
+          </tr>
+
+          <tr id='convention' >
+            <td class="header-label" width = "150">Version Pattern:</td>
+            <td><input maxlength="78" size="30" type="text" wicket:id="versionPattern" /> NOTE: not null</td>
           </tr>
 
 

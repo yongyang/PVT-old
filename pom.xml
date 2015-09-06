@@ -44,7 +44,6 @@
         <groupId>org.osgi</groupId>
         <artifactId>org.osgi.core</artifactId>
         <version>${version.osgi}</version>
-        <optional>true</optional>
       </dependency>
 
       <dependency>
@@ -178,7 +177,6 @@
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.core</artifactId>
-      <optional>true</optional>
     </dependency>
 
     <!-- Remote dependencies -->

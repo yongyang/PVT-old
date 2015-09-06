@@ -1,6 +1,8 @@
 package org.jboss.pnc.pvt.wicket;
 
-import org.apache.wicket.Application;
+import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.jboss.pnc.pvt.dao.PVTDataAccessObject;
 import org.jboss.pnc.pvt.model.VerifyTool;
@@ -13,7 +15,6 @@ import org.jboss.pnc.pvt.model.VersionConventionVerifyTool;
  * @author <a href="mailto:lgao@redhat.com">Lin Gao</a>
  *
  */
-@SuppressWarnings({ "serial"})
 public class VersionConventionVerifyToolNewPage extends AbstractVerifyToolPage {
 
     private static final long serialVersionUID = 1L;
@@ -24,7 +25,8 @@ public class VersionConventionVerifyToolNewPage extends AbstractVerifyToolPage {
 
     public VersionConventionVerifyToolNewPage(PageParameters pp, String info) {
         super(pp, info);
-//        form.add(new RequiredTextField<String>("expectJDKVersion"));
+        form.add(new TextField<String>("versionPattern", new PropertyModel<String>(tool, "versionPattern")));
+        form.add(new CheckBox("checkOSGI", new PropertyModel<Boolean>(tool, "checkOSGI")));
     }
 
     @Override

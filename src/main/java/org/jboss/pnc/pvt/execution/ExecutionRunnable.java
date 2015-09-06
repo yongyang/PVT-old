@@ -86,6 +86,12 @@ public abstract class ExecutionRunnable implements Runnable {
         }
     }
 
+    public void setTerminated() {
+        if (callBack != null) {
+            callBack.onTerminated(execution);
+        }
+    }
+
     public void setException(Exception e) {
         setStatus(Execution.Status.FAILED);
         this.execution.setException(e);

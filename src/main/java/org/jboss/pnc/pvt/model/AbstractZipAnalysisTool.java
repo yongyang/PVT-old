@@ -33,6 +33,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Objects;
 
 import org.jboss.logging.Logger;
+import org.jboss.pnc.pvt.execution.Execution;
 import org.jboss.pnc.pvt.execution.ExecutionRunnable;
 import org.jboss.pnc.pvt.report.ReleaseReport;
 
@@ -59,8 +60,10 @@ public abstract class AbstractZipAnalysisTool extends VerifyTool {
                     for (String remoteZip : remoteZipURLs) {
                         URL remoteZipURL = new URL(remoteZip);
                         logger.debug("Downloading file: " + remoteZipURL);
+                        releaseReport.setStatusMsg("Downloading file: " + remoteZipURL);
                         File downloadedZip = downloadZip(remoteZipURL);
                         logger.debug("Downloaded file: " + remoteZipURL);
+                        releaseReport.setStatusMsg("Downloaded file: " + remoteZipURL);
                         ReleaseReport.ZipReport zipReport = new ReleaseReport.ZipReport(downloadedZip.getName());
                         zipReport.setDownloadURL(remoteZipURL);
                         releaseReport.addZipReport(zipReport);
@@ -76,6 +79,13 @@ public abstract class AbstractZipAnalysisTool extends VerifyTool {
                                 downloadedZip.getParentFile().deleteOnExit();
                             }
                         }
+                    }
+                    releaseReport.setStatusMsg("COMPLETED");
+                    setLog(releaseReport.toJSONString());
+                    if (releaseReport.overAll()) {
+                        setStatus(Execution.Status.SUCCEEDED);
+                    } else {
+                        setStatus(Execution.Status.FAILED);
                     }
                 }
             }
@@ -113,6 +123,7 @@ public abstract class AbstractZipAnalysisTool extends VerifyTool {
                 if (attrs.isRegularFile() && jar.toString().endsWith(".jar")) {
                     // OK, it is a jar file
                     logger.debug("Analizing jar: " + jar.toString());
+                    releaseReport.setStatusMsg("Analizing jar: " + jar.toString());
                     walkJarFile(zipPath, jar, releaseReport, zipReport);
                     // update log after each jar analysis
                     execRun.setLog(releaseReport.toJSONString());

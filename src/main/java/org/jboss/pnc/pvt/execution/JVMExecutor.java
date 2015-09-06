@@ -20,6 +20,7 @@ package org.jboss.pnc.pvt.execution;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
+import org.jboss.logging.Logger;
 import org.jboss.pnc.pvt.execution.Execution.JVMExecution;
 
 /**
@@ -27,6 +28,8 @@ import org.jboss.pnc.pvt.execution.Execution.JVMExecution;
  * @author <a href="mailto:lgao@redhat.com">Lin Gao</a>
  */
 class JVMExecutor extends Executor {
+
+    private static final Logger logger = Logger.getLogger(JVMExecutor.class);
 
     static JVMExecutor INSTANCE = new JVMExecutor();
 
@@ -44,18 +47,25 @@ class JVMExecutor extends Executor {
             callBack.onStatus(execution);
         }
         Future<?> future = getRunnableService().submit(run);
-        startMonitor(future, execution, callBack);
+        startMonitor(future, execution, run);
     }
 
-    private void startMonitor(Future<?> future, Execution execution, CallBack callBack) {
+    private void startMonitor(final Future<?> future, final Execution execution, ExecutionRunnable run) {
         final Runnable monitor = new Runnable() {
             public void run() {
-                if (future.isDone()) {
-                    if (callBack != null) {
-                        callBack.onTerminated(execution);
-                    }
-                } else {
-                    getMonitorExecutorService().schedule(this, getMonitorInterval(), TimeUnit.SECONDS);
+                try {
+                    future.get();
+                    run.setTerminated();
+                } catch (InterruptedException e) {
+                    run.setException(e);
+                    run.setStatus(Execution.Status.FAILED);
+                    run.setTerminated();
+                    logger.error("Runnable is Interrupted.", e);
+                } catch (java.util.concurrent.ExecutionException e) {
+                    run.setException((Exception)e.getCause());
+                    run.setStatus(Execution.Status.FAILED);
+                    run.setTerminated();
+                    logger.error("Failed to execute the Runnable.", e.getCause());
                 }
             }
         };

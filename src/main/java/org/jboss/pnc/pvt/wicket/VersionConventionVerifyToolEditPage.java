@@ -2,7 +2,6 @@ package org.jboss.pnc.pvt.wicket;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.jboss.pnc.pvt.model.VerifyTool;
-import org.jboss.pnc.pvt.model.VersionConventionVerifyTool;
 
 
 /**
@@ -11,7 +10,6 @@ import org.jboss.pnc.pvt.model.VersionConventionVerifyTool;
  * @author <a href="mailto:lgao@redhat.com">Lin Gao</a>
  *
  */
-@SuppressWarnings({ "serial"})
 public class VersionConventionVerifyToolEditPage extends VersionConventionVerifyToolNewPage {
 
     private static final long serialVersionUID = 1L;

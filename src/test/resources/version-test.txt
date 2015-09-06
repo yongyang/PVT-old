@@ -1,6 +1,7 @@
 {
   "product" : "Test-Prd",
-  "release" : null,
+  "release" : "1.0.0",
+  "statusMsg" : "COMPLETED",
   "zipReports" : [ {
     "zip" : "version-test.zip",
     "downloadURL" : "file:/sources/productization/pvt/target/test-classes/version-test.zip",

@@ -22,7 +22,7 @@
     "name" : "1.0.0.DR1",
     "referenceReleaseId" : null,
     "distributions" : "http://download.devel.redhat.com/released/JBEAP-6/6.4.3/jboss-eap-6.4.3-full-build.zip",
-    "tools" : [ "096ffbbe-b7ea-4f36-954a-ea639b7967ad", "885db751-6d7f-4682-a9dc-431b2b3e5db8", "7ad56ecf-dbe5-42e3-a508-b7d853e361c5", "7bd1865f-21fd-4ef3-abc9-7dd271667efa", "e44990e5-454b-49c2-870e-963c4015d384" ],
+    "tools" : [ "096ffbbe-b7ea-4f36-954a-ea639b7967ad", "885db751-6d7f-4682-a9dc-431b2b3e5db8", "7ad56ecf-dbe5-42e3-a508-b7d853e361c5", "7bd1865f-21fd-4ef3-abc9-7dd271667efa", "e44990e5-454b-49c2-870e-963c4015d384", "c81446b7-1cf9-446d-b963-132df22d6e8c" ],
     "verifications" : {
       "096ffbbe-b7ea-4f36-954a-ea639b7967ad" : "7c258a5e-a084-4b82-ab69-2a03c5cae6f1",
       "885db751-6d7f-4682-a9dc-431b2b3e5db8" : "5f6bee6f-7f0d-44b2-bde7-342026d760e4",
@@ -116,6 +116,14 @@
       "jobId" : null,
       "jenkinsConfigXML" : "<?xml version='1.0' encoding='UTF-8'?>\n<project>\n<actions/>\n<description></description>\n<keepDependencies>false</keepDependencies>\n<properties/>\n<scm class=\"hudson.scm.NullSCM\"/>\n<canRoam>true</canRoam>\n<disabled>false</disabled>\n<blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>\n<blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>\n<triggers/>\n<concurrentBuild>false</concurrentBuild>\n<builders>\n<hudson.tasks.Shell>\n<command>\n  sleep 20;\r\necho -e \"wake up from a script\";\n</command>\n</hudson.tasks.Shell>\n</builders>\n<publishers/>\n<buildWrappers/>\n</project>",
       "script" : "sleep 20;\r\necho -e \"wake up from a script\";"
+    },
+    "c81446b7-1cf9-446d-b963-132df22d6e8c" : {
+      "@class" : "org.jboss.pnc.pvt.model.VersionConventionVerifyTool",
+      "id" : "c81446b7-1cf9-446d-b963-132df22d6e8c",
+      "name" : "eap6+ version check",
+      "description" : "Check OSGI compatible and redhat-X suffix",
+      "checkOSGI" : true,
+      "versionPattern" : ".+[\\.|-]redhat-\\d+$"
     }
   },
   "verifications" : {

@@ -1,10 +1,7 @@
 package org.jboss.pnc.pvt.model;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
@@ -16,7 +13,6 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
-import java.util.Objects;
 import java.util.Properties;
 
 import org.jboss.logging.Logger;
@@ -25,7 +21,6 @@ import org.jboss.pnc.pvt.execution.ExecutionException;
 import org.jboss.pnc.pvt.execution.ExecutionRunnable;
 import org.jboss.pnc.pvt.execution.Executor;
 import org.jboss.pnc.pvt.report.ReleaseReport;
-import org.jboss.pnc.pvt.wicket.PVTApplication;
 import org.osgi.framework.Version;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;

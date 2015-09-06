@@ -25,7 +25,6 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAttribute;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -46,6 +45,8 @@ public class ReleaseReport implements PlainReport {
 
     @XmlAttribute
     private final String release;
+    
+    private String statusMsg;
 
     private final List<ZipReport> zipReports = Collections.synchronizedList(new ArrayList<>());
 
@@ -53,6 +54,20 @@ public class ReleaseReport implements PlainReport {
         super();
         this.product = product;
         this.release = release;
+    }
+
+    /**
+     * @return the statusMsg
+     */
+    public String getStatusMsg() {
+        return statusMsg;
+    }
+
+    /**
+     * @param statusMsg the statusMsg to set
+     */
+    public void setStatusMsg(String statusMsg) {
+        this.statusMsg = statusMsg;
     }
 
     /**

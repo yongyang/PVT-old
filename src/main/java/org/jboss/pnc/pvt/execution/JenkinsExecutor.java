@@ -193,16 +193,16 @@ class JenkinsExecutor extends Executor {
                     }
                     int failed = statusRetrieveFailed.getAndIncrement();
                     if (failed >= getMaxRetryTime()) {
-                        logger.warn("Failed to check Build Detail.", e);
+                        logger.error("Failed to check Build Detail. Give up!", e);
                         if (callBack != null) {
                             callBack.onTerminated(execution);
                         }
                     } else {
-                        logger.debug("Continue checking.", e);
+                        logger.warn("Failed to check Build Detail. Continue.", e);
                         getMonitorExecutorService().schedule(this, getMonitorInterval(), TimeUnit.SECONDS);
                     }
                 } catch (Throwable t) {
-                    logger.warn("Failed to Monitor the execution.", t);
+                    logger.error("Failed to Monitor the execution.", t);
                     if (callBack != null) {
                         callBack.onTerminated(execution);
                     }
