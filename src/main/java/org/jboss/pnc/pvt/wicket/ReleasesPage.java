@@ -106,10 +106,10 @@ public class ReleasesPage extends TemplatePage{
                                 setResponsePage(VerificationPage.class, pageParameters);
                             }
                         };
-                        Label verificationStatus= new Label("release_verification_status", (verificationId != null) ? pvtModel.getVerificationById(verificationId).getStatus().toString() : "NEW");
+                        Label verificationStatus = new Label("release_verification_status", (verificationId != null) ? pvtModel.getVerificationById(verificationId).getStatus().toString() : "NEW");
                         item.add(verificationLink);
                         verificationLink.add(verificationStatus);
-                        if(verificationId == null) {
+                        if (verificationId == null) {
                             // Hide verification if can not get verificationId
                             verificationLink.setVisible(false);
                         }
@@ -156,21 +156,40 @@ public class ReleasesPage extends TemplatePage{
     }
 
     private void verifyRelease(Release release) {
-        //TODO: detect if the Tool need to run again
+        PVTModel pvtModel = PVTApplication.getDAO().getPvtModel();
+
+        Map<String, String> existedVerifications = release.getVerifications();
+
         for(String toolId : release.getTools()) {
-            PVTModel pvtModel = PVTApplication.getDAO().getPvtModel();
-            VerifyTool tool = pvtModel.getVerifyToolById(toolId);
-            // start verification and link to Release
-            Verification verification = tool.verify(
-                    new VerifyParameter(tool.getId(),
-                    (release.getReferenceReleaseId() == null || release.getReferenceReleaseId().trim().isEmpty()) ? null : pvtModel.getReleasebyId(release.getReferenceReleaseId()),
-                    release));
-            release.addVerification(verification.getToolId(), verification.getId());
-            release.setStatus(PVTStatus.VERIFYING);
-            pvtModel.updateRelease(release);
-//            pvtModel.addVerification(verification); this has been done in toolverify() method
-            PVTApplication.getDAO().persist();
+            if(!existedVerifications.containsKey(toolId)) { // not run yet
+               runVerify(toolId, release);
+
+            }
+            else { // has run before, detect if the Tool need to run again
+                String verificationId = existedVerifications.get(toolId);
+                Verification existedVerification = pvtModel.getVerificationById(verificationId);
+                if(release.getUpdateTime() > existedVerification.getStartTime()) { //need to run again
+                    existedVerifications.remove(toolId);
+                    runVerify(toolId, release);
+                }
+            }
         }
+        // persist all verifications
+        PVTApplication.getDAO().persist();
+    }
+
+    private void runVerify(String toolId, Release release){
+        PVTModel pvtModel = PVTApplication.getDAO().getPvtModel();
+        VerifyTool tool = pvtModel.getVerifyToolById(toolId);
+        // start verification and link to Release
+        Verification verification = tool.verify(
+                new VerifyParameter(tool.getId(),
+                        (release.getReferenceReleaseId() == null || release.getReferenceReleaseId().trim().isEmpty()) ? null : pvtModel.getReleasebyId(release.getReferenceReleaseId()),
+                        release));
+        release.addVerification(verification.getToolId(), verification.getId());
+        release.setStatus(PVTStatus.VERIFYING);
+        pvtModel.updateRelease(release);
+        pvtModel.addVerification(verification);
     }
 
 

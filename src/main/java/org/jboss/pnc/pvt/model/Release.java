@@ -29,7 +29,7 @@ public class Release implements Serializable {
     // The tools applied to this release
     private List<String> tools = new ArrayList<>();
 
-    // Runtime verification, toolId => verificationId
+    // Runtime verification, {toolId => verificationId}
     private Map<String, String> verifications = new HashMap<>();
 
     private String description;
@@ -120,6 +120,10 @@ public class Release implements Serializable {
 
     public Map<String, String> getVerifications() {
         return verifications;
+    }
+
+    public void setVerifications(Map<String, String> verifications) {
+        this.verifications=verifications;
     }
 
     public String getVerificationIdByToolId(String toolId){

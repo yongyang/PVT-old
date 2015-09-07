@@ -26,6 +26,7 @@ public class ReleaseEditPage extends ReleaseNewPage {
         PVTDataAccessObject dao = PVTApplication.getDAO();
         release.setProductId(productDropDownChoice.getModelObject().getId());
         release.setTools(Arrays.asList(checkBoxMultipleChoice.getInputAsArray()));
+        release.setUpdateTime(System.currentTimeMillis());
         dao.getPvtModel().updateRelease(release);
         dao.persist();
         setInfo("Release: " + release.getName() + " is Updated.");

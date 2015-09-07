@@ -140,14 +140,16 @@ public abstract class VerifyTool implements Serializable {
         }
         verification.setToolId(param.getToolId());
         verification.setExecution(execution);
-        saveInDB(verification);
+//        saveInDB(verification); // do save in ReleasePage for all created verifications together
         return verification;
     }
 
+/*
     private void saveInDB(Verification verification) {
         PVTModel pvtModel = PVTApplication.getDAO().getPvtModel();
         pvtModel.addVerification(verification);
     }
+*/
 
     protected Verification getLastVerification(String releaseId) {
         PVTModel pvtModel = PVTApplication.getDAO().getPvtModel();
