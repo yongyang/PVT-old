@@ -29,7 +29,7 @@ public class JSONDataAccessObject extends PVTDataAccessObject implements Seriali
 
     private final File jsonFile = new File(((WebApplication)Application.get()).getServletContext().getRealPath("/data"), "pvt.json");
 
-    public void load() {
+    public synchronized void load() {
         try {
             pvtModel = mapper.readValue(jsonFile, PVTModel.class);
         }
@@ -38,7 +38,7 @@ public class JSONDataAccessObject extends PVTDataAccessObject implements Seriali
         }
     }
 
-    public void persist() {
+    public synchronized void persist() {
         try {
             JsonNode node = mapper.valueToTree(pvtModel);
             mapper.writeValue(jsonFile, node);
