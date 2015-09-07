@@ -2,6 +2,7 @@ package org.jboss.pnc.pvt.wicket;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxCallListener;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
@@ -15,6 +16,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.time.Duration;
 import org.jboss.pnc.pvt.model.*;
 
 import java.util.*;
@@ -48,7 +50,7 @@ public class ReleasesPage extends TemplatePage{
         add(new ListView<Release>("release_rows", releases) {
             @Override
             protected void populateItem(ListItem<Release> item) {
-                Release release = item.getModelObject();
+                final Release release = item.getModelObject();
                 Link product_link = new Link("product_link") {
                     @Override
                     public void onClick() {
@@ -106,7 +108,29 @@ public class ReleasesPage extends TemplatePage{
                                 setResponsePage(VerificationPage.class, pageParameters);
                             }
                         };
-                        Label verificationStatus = new Label("release_verification_status", (verificationId != null) ? pvtModel.getVerificationById(verificationId).getStatus().toString() : "NEW");
+                        Label verificationStatus = new Label(
+                                "release_verification_status",
+                                new Model<Verification.Status>() {
+                                    @Override
+                                    public Verification.Status getObject() {
+                                        String verificationId = release.getVerificationIdByToolId(toolId);
+                                        return (verificationId != null) ? pvtModel.getVerificationById(verificationId).getStatus() : Verification.Status.NEW;
+                                    }
+                                }
+                        );
+
+                        verificationStatus.add(new AbstractAjaxTimerBehavior(Duration.seconds(5L)) {
+                            @Override
+                            protected void onTimer(AjaxRequestTarget target) {
+                                target.add(verificationStatus);
+                                if(verificationStatus.getDefaultModel().getObject().equals(Verification.Status.NEED_INSPECT) ||
+                                        verificationStatus.getDefaultModel().getObject().equals(Verification.Status.NOT_PASSED) ||
+                                        verificationStatus.getDefaultModel().getObject().equals(Verification.Status.PASSED)) {
+                                    stop(target);
+                                }
+                            }
+                        });
+
                         item.add(verificationLink);
                         verificationLink.add(verificationStatus);
                         if (verificationId == null) {
