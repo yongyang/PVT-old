@@ -133,8 +133,7 @@ public class JDKCompatibleVerifyTool extends AbstractZipAnalysisTool {
      */
     @Override
     public String toString() {
-        return "JDKCompatibleVerifyTool [minJDK=" + minJDK + ", maxJDK=" + maxJDK + ", fastReturn=" + fastReturn
-                + ", getName()=" + getName() + "]";
+        return "JDKCompatibleVerifyTool " + "[name=" + getName() + ", minJDK=" + minJDK + ", maxJDK=" + maxJDK + ", fastReturn=" + fastReturn + "]";
     }
 
     @Override
