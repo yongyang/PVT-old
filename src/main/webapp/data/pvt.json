@@ -144,6 +144,7 @@
         "name" : "JDK-Check-For-JBOSS-EAP-1.0.0.DR1",
         "link" : null,
         "exception" : null,
+        "report": {},
         "status" : "SUCCEEDED"
       },
       "waiveComment" : null
@@ -161,6 +162,7 @@
         "name" : "BadJob",
         "link" : "http://localhost:8090/job/BadJob/45/",
         "exception" : null,
+        "report": {},
         "status" : "FAILED"
       },
       "waiveComment" : null
@@ -178,6 +180,7 @@
         "name" : "GoodJob",
         "link" : "http://localhost:8090/job/GoodJob/12/",
         "exception" : null,
+        "report": {},
         "status" : "SUCCEEDED"
       },
       "waiveComment" : null
@@ -195,6 +198,7 @@
         "name" : "JBOSS-EAP-1.0.0.DR1-TempateJenkinsJob",
         "link" : "http://localhost:8090/job/JBOSS-EAP-1.0.0.DR1-TempateJenkinsJob/10/",
         "exception" : null,
+        "report": {},
         "status" : "SUCCEEDED"
       },
       "waiveComment" : null
@@ -212,6 +216,7 @@
         "name" : "JBOSS-EAP-1.0.0.DR1-ScriptJenkinsTool",
         "link" : "http://localhost:8090/job/JBOSS-EAP-1.0.0.DR1-ScriptJenkinsTool/10/",
         "exception" : null,
+        "report": {},
         "status" : "SUCCEEDED"
       },
       "waiveComment" : null
