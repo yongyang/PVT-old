@@ -118,19 +118,21 @@ public class ReleasesPage extends TemplatePage{
                                     }
                                 }
                         );
+                        if(verificationStatus.getDefaultModel().getObject().equals(Verification.Status.NEW) ||
+                                verificationStatus.getDefaultModel().getObject().equals(Verification.Status.IN_PROGRESS)) {
 
-                        verificationStatus.add(new AbstractAjaxTimerBehavior(Duration.seconds(5L)) {
-                            @Override
-                            protected void onTimer(AjaxRequestTarget target) {
-                                target.add(verificationStatus);
-                                if(verificationStatus.getDefaultModel().getObject().equals(Verification.Status.NEED_INSPECT) ||
-                                        verificationStatus.getDefaultModel().getObject().equals(Verification.Status.NOT_PASSED) ||
-                                        verificationStatus.getDefaultModel().getObject().equals(Verification.Status.PASSED)) {
-                                    stop(target);
+                            verificationStatus.add(new AbstractAjaxTimerBehavior(Duration.seconds(5L)) {
+                                @Override
+                                protected void onTimer(AjaxRequestTarget target) {
+                                    target.add(verificationStatus);
+                                    if (verificationStatus.getDefaultModel().getObject().equals(Verification.Status.NEED_INSPECT) ||
+                                            verificationStatus.getDefaultModel().getObject().equals(Verification.Status.NOT_PASSED) ||
+                                            verificationStatus.getDefaultModel().getObject().equals(Verification.Status.PASSED)) {
+                                        stop(target);
+                                    }
                                 }
-                            }
-                        });
-
+                            });
+                        }
                         item.add(verificationLink);
                         verificationLink.add(verificationStatus);
                         if (verificationId == null) {
