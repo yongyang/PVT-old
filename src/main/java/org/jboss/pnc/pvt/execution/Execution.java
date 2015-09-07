@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.jboss.pnc.pvt.execution.Execution.JVMExecution;
 import org.jboss.pnc.pvt.execution.Execution.JenkinsExecution;
+import org.jboss.pnc.pvt.report.Report;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -58,13 +59,13 @@ public abstract class Execution implements Serializable {
     /** Each execution should have an external link. **/
     private String link;
 
-    /** Exception when there is an Exception occured. **/
+    /** Exception when there is an Exception occurred. **/
     private Exception exception;
 
     /**
      * Log of the execution, maybe changed constantly before execution is finished.
      */
-    private String log;
+    private Report report;
 
     /**
      * Status of the Execution. Default to Status.RUNNING.
@@ -92,12 +93,18 @@ public abstract class Execution implements Serializable {
         return this;
     }
 
-    public synchronized String getLog() {
-        return log;
+    /**
+     * @return the report
+     */
+    public synchronized Report getReport() {
+        return report;
     }
 
-    public synchronized Execution setLog(String log) {
-        this.log = log;
+    /**
+     * @param report the report to set
+     */
+    public synchronized Execution setReport(Report report) {
+        this.report = report;
         return this;
     }
 

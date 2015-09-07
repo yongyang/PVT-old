@@ -101,7 +101,7 @@ public class VerifyToolTest {
         Assert.assertEquals(Verification.Status.PASSED, verification.getStatus());
         URL expectedLog = getClass().getClassLoader().getResource("version-test.txt");
         String expected = new String(Files.readAllBytes(Paths.get(expectedLog.toURI())));
-        Assert.assertEquals(expected, verification.getExecution().getLog());
+        Assert.assertEquals(expected, verification.getExecution().getReport().getMainLog());
     }
 
 }

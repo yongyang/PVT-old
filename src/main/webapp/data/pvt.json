@@ -144,7 +144,6 @@
         "name" : "JDK-Check-For-JBOSS-EAP-1.0.0.DR1",
         "link" : null,
         "exception" : null,
-        "log" : null,
         "status" : "SUCCEEDED"
       },
       "waiveComment" : null
@@ -162,7 +161,6 @@
         "name" : "BadJob",
         "link" : "http://localhost:8090/job/BadJob/45/",
         "exception" : null,
-        "log" : "Started by user anonymous\r\nBuilding in workspace /home/lgao/.jenkins/workspace/BadJob\r\n[BadJob] $ /bin/sh -xe /tmp/hudson851975241393252857.sh\r\n+ sleep 20\r\n+ echo -e 'wake up'\r\nwake up\r\n+ exit 1\r\nBuild step 'Execute shell' marked build as failure\r\nFinished: FAILURE\r\n",
         "status" : "FAILED"
       },
       "waiveComment" : null
@@ -180,7 +178,6 @@
         "name" : "GoodJob",
         "link" : "http://localhost:8090/job/GoodJob/12/",
         "exception" : null,
-        "log" : "Started by user anonymous\r\nBuilding in workspace /home/lgao/.jenkins/workspace/GoodJob\r\n[GoodJob] $ /bin/sh -xe /tmp/hudson7589172806153875898.sh\r\n+ sleep 20\r\n+ echo -e 'wake up'\r\nwake up\r\nFinished: SUCCESS\r\n",
         "status" : "SUCCEEDED"
       },
       "waiveComment" : null
@@ -198,7 +195,6 @@
         "name" : "JBOSS-EAP-1.0.0.DR1-TempateJenkinsJob",
         "link" : "http://localhost:8090/job/JBOSS-EAP-1.0.0.DR1-TempateJenkinsJob/10/",
         "exception" : null,
-        "log" : "Started by user anonymous\r\nBuilding in workspace /home/lgao/.jenkins/workspace/JBOSS-EAP-1.0.0.DR1-TempateJenkinsJob\r\n[JBOSS-EAP-1.0.0.DR1-TempateJenkinsJob] $ /bin/sh -xe /tmp/hudson4542818921249520711.sh\r\n+ sleep 20\r\n+ echo -e 'wake up'\r\nwake up\r\nFinished: SUCCESS\r\n",
         "status" : "SUCCEEDED"
       },
       "waiveComment" : null
@@ -216,7 +212,6 @@
         "name" : "JBOSS-EAP-1.0.0.DR1-ScriptJenkinsTool",
         "link" : "http://localhost:8090/job/JBOSS-EAP-1.0.0.DR1-ScriptJenkinsTool/10/",
         "exception" : null,
-        "log" : "Started by user anonymous\r\nBuilding in workspace /home/lgao/.jenkins/workspace/JBOSS-EAP-1.0.0.DR1-ScriptJenkinsTool\r\n[JBOSS-EAP-1.0.0.DR1-ScriptJenkinsTool] $ /bin/sh -xe /tmp/hudson1417998216396403393.sh\r\n+ sleep 20\r\n+ echo -e 'wake up from a script'\r\nwake up from a script\r\nFinished: SUCCESS\r\n",
         "status" : "SUCCEEDED"
       },
       "waiveComment" : null

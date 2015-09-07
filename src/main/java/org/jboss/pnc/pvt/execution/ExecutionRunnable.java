@@ -81,7 +81,7 @@ public abstract class ExecutionRunnable implements Runnable {
     }
 
     public void setLog(String log) {
-        this.execution.setLog(log);
+        this.execution.getReport().setMainLog(log);
         if (callBack != null) {
             callBack.onLogChanged(this.execution);
         }

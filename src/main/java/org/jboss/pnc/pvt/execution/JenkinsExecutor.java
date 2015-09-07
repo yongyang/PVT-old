@@ -18,17 +18,23 @@
 package org.jboss.pnc.pvt.execution;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.commons.io.IOUtils;
 import org.jboss.logging.Logger;
 import org.jboss.pnc.pvt.execution.Execution.JenkinsExecution;
+import org.jboss.pnc.pvt.report.Report;
+import org.jboss.pnc.pvt.report.Report.ReportLog;
 
 import com.offbytwo.jenkins.JenkinsServer;
 import com.offbytwo.jenkins.client.JenkinsHttpClient;
+import com.offbytwo.jenkins.model.Artifact;
 import com.offbytwo.jenkins.model.Build;
 import com.offbytwo.jenkins.model.BuildResult;
 import com.offbytwo.jenkins.model.BuildWithDetails;
@@ -84,6 +90,7 @@ class JenkinsExecutor extends Executor {
     @Override
     public void execute(final Execution execution, final CallBack callBack) throws ExecutionException {
         JenkinsExecution jenkinsExe = (JenkinsExecution)execution;
+        jenkinsExe.setReport(new Report());  // report will be initialized when it is started.
         String jobId = jenkinsExe.getName();
         String jobContent = jenkinsExe.getJobContent();
         try {
@@ -128,7 +135,7 @@ class JenkinsExecutor extends Executor {
                     BuildWithDetails jenkinsBuildDetails = jenkinsBuild.details();
                     String log = jenkinsBuildDetails.getConsoleOutputText();
                     if (log != null) {
-                        execution.setLog(log);
+                        execution.getReport().setMainLog(log);
                         if (callBack != null) {
                             callBack.onLogChanged(execution);
                         }
@@ -161,6 +168,19 @@ class JenkinsExecutor extends Executor {
                         case ABORTED:
                         {
                             execution.setStatus(Execution.Status.FAILED);
+                            List<Artifact> artiFacts = jenkinsBuildDetails.getArtifacts();
+                            if (artiFacts != null && artiFacts.size() > 0) {
+                                for (Artifact arti: artiFacts) {
+                                    try(InputStream input = jenkinsBuildDetails.downloadArtifact(arti)) {
+                                        String artiLog = IOUtils.toString(input);
+                                        ReportLog reportLog = new ReportLog(arti.getFileName(), artiLog);
+                                        execution.getReport().addReportLog(reportLog);
+                                    }
+                                }
+                                if (callBack != null) {
+                                    callBack.onLogChanged(execution);
+                                }
+                            }
                             if (callBack != null) {
                                 callBack.onStatus(execution);
                                 callBack.onTerminated(execution);
@@ -170,6 +190,19 @@ class JenkinsExecutor extends Executor {
                         case SUCCESS:
                         {
                             execution.setStatus(Execution.Status.SUCCEEDED);
+                            List<Artifact> artiFacts = jenkinsBuildDetails.getArtifacts();
+                            if (artiFacts != null && artiFacts.size() > 0) {
+                                for (Artifact arti: artiFacts) {
+                                    try(InputStream input = jenkinsBuildDetails.downloadArtifact(arti)) {
+                                        String artiLog = IOUtils.toString(input);
+                                        ReportLog reportLog = new ReportLog(arti.getFileName(), artiLog);
+                                        execution.getReport().addReportLog(reportLog);
+                                    }
+                                }
+                                if (callBack != null) {
+                                    callBack.onLogChanged(execution);
+                                }
+                            }
                             if (callBack != null) {
                                 callBack.onStatus(execution);
                                 callBack.onTerminated(execution);

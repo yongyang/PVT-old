@@ -22,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.jboss.logging.Logger;
 import org.jboss.pnc.pvt.execution.Execution.JVMExecution;
+import org.jboss.pnc.pvt.report.Report;
 
 /**
  * 
@@ -40,6 +41,7 @@ class JVMExecutor extends Executor {
     @Override
     public void execute(final Execution execution, final CallBack callBack) throws ExecutionException {
         JVMExecution jvmExec = (JVMExecution) execution;
+        jvmExec.setReport(new Report()); // report will be initialized when it is started.
         ExecutionRunnable run = jvmExec.getRunnable();
         run.setCallback(callBack);
         jvmExec.setStatus(Execution.Status.RUNNING);

@@ -57,8 +57,8 @@ public class VerificationPage extends TemplatePage {
             add(new ExternalLink("execution_link", "#", verification.getExecution().getLink()));
         }
 
-        if(verification.getExecution().getLog() != null) {
-            add(new Label("execution_log", verification.getExecution().getLog()));
+        if(verification.getExecution().getReport().getMainLog() != null) {
+            add(new Label("execution_log", verification.getExecution().getReport().getMainLog()));
         }
         else {
             add(new Label("execution_log", ""));
