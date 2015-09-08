@@ -130,7 +130,7 @@ public class ReleasesPage extends TemplatePage{
                                     @Override
                                     public Verification.Status getObject() {
                                         String verificationId = release.getVerificationIdByToolId(toolId);
-                                        return (verificationId != null) ? pvtModel.getVerificationById(verificationId).getStatus() : Verification.Status.NEW;
+                                        return (verificationId != null &&  pvtModel.getVerificationById(verificationId) != null) ? pvtModel.getVerificationById(verificationId).getStatus() : Verification.Status.NEW;
                                     }
                                 }
                         );
@@ -210,7 +210,7 @@ public class ReleasesPage extends TemplatePage{
             else { // has run before, detect if the Tool need to run again
                 String verificationId = existedVerifications.get(toolId);
                 Verification existedVerification = pvtModel.getVerificationById(verificationId);
-                if(release.getUpdateTime() > existedVerification.getStartTime() || existedVerification.getStatus().equals(Verification.Status.NOT_PASSED)) { //need to run again
+                if(existedVerification == null || release.getUpdateTime() > existedVerification.getStartTime() || existedVerification.getStatus().equals(Verification.Status.NOT_PASSED)) { //need to run again
                     existedVerifications.remove(toolId);
                     runVerify(toolId, release);
                 }
