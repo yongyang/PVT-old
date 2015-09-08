@@ -10,7 +10,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.jboss.pnc.pvt.model.PVTModel;
 import org.jboss.pnc.pvt.model.Product;
+import org.jboss.pnc.pvt.model.Release;
 
 import java.util.*;
 
@@ -48,7 +50,8 @@ public class ProductsPage extends TemplatePage{
         });
 
 
-        List<Product> products = ((PVTApplication)Application.get()).getDAO().getPvtModel().getProducts();
+        PVTModel pvtModel = PVTApplication.getDAO().getPvtModel();
+        List<Product> products = pvtModel.getProducts();
 
         add(new Label("product_count", Model.of("" + products.size())));
 
@@ -76,6 +79,11 @@ public class ProductsPage extends TemplatePage{
                 if(products.indexOf(item.getModel().getObject()) % 2 == 1) {
                     item.add(AttributeModifier.replace("class", "errata_row odd"));
                 }
+
+
+                Release lastRelease = pvtModel.getLastReleaseOfProduct(item.getModelObject().getId());
+                item.add(new Label("lastReleaseName", lastRelease != null ? lastRelease.getName(): "NONE"));
+                item.add(new Label("lastReleaseStatus", lastRelease != null ? lastRelease.getStatus() : "NONE"));
             }
         });
 

@@ -50,7 +50,7 @@ public class SimpleJenkinsVerifyTool extends VerifyTool {
 
     protected void doExecute(final Execution execution, final Verification verification) {
         try {
-            verification.setStatus(Verification.Status.IN_PROGRESS);
+            verification.setStatus(Verification.Status.IN_PROGRESS); //TODO: when to save the status
             Executor.getJenkinsExecutor().execute(execution, defaultVerificationCallBack(verification));
         } catch (ExecutionException e) {
             verification.setStatus(Verification.Status.NOT_PASSED);

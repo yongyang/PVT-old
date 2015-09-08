@@ -185,9 +185,23 @@ public class PVTModel implements Serializable {
 		}
 	}
 
-	public Release getPreviousRelease(String productId, String releaseId) {
-		//TODO:
-		return  null;
+
+
+	public Release getLastReleaseOfProduct(String productId) {
+		Release lastRelease = null;
+		for(Release release : releases) {
+			if(release.getProductId().equals(productId)) {
+				if(lastRelease == null) {
+					lastRelease = release;
+				}
+				else {
+					if(release.getCreateTime() > lastRelease.getCreateTime()) {
+						lastRelease = release;
+					}
+				}
+			}
+		}
+		return  lastRelease;
 	}
 
 
