@@ -78,8 +78,25 @@ public class ReleasesPage extends TemplatePage{
                     }
                 });
 
+                Label releaseStatusLabel = new Label("release_status", new PropertyModel(item.getModel(), "status"));
+                if(item.getModelObject().getStatus().equals(PVTStatus.NEW) || item.getModelObject().getStatus().equals(PVTStatus.VERIFYING)) {
+                    releaseStatusLabel.add(new AbstractAjaxTimerBehavior(Duration.seconds(5L)) {
+                        @Override
+                        protected void onTimer(AjaxRequestTarget target) {
+                            updateReleaseStatus(release);
+                            target.add(releaseStatusLabel);
+                            if (releaseStatusLabel.getDefaultModel().getObject().equals(PVTStatus.NEED_INSPECT) ||
+                                    releaseStatusLabel.getDefaultModel().getObject().equals(PVTStatus.REJECTED) ||
+                                    releaseStatusLabel.getDefaultModel().getObject().equals(PVTStatus.PASSED)) {
+                                stop(target);
+                            }
+                        }
+                    });
+                }
 
-                item.add(new Label("release_status", new PropertyModel(item.getModel(), "status")));
+                item.add(releaseStatusLabel);
+
+
                 item.add(new Label("release_description", new PropertyModel(item.getModel(), "description")));
                 item.add(new ListView<String>("release_tools", item.getModelObject().getTools()) {
                     @Override
@@ -118,7 +135,7 @@ public class ReleasesPage extends TemplatePage{
                                     }
                                 }
                         );
-                        if(verificationStatus.getDefaultModel().getObject().equals(Verification.Status.NEW) ||
+                        if (verificationStatus.getDefaultModel().getObject().equals(Verification.Status.NEW) ||
                                 verificationStatus.getDefaultModel().getObject().equals(Verification.Status.IN_PROGRESS)) {
 
                             verificationStatus.add(new AbstractAjaxTimerBehavior(Duration.seconds(5L)) {
@@ -194,7 +211,7 @@ public class ReleasesPage extends TemplatePage{
             else { // has run before, detect if the Tool need to run again
                 String verificationId = existedVerifications.get(toolId);
                 Verification existedVerification = pvtModel.getVerificationById(verificationId);
-                if(release.getUpdateTime() > existedVerification.getStartTime()) { //need to run again
+                if(release.getUpdateTime() > existedVerification.getStartTime() || existedVerification.getStatus().equals(Verification.Status.NOT_PASSED)) { //need to run again
                     existedVerifications.remove(toolId);
                     runVerify(toolId, release);
                 }
@@ -218,6 +235,34 @@ public class ReleasesPage extends TemplatePage{
 //        pvtModel.addVerification(verification);
     }
 
+
+    private void updateReleaseStatus(Release release) {
+        PVTStatus status = PVTStatus.VERIFYING;
+        for(String verificationId : release.getVerifications().values()){
+            Verification verification = PVTApplication.getDAO().getPvtModel().getVerificationById(verificationId);
+            if(verification.getStatus().equals(Verification.Status.IN_PROGRESS)) {
+                status = PVTStatus.VERIFYING;
+                break;
+            }
+
+            if(verification.getStatus().equals(Verification.Status.NOT_PASSED)) {
+                status = PVTStatus.REJECTED;
+                break;
+            }
+
+            if(verification.getStatus().equals(Verification.Status.NEED_INSPECT)) {
+                status = PVTStatus.NEED_INSPECT;
+                break;
+            }
+
+            if(verification.getStatus().equals(Verification.Status.PASSED)) {
+                status = PVTStatus.PASSED;
+            }
+        }
+
+        release.setStatus(status);
+        PVTApplication.getDAO().persist();
+    }
 
 }
 
