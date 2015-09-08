@@ -228,8 +228,10 @@ public class ReleasesPage extends TemplatePage{
                 new VerifyParameter(tool.getId(),
                         (release.getReferenceReleaseId() == null || release.getReferenceReleaseId().trim().isEmpty()) ? null : pvtModel.getReleasebyId(release.getReferenceReleaseId()),
                         release));
+//        verification.setStatus(Verification.Status.IN_PROGRESS);
         release.addVerification(verification.getToolId(), verification.getId());
         release.setStatus(Release.Status.VERIFYING);
+        pvtModel.addVerification(verification);
         pvtModel.updateRelease(release);
 //        pvtModel.addVerification(verification);
     }
