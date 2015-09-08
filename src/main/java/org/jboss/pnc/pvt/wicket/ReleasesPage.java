@@ -1,6 +1,5 @@
 package org.jboss.pnc.pvt.wicket;
 
-import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -79,15 +78,15 @@ public class ReleasesPage extends TemplatePage{
                 });
 
                 Label releaseStatusLabel = new Label("release_status", new PropertyModel(item.getModel(), "status"));
-                if(item.getModelObject().getStatus().equals(PVTStatus.NEW) || item.getModelObject().getStatus().equals(PVTStatus.VERIFYING)) {
+                if(item.getModelObject().getStatus().equals(Release.Status.NEW) || item.getModelObject().getStatus().equals(Release.Status.VERIFYING)) {
                     releaseStatusLabel.add(new AbstractAjaxTimerBehavior(Duration.seconds(5L)) {
                         @Override
                         protected void onTimer(AjaxRequestTarget target) {
                             updateReleaseStatus(release);
                             target.add(releaseStatusLabel);
-                            if (releaseStatusLabel.getDefaultModel().getObject().equals(PVTStatus.NEED_INSPECT) ||
-                                    releaseStatusLabel.getDefaultModel().getObject().equals(PVTStatus.REJECTED) ||
-                                    releaseStatusLabel.getDefaultModel().getObject().equals(PVTStatus.PASSED)) {
+                            if (releaseStatusLabel.getDefaultModel().getObject().equals(Release.Status.NEED_INSPECT) ||
+                                    releaseStatusLabel.getDefaultModel().getObject().equals(Release.Status.REJECTED) ||
+                                    releaseStatusLabel.getDefaultModel().getObject().equals(Release.Status.PASSED)) {
                                 stop(target);
                             }
                         }
@@ -230,33 +229,33 @@ public class ReleasesPage extends TemplatePage{
                         (release.getReferenceReleaseId() == null || release.getReferenceReleaseId().trim().isEmpty()) ? null : pvtModel.getReleasebyId(release.getReferenceReleaseId()),
                         release));
         release.addVerification(verification.getToolId(), verification.getId());
-        release.setStatus(PVTStatus.VERIFYING);
+        release.setStatus(Release.Status.VERIFYING);
         pvtModel.updateRelease(release);
 //        pvtModel.addVerification(verification);
     }
 
 
     private void updateReleaseStatus(Release release) {
-        PVTStatus status = PVTStatus.VERIFYING;
+        Release.Status status = Release.Status.VERIFYING;
         for(String verificationId : release.getVerifications().values()){
             Verification verification = PVTApplication.getDAO().getPvtModel().getVerificationById(verificationId);
             if(verification.getStatus().equals(Verification.Status.IN_PROGRESS)) {
-                status = PVTStatus.VERIFYING;
+                status = Release.Status.VERIFYING;
                 break;
             }
 
             if(verification.getStatus().equals(Verification.Status.NOT_PASSED)) {
-                status = PVTStatus.REJECTED;
+                status = Release.Status.REJECTED;
                 break;
             }
 
             if(verification.getStatus().equals(Verification.Status.NEED_INSPECT)) {
-                status = PVTStatus.NEED_INSPECT;
+                status = Release.Status.NEED_INSPECT;
                 break;
             }
 
             if(verification.getStatus().equals(Verification.Status.PASSED)) {
-                status = PVTStatus.PASSED;
+                status = Release.Status.PASSED;
             }
         }
 

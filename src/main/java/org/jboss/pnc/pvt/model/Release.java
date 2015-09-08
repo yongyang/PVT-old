@@ -34,7 +34,7 @@ public class Release implements Serializable {
 
     private String description;
 
-    private PVTStatus status = PVTStatus.NEW;
+    private Status status = Status.NEW;
 
     private long createTime = System.currentTimeMillis();
 
@@ -78,11 +78,11 @@ public class Release implements Serializable {
         this.distributions = distributions;
     }
 
-    public PVTStatus getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(PVTStatus status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
@@ -140,5 +140,13 @@ public class Release implements Serializable {
 
     public void setReferenceReleaseId(String referenceReleaseId) {
         this.referenceReleaseId = referenceReleaseId;
+    }
+
+    /**
+     * Created by yyang on 4/24/15.
+     */
+    @JsonAutoDetect
+    public static enum Status {
+        NEW, VERIFYING, NEED_INSPECT, PASSED, REJECTED
     }
 }
