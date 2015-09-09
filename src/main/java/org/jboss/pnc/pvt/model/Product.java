@@ -56,7 +56,7 @@ public class Product implements Serializable {
     
     private String description;
 
-    private List<Release> releases = new ArrayList<>();
+//    private List<Release> releases = new ArrayList<>();
 
 
     public Product() {

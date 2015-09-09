@@ -71,7 +71,12 @@ public class Release implements Serializable {
 
     @JsonIgnore
     public String[] getDistributionArray(){
-        return distributions.split("\\r\\n");
+        if(distributions != null) {
+            return distributions.split("\\r\\n");
+        }
+        else {
+            return new String[0];
+        }
     }
 
     public void setDistributions(String distributions) {

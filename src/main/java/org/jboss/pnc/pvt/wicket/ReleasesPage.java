@@ -59,7 +59,7 @@ public class ReleasesPage extends TemplatePage{
                     }
                 };
                 String productId = item.getModel().getObject().getProductId();
-                String productName = PVTApplication.getDAO().getPvtModel().getProductbyId(productId).getName();
+                String productName = PVTApplication.getDAO().getPvtModel().getProductById(productId).getName();
                 product_link.add(new Label("product_name", productName));
                 item.add(product_link);
 

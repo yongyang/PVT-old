@@ -4,7 +4,6 @@ import org.jboss.logging.Logger;
 import org.jboss.pnc.pvt.execution.Execution;
 import org.jboss.pnc.pvt.execution.ExecutionException;
 import org.jboss.pnc.pvt.execution.Executor;
-import org.jboss.pnc.pvt.model.Verification.Status;
 import org.jboss.pnc.pvt.wicket.PVTApplication;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -70,7 +69,7 @@ public class SimpleJenkinsVerifyTool extends VerifyTool {
         String releaseName = param.getRelease().getName();
         String prdId = param.getRelease().getProductId();
         PVTModel pvtModel = PVTApplication.getDAO().getPvtModel();
-        String prdName = pvtModel.getProductbyId(prdId).getName();
+        String prdName = pvtModel.getProductById(prdId).getName();
         return prdName + "-" + releaseName + "-" + getName();
     }
 

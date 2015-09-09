@@ -2,7 +2,8 @@ package org.jboss.pnc.pvt.wicket;
 
 import java.util.List;
 
-import org.apache.wicket.Application;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.validation.IFormValidator;
@@ -30,7 +31,7 @@ public class ReleaseNewPage extends TemplatePage {
     TextField<String> nameTextField;
 
     protected DropDownChoice<Product> productDropDownChoice;
-    protected CheckBoxMultipleChoice<VerifyTool> checkBoxMultipleChoice;
+    protected CheckBoxMultipleChoice<VerifyTool> toolCheckBoxMultipleChoice;
     protected Button resetButton;
     protected Button backButton;
     protected Button removeButton;
@@ -52,13 +53,8 @@ public class ReleaseNewPage extends TemplatePage {
         add(new Label("release_summary", getTitle()));
 
 
-        releaseForm = new Form("form-release", new CompoundPropertyModel(release)) {
-            @Override
-            protected void onSubmit() {
-                doSubmit();
-            }
+        releaseForm = new Form("form-release", new CompoundPropertyModel(release));
 
-        };
 
         DropDownChoice<Release> previousReleaseIdDropDownChoice = new DropDownChoice<Release>("previous_release_id",
                 Model.of(),
@@ -101,11 +97,16 @@ public class ReleaseNewPage extends TemplatePage {
         productDropDownChoice.setRequired(true);
 
         if (release != null) {
-            productDropDownChoice.setModelObject(dao.getPvtModel().getProductbyId(release.getProductId()));
+            productDropDownChoice.setModelObject(dao.getPvtModel().getProductById(release.getProductId()));
         }
 
         releaseForm.add(productDropDownChoice);
-
+        releaseForm.add(new Button("submit") {
+            @Override
+            public void onSubmit() {
+                doSubmit();
+            }
+        });
 
         nameTextField = new TextField<String>("name");
         nameTextField.setRequired(true);
@@ -113,7 +114,7 @@ public class ReleaseNewPage extends TemplatePage {
         releaseForm.add(new TextArea<String>("distributions"));
         releaseForm.add(new TextArea<String>("description"));
 
-        checkBoxMultipleChoice = new CheckBoxMultipleChoice<VerifyTool>(
+        toolCheckBoxMultipleChoice = new CheckBoxMultipleChoice<VerifyTool>(
                 "tools",
                 new ListModel<VerifyTool>(dao.getPvtModel().getVerifyTools(release.getTools())),
                 dao.getPvtModel().getToolsList(),
@@ -128,7 +129,7 @@ public class ReleaseNewPage extends TemplatePage {
                         return object == null ? null : object.getId();
                     }
                 });
-        releaseForm.add(checkBoxMultipleChoice);
+        releaseForm.add(toolCheckBoxMultipleChoice);
 
         backButton = new Button("back") {
             @Override
@@ -148,11 +149,26 @@ public class ReleaseNewPage extends TemplatePage {
         };
         releaseForm.add(resetButton);
 
-        removeButton = new Button("remove") {
+        removeButton = new AjaxButton("remove") {
+
+            boolean success = false;
 
             @Override
-            public void onSubmit() {
-                doRemove();
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                success = doRemove();
+            }
+
+
+            @Override
+            protected void onAfterSubmit(AjaxRequestTarget target, Form<?> form) {
+                super.onAfterSubmit(target, form);
+                if(!success) {
+                    target.appendJavaScript("alert('Remove Release failed, usually because this release has link data!')");
+                }
+                else {
+                    PageParameters pp = new PageParameters();
+                    setResponsePage(new ReleasesPage(pp, "Release: " + release.getName() + " is removed."));
+                }
             }
         };
         releaseForm.add(removeButton);
@@ -213,8 +229,8 @@ public class ReleaseNewPage extends TemplatePage {
         releaseForm.getModel().setObject(new Release());
     }
 
-    public void doRemove() {
-
+    public boolean doRemove() {
+        return false;
     }
 
 }

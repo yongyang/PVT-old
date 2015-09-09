@@ -1,6 +1,5 @@
 package org.jboss.pnc.pvt.wicket;
 
-import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
@@ -34,7 +33,7 @@ public class ProductEditPage extends TemplatePage {
         PVTDataAccessObject dao = PVTApplication.getDAO();
         if (pp != null) {
         	if (!pp.get("productId").isNull())
-        		product = dao.getPvtModel().getProductbyId(pp.get("productId").toString());
+        		product = dao.getPvtModel().getProductById(pp.get("productId").toString());
         }
         
         productForm = new Form("form-product", new CompoundPropertyModel(product)) {

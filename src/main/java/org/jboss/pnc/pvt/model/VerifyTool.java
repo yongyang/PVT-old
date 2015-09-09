@@ -169,7 +169,7 @@ public abstract class VerifyTool implements Serializable {
 
     protected String getProductName(String productId) {
         PVTModel pvtModel = PVTApplication.getDAO().getPvtModel();
-        Product prd = pvtModel.getProductbyId(productId);
+        Product prd = pvtModel.getProductById(productId);
         return prd == null ? null : prd.getName();
     }
 

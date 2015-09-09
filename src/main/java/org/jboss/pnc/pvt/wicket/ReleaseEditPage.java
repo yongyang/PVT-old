@@ -1,11 +1,11 @@
 package org.jboss.pnc.pvt.wicket;
 
-import org.apache.wicket.Application;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.jboss.pnc.pvt.dao.PVTDataAccessObject;
 import org.jboss.pnc.pvt.model.Release;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
@@ -25,7 +25,7 @@ public class ReleaseEditPage extends ReleaseNewPage {
     public void doSubmit() {
         PVTDataAccessObject dao = PVTApplication.getDAO();
         release.setProductId(productDropDownChoice.getModelObject().getId());
-        release.setTools(Arrays.asList(checkBoxMultipleChoice.getInputAsArray()));
+        release.setTools(toolCheckBoxMultipleChoice.getInputAsArray() != null ? Arrays.asList(toolCheckBoxMultipleChoice.getInputAsArray()) : Collections.emptyList());
         release.setUpdateTime(System.currentTimeMillis());
         dao.getPvtModel().updateRelease(release);
         dao.persist();
@@ -37,12 +37,17 @@ public class ReleaseEditPage extends ReleaseNewPage {
         releaseForm.getModel().setObject(release);
     }
 
-    public void doRemove() {
+    public boolean doRemove() {
         PVTDataAccessObject dao = PVTApplication.getDAO();
-        dao.getPvtModel().removeRelease(release);
-        dao.persist();
-        PageParameters pp = new PageParameters();
-        setResponsePage(new ReleasesPage(pp, "Release: " + release.getName() + " is removed."));
+        //check the release if has running verification
+        boolean success = dao.getPvtModel().removeRelease(release);
+        if(success) {
+            dao.persist();
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     @Override

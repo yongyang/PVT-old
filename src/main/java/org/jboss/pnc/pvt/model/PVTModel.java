@@ -49,11 +49,19 @@ public class PVTModel implements Serializable {
     	}
     }
     
-    public void removeProduct(Product product){
-    	products.remove(product);
+    public boolean removeProduct(Product product){
+		boolean hasRelease = false;
+		for(Release release : releases) {
+			if(release.getProductId().equals(product.getId())) {
+				hasRelease = true;
+				break;
+			}
+		}
+		return hasRelease ? false : products.remove(product);
+
     }
     
-    public Product getProductbyId(String id){
+    public Product getProductById(String id){
     	Product product = new Product();
     	for (Product p : products){
     		if (p.getId().equals(id)){
@@ -83,8 +91,13 @@ public class PVTModel implements Serializable {
     	}
     }
     
-    public void removeRelease(Release release){
-    	releases.remove(release);
+    public boolean removeRelease(Release release){
+		if(!release.getTools().isEmpty()) {
+			return false;
+		}
+		else {
+			return releases.remove(release);
+		}
     }
     
     public Release getReleasebyId(String id){
