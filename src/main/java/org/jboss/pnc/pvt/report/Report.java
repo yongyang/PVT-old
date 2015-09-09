@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created by yyang on 4/21/15.
@@ -61,7 +63,8 @@ public class Report implements Serializable {
         private final String name;
         private final String content;
 
-        public ReportLog(final String name, final String content) {
+        @JsonCreator
+        public ReportLog(final @JsonProperty("name") String name, final @JsonProperty("content")String content) {
             super();
             this.name = name;
             this.content = content;

@@ -44,7 +44,7 @@ public class ScriptJenkinsVerifyTool extends TemplateJenkinsVerifyTool implement
     private String script;
 
     public static final String LABEL = "Script Jenkins Tool";
-
+    
     private static final String SHELL_SCRIPT_JENKINS_TEMPLTE;
     static {
         try (InputStream input = ScriptJenkinsVerifyTool.class.getClassLoader().getResourceAsStream("jenkins_shell.template");) {

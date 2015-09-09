@@ -20,7 +20,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.jboss.logging.Logger;
 import org.jboss.pnc.pvt.execution.CallBack;
@@ -41,7 +41,7 @@ public class ToolsExecutionEndPoint {
 
     private static final Logger logger = Logger.getLogger(ToolsExecutionEndPoint.class);
 
-    private final HttpClient httpClient = new DefaultHttpClient();
+    private final HttpClient httpClient = HttpClientBuilder.create().build();
 
     public ToolsExecutionEndPoint() {
     }
@@ -60,7 +60,7 @@ public class ToolsExecutionEndPoint {
         }
         Execution execution = Execution.createJenkinsExecution(jobName, jobContent, null);
         try {
-            JenkinsConfiguration config = Executor.getDefaultJenkinsProps();
+            JenkinsConfiguration config = JenkinsConfiguration.defaultJenkinsProps();
             config.setCreateIfJobMissing(true); // create if missing
             config.setOverrideJob(true);
             Executor.getJenkinsExecutor(config).execute(execution, null);
@@ -91,7 +91,7 @@ public class ToolsExecutionEndPoint {
             }
         };
         try {
-            JenkinsConfiguration config = Executor.getDefaultJenkinsProps();
+            JenkinsConfiguration config = JenkinsConfiguration.defaultJenkinsProps();
             config.setCreateIfJobMissing(true); // create if missing
             config.setOverrideJob(true);
             Executor.getJenkinsExecutor(config).execute(execution, callBack);
@@ -148,7 +148,7 @@ public class ToolsExecutionEndPoint {
             }
         };
         try {
-            JenkinsConfiguration config = Executor.getDefaultJenkinsProps();
+            JenkinsConfiguration config = JenkinsConfiguration.defaultJenkinsProps();
             config.setCreateIfJobMissing(true); // create if missing
             config.setOverrideJob(true);
             Executor.getJenkinsExecutor(config).execute(execution, callBack);

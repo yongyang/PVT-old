@@ -18,13 +18,16 @@
 package org.jboss.pnc.pvt.execution;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import com.offbytwo.jenkins.JenkinsServer;
+import com.offbytwo.jenkins.client.JenkinsHttpClient;
 
 /**
  * <code>Executor</code> is responsible to start a execution.
@@ -87,17 +90,25 @@ public abstract class Executor {
         return RUNNABLE_EXESERVICE;
     }
 
-    /**
-     * @return Default Jenkins Property.
-     * 
-     * @throws IOException
-     */
-    public static JenkinsConfiguration getDefaultJenkinsProps() throws IOException {
-        Properties props = new Properties();
-        try (InputStream input = Executor.class.getResourceAsStream("/jenkins.properties")) {
-            props.load(input);
+    public static JenkinsServer getJenkinsServer(JenkinsConfiguration jenkinsConfig) throws IOException {
+        String jenkinsUrl = jenkinsConfig.getUrl();
+        String username = jenkinsConfig.getUsername();
+        String password = jenkinsConfig.getPassword();
+        if (jenkinsUrl == null || jenkinsUrl.trim().length() == 0) {
+            throw new IllegalStateException("Jenkins URL must be specified.");
         }
-        return JenkinsConfiguration.fromProperty(props);
+        final JenkinsHttpClient jenkinsHttpClient;
+        try {
+            if (username != null && username.trim().length() > 0
+                    && password != null && password.trim().length() > 0) {
+                jenkinsHttpClient = new JenkinsHttpClient(new URI(jenkinsUrl), username, password);
+            } else {
+                jenkinsHttpClient = new JenkinsHttpClient(new URI(jenkinsUrl));
+            }
+        } catch (URISyntaxException e) {
+            throw new IOException("Wrong JenkinsURL: " + jenkinsUrl, e);
+        }
+        return new JenkinsServer(jenkinsHttpClient);
     }
 
     private static ScheduledExecutorService MONITOR_EXESERVICE = Executors.newScheduledThreadPool(getMonitorThreadPoolSize(),

@@ -22,17 +22,18 @@
     "name" : "1.0.0.DR1",
     "referenceReleaseId" : null,
     "distributions" : "http://download.devel.redhat.com/released/JBEAP-6/6.4.3/jboss-eap-6.4.3-full-build.zip",
-    "tools" : [ "096ffbbe-b7ea-4f36-954a-ea639b7967ad", "885db751-6d7f-4682-a9dc-431b2b3e5db8", "7ad56ecf-dbe5-42e3-a508-b7d853e361c5", "7bd1865f-21fd-4ef3-abc9-7dd271667efa", "e44990e5-454b-49c2-870e-963c4015d384", "c81446b7-1cf9-446d-b963-132df22d6e8c" ],
+    "tools" : [ "7ad56ecf-dbe5-42e3-a508-b7d853e361c5" ],
     "verifications" : {
       "096ffbbe-b7ea-4f36-954a-ea639b7967ad" : "7c258a5e-a084-4b82-ab69-2a03c5cae6f1",
       "885db751-6d7f-4682-a9dc-431b2b3e5db8" : "5f6bee6f-7f0d-44b2-bde7-342026d760e4",
-      "7ad56ecf-dbe5-42e3-a508-b7d853e361c5" : "59baa38e-7d86-410f-9f69-7416fe08a6ab",
       "7bd1865f-21fd-4ef3-abc9-7dd271667efa" : "07f9767c-a9aa-48ab-b1f7-b48eaaf29e5e",
-      "e44990e5-454b-49c2-870e-963c4015d384" : "a54b7f22-43c8-42be-8ef9-96023c484c2d"
+      "e44990e5-454b-49c2-870e-963c4015d384" : "a54b7f22-43c8-42be-8ef9-96023c484c2d",
+      "7ad56ecf-dbe5-42e3-a508-b7d853e361c5" : "59baa38e-7d86-410f-9f69-7416fe08a6ab"
     },
     "description" : "JBOSS-EAP 6.4.3 release",
     "status" : "VERIFYING",
-    "createTime" : 1440062648090
+    "createTime" : 1440062648090,
+    "updateTime" : 1441639817412
   }, {
     "id" : "06906f58-bf00-47dd-bde1-18e81f6163a9",
     "productId" : "df7a423b-0b4d-40f3-860c-85d178c12cf1",
@@ -43,7 +44,8 @@
     "verifications" : { },
     "description" : "BRMS 1.0.0.DR1 release",
     "status" : "NEW",
-    "createTime" : 1440062648090
+    "createTime" : 1440062648090,
+    "updateTime" : 1441639785630
   } ],
   "toolTypes" : [ {
     "id" : "df7a423b-0b4d-40f3-860c-85d178c12cf3",
@@ -79,7 +81,7 @@
       "description" : "jdk version >= 1.8",
       "minJDK" : "JDK8",
       "maxJDK" : "JDK8",
-      "fastReturn" : "True"
+      "fastReturn" : true
     },
     "0c61451b-a883-4b22-bc20-e5d5589e4d82" : {
       "@class" : "org.jboss.pnc.pvt.model.JDKCompatibleVerifyTool",
@@ -88,7 +90,7 @@
       "description" : "jdk version >= 1.6",
       "minJDK" : "JDK6",
       "maxJDK" : "JDK8",
-      "fastReturn" : "True"
+      "fastReturn" : true
     },
     "885db751-6d7f-4682-a9dc-431b2b3e5db8" : {
       "@class" : "org.jboss.pnc.pvt.model.SimpleJenkinsVerifyTool",
@@ -144,7 +146,9 @@
         "name" : "JDK-Check-For-JBOSS-EAP-1.0.0.DR1",
         "link" : null,
         "exception" : null,
-        "report": {},
+        "report" : {
+          "mainLog" : null
+        },
         "status" : "SUCCEEDED"
       },
       "waiveComment" : null
@@ -162,7 +166,9 @@
         "name" : "BadJob",
         "link" : "http://localhost:8090/job/BadJob/45/",
         "exception" : null,
-        "report": {},
+        "report" : {
+          "mainLog" : null
+        },
         "status" : "FAILED"
       },
       "waiveComment" : null
@@ -172,15 +178,24 @@
       "toolId" : "7ad56ecf-dbe5-42e3-a508-b7d853e361c5",
       "referenceReleaseId" : null,
       "releaseId" : "06906f58-bf00-47dd-bde1-18e81f6163a8",
-      "startTime" : 1441010064889,
-      "endTime" : 1441010095057,
+      "startTime" : 1441639822923,
+      "endTime" : 1441639853468,
       "status" : "PASSED",
       "execution" : {
         "type" : "jenkins",
         "name" : "GoodJob",
-        "link" : "http://localhost:8090/job/GoodJob/12/",
+        "link" : "http://localhost:8090/job/GoodJob/21/",
         "exception" : null,
-        "report": {},
+        "report" : {
+          "mainLog" : "Started by user anonymous\r\nBuilding in workspace /home/lgao/.jenkins/workspace/GoodJob\r\n[GoodJob] $ /bin/sh -xe /tmp/hudson7623818712280800691.sh\r\n+ sleep 20\r\n+ echo -e 'wake up'\r\nwake up\r\n+ mkdir -p output\r\n+ echo -e 'This is a report in output directory'\r\n+ echo -e 'This is a report in XML format in output directory'\r\nArchiving artifacts\r\nFinished: SUCCESS\r\n",
+          "externalLogs" : [ {
+            "name" : "report1.txt",
+            "content" : "This is a report in output directory\n"
+          }, {
+            "name" : "report1.xml",
+            "content" : "This is a report in XML format in output directory\n"
+          } ]
+        },
         "status" : "SUCCEEDED"
       },
       "waiveComment" : null
@@ -198,7 +213,9 @@
         "name" : "JBOSS-EAP-1.0.0.DR1-TempateJenkinsJob",
         "link" : "http://localhost:8090/job/JBOSS-EAP-1.0.0.DR1-TempateJenkinsJob/10/",
         "exception" : null,
-        "report": {},
+        "report" : {
+          "mainLog" : null
+        },
         "status" : "SUCCEEDED"
       },
       "waiveComment" : null
@@ -216,7 +233,9 @@
         "name" : "JBOSS-EAP-1.0.0.DR1-ScriptJenkinsTool",
         "link" : "http://localhost:8090/job/JBOSS-EAP-1.0.0.DR1-ScriptJenkinsTool/10/",
         "exception" : null,
-        "report": {},
+        "report" : {
+          "mainLog" : null
+        },
         "status" : "SUCCEEDED"
       },
       "waiveComment" : null

@@ -17,6 +17,8 @@
 
 package org.jboss.pnc.pvt.execution;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 /**
@@ -36,12 +38,20 @@ public class JenkinsConfiguration {
     public static final String KEY_JENKINS_CRUMB_FlAG = "jenkins.crumb.flag";
 
     private String url;
-    private String username;    
+    private String username;
     private String password;
     private long jobTimeOut;
     private boolean createIfJobMissing;
     private boolean overrideJob;
     private boolean crumbFlag;
+
+    public static JenkinsConfiguration defaultJenkinsProps() throws IOException {
+        Properties props = new Properties();
+        try (InputStream input = Executor.class.getResourceAsStream("/jenkins.properties")) {
+            props.load(input);
+        }
+        return JenkinsConfiguration.fromProperty(props);
+    }
 
     public static JenkinsConfiguration fromProperty(Properties props) {
         JenkinsConfiguration config = new JenkinsConfiguration();
@@ -55,7 +65,6 @@ public class JenkinsConfiguration {
         return config;
     }
 
-    
     /**
      * @return the crumbFlag
      */
@@ -70,87 +79,98 @@ public class JenkinsConfiguration {
         this.crumbFlag = crumbFlag;
     }
 
-
     /**
      * @return the url
      */
     public String getUrl() {
         return url;
     }
+
     /**
      * @param url the url to set
      */
     public void setUrl(String url) {
         this.url = url;
     }
+
     /**
      * @return the username
      */
     public String getUsername() {
         return username;
     }
+
     /**
      * @param username the username to set
      */
     public void setUsername(String username) {
         this.username = username;
     }
+
     /**
      * @return the password
      */
     public String getPassword() {
         return password;
     }
+
     /**
      * @param password the password to set
      */
     public void setPassword(String password) {
         this.password = password;
     }
+
     /**
      * @return the jobTimeOut
      */
     public long getJobTimeOut() {
         return jobTimeOut;
     }
+
     /**
      * @param jobTimeOut the jobTimeOut to set
      */
     public void setJobTimeOut(long jobTimeOut) {
         this.jobTimeOut = jobTimeOut;
     }
+
     /**
      * @return the createIfJobMissing
      */
     public boolean isCreateIfJobMissing() {
         return createIfJobMissing;
     }
+
     /**
      * @param createIfJobMissing the createIfJobMissing to set
      */
     public void setCreateIfJobMissing(boolean createIfJobMissing) {
         this.createIfJobMissing = createIfJobMissing;
     }
+
     /**
      * @return the overrideJob
      */
     public boolean isOverrideJob() {
         return overrideJob;
     }
+
     /**
      * @param overrideJob the overrideJob to set
      */
     public void setOverrideJob(boolean overrideJob) {
         this.overrideJob = overrideJob;
     }
+
     /* (non-Javadoc)
      * @see java.lang.Object#toString()
      */
     @Override
     public String toString() {
         return "JenkinsConfiguration [url=" + url + ", username=" + username + ", password=******, jobTimeOut="
-                + jobTimeOut + ", createIfJobMissing=" + createIfJobMissing + ", overrideJob=" + overrideJob + "]";
+                + jobTimeOut + ", createIfJobMissing=" + createIfJobMissing + ", overrideJob=" + overrideJob + ", crumbFlag="
+                + crumbFlag + "]";
     }
 
-    
 }

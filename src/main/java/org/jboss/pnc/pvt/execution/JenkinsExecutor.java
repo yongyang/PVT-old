@@ -19,8 +19,6 @@ package org.jboss.pnc.pvt.execution;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -33,7 +31,6 @@ import org.jboss.pnc.pvt.report.Report;
 import org.jboss.pnc.pvt.report.Report.ReportLog;
 
 import com.offbytwo.jenkins.JenkinsServer;
-import com.offbytwo.jenkins.client.JenkinsHttpClient;
 import com.offbytwo.jenkins.model.Artifact;
 import com.offbytwo.jenkins.model.Build;
 import com.offbytwo.jenkins.model.BuildResult;
@@ -56,7 +53,7 @@ class JenkinsExecutor extends Executor {
         super();
         try {
             if (jenkinsConfig == null) {
-                this.jenkinsConfig = getDefaultJenkinsProps();
+                this.jenkinsConfig = JenkinsConfiguration.defaultJenkinsProps();
             } else {
                 this.jenkinsConfig = jenkinsConfig;
             }
@@ -64,27 +61,6 @@ class JenkinsExecutor extends Executor {
             throw new IllegalStateException("Can't initialize Jenkins Executor.", e);
         }
 
-    }
-
-    private JenkinsServer getJenkinsServer() throws IOException {
-        String jenkinsUrl = this.jenkinsConfig.getUrl();
-        String username = this.jenkinsConfig.getUsername();
-        String password = this.jenkinsConfig.getPassword();
-        if (jenkinsUrl == null || jenkinsUrl.trim().length() == 0) {
-            throw new IllegalStateException("Jenkins URL must be specified.");
-        }
-        final JenkinsHttpClient jenkinsHttpClient;
-        try {
-            if (username != null && username.trim().length() > 0
-                    && password != null && password.trim().length() > 0) {
-                jenkinsHttpClient = new JenkinsHttpClient(new URI(jenkinsUrl), username, password);
-            } else {
-                jenkinsHttpClient = new JenkinsHttpClient(new URI(jenkinsUrl));
-            }
-        } catch (URISyntaxException e) {
-            throw new IOException("Wrong JenkinsURL: " + jenkinsUrl, e);
-        }
-        return new JenkinsServer(jenkinsHttpClient);
     }
 
     @Override
@@ -107,7 +83,7 @@ class JenkinsExecutor extends Executor {
             url.append(buildNumber);
             url.append("/");
             execution.setLink(url.toString());
-            startMonitor(jobId, buildNumber, execution, callBack);
+            startMonitor(jobId, buildNumber, jenkinsExe, callBack);
         } catch (IOException e) {
             execution.setException(e);
             if (callBack != null) {
@@ -117,7 +93,7 @@ class JenkinsExecutor extends Executor {
         }
     }
 
-    private void startMonitor(String jobName, int buildNumber, final Execution execution, final CallBack callBack) {
+    private void startMonitor(String jobName, int buildNumber, final JenkinsExecution execution, final CallBack callBack) {
         AtomicInteger statusRetrieveFailed = new AtomicInteger(0);
         final Runnable checking = new Runnable() {
 
@@ -171,6 +147,12 @@ class JenkinsExecutor extends Executor {
                             List<Artifact> artiFacts = jenkinsBuildDetails.getArtifacts();
                             if (artiFacts != null && artiFacts.size() > 0) {
                                 for (Artifact arti: artiFacts) {
+                                    String logFilePattern =execution.getLogFilePattern(); 
+                                    if (logFilePattern != null && logFilePattern.trim().length() > 0) {
+                                        if (arti.getRelativePath().matches(logFilePattern) == false) {
+                                            continue;
+                                        }
+                                    }
                                     try(InputStream input = jenkinsBuildDetails.downloadArtifact(arti)) {
                                         String artiLog = IOUtils.toString(input);
                                         ReportLog reportLog = new ReportLog(arti.getFileName(), artiLog);
@@ -193,6 +175,12 @@ class JenkinsExecutor extends Executor {
                             List<Artifact> artiFacts = jenkinsBuildDetails.getArtifacts();
                             if (artiFacts != null && artiFacts.size() > 0) {
                                 for (Artifact arti: artiFacts) {
+                                    String logFilePattern =execution.getLogFilePattern(); 
+                                    if (logFilePattern != null && logFilePattern.trim().length() > 0) {
+                                        if (arti.getRelativePath().matches(logFilePattern) == false) {
+                                            continue;
+                                        }
+                                    }
                                     try(InputStream input = jenkinsBuildDetails.downloadArtifact(arti)) {
                                         String artiLog = IOUtils.toString(input);
                                         ReportLog reportLog = new ReportLog(arti.getFileName(), artiLog);
@@ -247,7 +235,7 @@ class JenkinsExecutor extends Executor {
     }
 
     private Build getBuild(String jobName, int buildNumber) throws IOException {
-        JenkinsServer jenkinsServer = getJenkinsServer();
+        JenkinsServer jenkinsServer = getJenkinsServer(this.jenkinsConfig);
         JobWithDetails jenkinsJob = jenkinsServer.getJob(jobName);
         if (jenkinsJob != null) {
             for (Build build: jenkinsJob.getBuilds()) {
@@ -273,7 +261,7 @@ class JenkinsExecutor extends Executor {
      * Gets or create a job by its name
      */
     private JobWithDetails getOrCreateJenkinsJob(String jobName, String jobContent) throws IOException, ExecutionException {
-        JenkinsServer jenkinsServer = getJenkinsServer();
+        JenkinsServer jenkinsServer = getJenkinsServer(this.jenkinsConfig);
         JobWithDetails jenkinsJob = jenkinsServer.getJob(jobName);
         if (jenkinsJob == null && this.jenkinsConfig.isCreateIfJobMissing()) {
             logger.info("Start to create the Jenkins job");
@@ -287,7 +275,7 @@ class JenkinsExecutor extends Executor {
     }
 
     private JobWithDetails updateJenkinsJob(String jobName, String jobContent) throws IOException, ExecutionException {
-        JenkinsServer jenkinsServer = getJenkinsServer();
+        JenkinsServer jenkinsServer = getJenkinsServer(this.jenkinsConfig);
         if (jobContent == null) {
             throw new ExecutionException("No job content found for: " + jobName);
         }
@@ -300,7 +288,7 @@ class JenkinsExecutor extends Executor {
      * 
      */
     private JobWithDetails createJenkinsJob(String jobName, String jobContent) throws IOException, ExecutionException {
-        JenkinsServer jenkinsServer = getJenkinsServer();
+        JenkinsServer jenkinsServer = getJenkinsServer(this.jenkinsConfig);
         if (jobContent == null) {
             throw new ExecutionException("No job content found for: " + jobName);
         }

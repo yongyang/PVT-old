@@ -39,7 +39,7 @@ public class TemplateJenkinsVerifyTool extends SimpleJenkinsVerifyTool {
 
     protected void doExecute(final Execution execution, final Verification verification) {
         try {
-            JenkinsConfiguration jenkinsConfig = Executor.getDefaultJenkinsProps();
+            JenkinsConfiguration jenkinsConfig = JenkinsConfiguration.defaultJenkinsProps();
             jenkinsConfig.setCreateIfJobMissing(true);
             jenkinsConfig.setOverrideJob(true);
             verification.setStatus(Verification.Status.IN_PROGRESS);

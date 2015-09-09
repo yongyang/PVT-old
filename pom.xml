@@ -27,6 +27,7 @@
       <version.javax.servlet>1.0.2.Final</version.javax.servlet>
       <version.javax.websocket>1.0.0.Final</version.javax.websocket>
       <version.javax.validation>1.1.0.Final</version.javax.validation>
+      <version.jaxen>1.1.6</version.jaxen>
       <version.jboss.logging>3.2.1.Final</version.jboss.logging>
       <version.junit>4.12</version.junit>
       <version.osgi>4.2.0</version.osgi>
@@ -73,6 +74,12 @@
         <artifactId>validation-api</artifactId>
         <version>${version.javax.validation}</version>
         <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>jaxen</groupId>
+        <artifactId>jaxen</artifactId>
+        <version>${version.jaxen}</version>
       </dependency>
 
       <dependency>
@@ -199,6 +206,10 @@
     <dependency>
       <groupId>javax.validation</groupId>
       <artifactId>validation-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>jaxen</groupId>
+      <artifactId>jaxen</artifactId>
     </dependency>
 
     <dependency>

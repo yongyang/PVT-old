@@ -150,12 +150,28 @@ public abstract class Execution implements Serializable {
 
         private final String jobContent;
         private final Map<String, String> jobParams;
+        
+        private String logFilePattern;
 
         @JsonCreator
         JenkinsExecution(final @JsonProperty("name") String name, @JsonProperty("jobContent") final String jobContent, @JsonProperty("jobParams") final Map<String, String> jobParams) {
             super(name);
             this.jobContent = jobContent;
             this.jobParams = jobParams;
+        }
+
+        /**
+         * @return the logFilePattern
+         */
+        public synchronized String getLogFilePattern() {
+            return logFilePattern;
+        }
+
+        /**
+         * @param logFilePattern the logFilePattern to set
+         */
+        public synchronized void setLogFilePattern(String logFilePattern) {
+            this.logFilePattern = logFilePattern;
         }
 
         /**

@@ -95,7 +95,7 @@ public class VerifyToolTest {
         
         URL zipURL = getClass().getClassLoader().getResource("version-test.zip");
         release.setDistributions(zipURL.toString());
-        VerifyParameter param = new VerifyParameter("toolId", null, release);
+        VerifyParameter param = new VerifyParameter("toolId", null, release, null, false);
         Verification verification = tool.verify(param);
         latch.await(600, TimeUnit.SECONDS); // 10 minutes
         Assert.assertEquals(Verification.Status.PASSED, verification.getStatus());
