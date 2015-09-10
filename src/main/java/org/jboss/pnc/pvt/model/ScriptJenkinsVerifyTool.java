@@ -123,11 +123,11 @@ public class ScriptJenkinsVerifyTool extends TemplateJenkinsVerifyTool implement
         if (localScript == null) {
             localScript = "";
         }
-        Map<String, Object> variableMap = new HashMap<>();
+        Map<String, String> variableMap = new HashMap<>();
         variableMap.put("paramProps", getStrParams());
-        variableMap.put("script", localScript);
-        variableMap.put("publishers", getPublishers());
-        return StringFormatter.format(SHELL_SCRIPT_JENKINS_TEMPLTE, variableMap);
+        variableMap.put("jenkinsScript", localScript);
+        variableMap.put("jenkinsPublishers", getPublishers());
+        return StringFormatter.replaceVariables(SHELL_SCRIPT_JENKINS_TEMPLTE, variableMap);
     }
 
     private String getPublishers() {
@@ -176,9 +176,10 @@ public class ScriptJenkinsVerifyTool extends TemplateJenkinsVerifyTool implement
                 marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
                 marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
                 marshaller.marshal(paramProp, sw);
-                
+
             } catch (JAXBException e) {
-                throw new RuntimeException("Can't marshalle Jenkins String Parameters of ScriptJenkinsVerityTool: " + getName(), e);
+                throw new RuntimeException(
+                        "Can't marshalle Jenkins String Parameters of ScriptJenkinsVerityTool: " + getName(), e);
             }
             StringBuilder sb = new StringBuilder();
             sb.append("<properties>\n  ");

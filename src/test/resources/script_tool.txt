@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+  <hudson.model.ParametersDefinitionProperty>
+    <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+            <name>CURRENT_ZIP_URL</name>
+            <description>The first zip url of current release</description>
+            <defaultValue></defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+            <name>REF_ZIP_URL</name>
+            <description>The firsh zip url of reference release</description>
+            <defaultValue></defaultValue>
+        </hudson.model.StringParameterDefinition>
+    </parameterDefinitions>
+</hudson.model.ParametersDefinitionProperty>
+</properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>
+        # download dist-diff tool
+wget -O dist-diff.jar http://10.66.79.92/dist-diff2-jar-with-dependencies.jar
+# download zip 1 and unzip it
+wget -O current.zip ${CURRENT_ZIP_URL}
+unzip -q -d current current.zip
+# download zip 2 and unzip it
+wget -O previous.zip ${REF_ZIP_URL}
+unzip -q -d previous previous.zip
+java -jar dist-diff.jar -a current -b previous -i
+
+      </command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+  <hudson.tasks.ArtifactArchiver>
+    <artifacts>output/*</artifacts>
+    <allowEmptyArchive>true</allowEmptyArchive>
+    <onlyIfSuccessful>false</onlyIfSuccessful>
+    <fingerprint>false</fingerprint>
+    <defaultExcludes>true</defaultExcludes>
+</hudson.tasks.ArtifactArchiver>
+</publishers>
+  <buildWrappers/>
+</project>

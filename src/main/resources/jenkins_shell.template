@@ -14,10 +14,10 @@
   <builders>
     <hudson.tasks.Shell>
       <command>
-        ${script}
+        ${jenkinsScript}
       </command>
     </hudson.tasks.Shell>
   </builders>
-  ${publishers}
+  ${jenkinsPublishers}
   <buildWrappers/>
 </project>

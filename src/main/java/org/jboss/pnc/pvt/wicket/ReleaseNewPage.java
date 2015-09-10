@@ -56,7 +56,7 @@ public class ReleaseNewPage extends TemplatePage {
         releaseForm = new Form("form-release", new CompoundPropertyModel(release));
 
 
-        DropDownChoice<Release> previousReleaseIdDropDownChoice = new DropDownChoice<Release>("previous_release_id",
+        DropDownChoice<Release> previousReleaseIdDropDownChoice = new DropDownChoice<Release>("referenceReleaseId",
                 Model.of(),
                 dao.getPvtModel().getReleasesByProduct(release.getProductId()),
                 new IChoiceRenderer<Release>() {

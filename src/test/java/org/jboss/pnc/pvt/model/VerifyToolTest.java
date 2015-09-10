@@ -17,12 +17,17 @@
 
 package org.jboss.pnc.pvt.model;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.wicket.util.io.IOUtils;
 import org.jboss.pnc.pvt.execution.CallBack;
 import org.jboss.pnc.pvt.execution.Execution;
 import org.jboss.pnc.pvt.execution.ExecutionException;
@@ -104,4 +109,28 @@ public class VerifyToolTest {
         Assert.assertEquals(expected, verification.getExecution().getReport().getMainLog());
     }
 
+    @Test
+    public void testScriptPattern() throws Exception {
+        ScriptJenkinsVerifyTool tool = new ScriptJenkinsVerifyTool();
+        String script = "# download dist-diff tool\n"
+                + "wget -O dist-diff.jar http://10.66.79.92/dist-diff2-jar-with-dependencies.jar\n"
+                + "# download zip 1 and unzip it\n"
+                + "wget -O current.zip ${CURRENT_ZIP_URL}\n"
+                + "unzip -q -d current current.zip\n"
+                + "# download zip 2 and unzip it\n"
+                + "wget -O previous.zip ${REF_ZIP_URL}\n"
+                + "unzip -q -d previous previous.zip\n"
+                + "java -jar dist-diff.jar -a current -b previous -i\n";
+        tool.setScript(script);
+        tool.setArchiver("output/*");
+        List<String> params = new ArrayList<>();
+        params.add("CURRENT_ZIP_URL");
+        params.add("REF_ZIP_URL");
+        tool.setStringParams(params);
+
+        String jenkinsConfigXML = tool.getJenkinsConfigXML();
+        URL expectedLog = getClass().getClassLoader().getResource("script_tool.txt");
+        String expected = new String(Files.readAllBytes(Paths.get(expectedLog.toURI())));
+        Assert.assertEquals(expected, jenkinsConfigXML);
+    }
 }

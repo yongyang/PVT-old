@@ -21,7 +21,7 @@
     "productId" : "df7a423b-0b4d-40f3-860c-85d178c12cf0",
     "name" : "1.0.0.DR1",
     "referenceReleaseId" : null,
-    "distributions" : "http://download.devel.redhat.com/released/JBEAP-6/6.4.3/jboss-eap-6.4.3-full-build.zip",
+    "distributions" : "http://download.devel.redhat.com/released/JBEAP-6/6.4.2/jboss-eap-6.4.2-full-build.zip",
     "tools" : [ "e44990e5-454b-49c2-870e-963c4015d384" ],
     "verifications" : {
       "096ffbbe-b7ea-4f36-954a-ea639b7967ad" : "7c258a5e-a084-4b82-ab69-2a03c5cae6f1",
@@ -33,7 +33,7 @@
     "description" : "JBOSS-EAP 6.4.3 release",
     "status" : "REJECTED",
     "createTime" : 1440062648090,
-    "updateTime" : 1441870406481
+    "updateTime" : 1441871364099
   }, {
     "id" : "06906f58-bf00-47dd-bde1-18e81f6163a9",
     "productId" : "df7a423b-0b4d-40f3-860c-85d178c12cf1",
@@ -46,6 +46,18 @@
     "status" : "VERIFYING",
     "createTime" : 1440062648090,
     "updateTime" : 1441639785630
+  }, {
+    "id" : "9048d848-2c57-4c14-8f36-e0e5e3f9bd1b",
+    "productId" : "df7a423b-0b4d-40f3-860c-85d178c12cf0",
+    "name" : "1.0.0.DR2",
+    "referenceReleaseId" : "06906f58-bf00-47dd-bde1-18e81f6163a8",
+    "distributions" : "http://download.devel.redhat.com/released/JBEAP-6/6.4.3/jboss-eap-6.4.3-full-build.zip",
+    "tools" : [ "a4d685cf-04a9-499d-9097-426106721233" ],
+    "verifications" : { },
+    "description" : null,
+    "status" : "NEW",
+    "createTime" : 1441871291411,
+    "updateTime" : 1441871456851
   } ],
   "toolTypes" : [ {
     "id" : "df7a423b-0b4d-40f3-860c-85d178c12cf3",
@@ -132,6 +144,17 @@
       "description" : "Check OSGI compatible and redhat-X suffix",
       "checkOSGI" : true,
       "versionPattern" : ".+[\\.|-]redhat-\\d+$"
+    },
+    "a4d685cf-04a9-499d-9097-426106721233" : {
+      "@class" : "org.jboss.pnc.pvt.model.ScriptJenkinsVerifyTool",
+      "id" : "a4d685cf-04a9-499d-9097-426106721233",
+      "name" : "zip-diff",
+      "description" : "The demo zip-diff tool used to run zip difference for 2 zip files",
+      "jobId" : null,
+      "jenkinsConfigXML" : "<?xml version='1.0' encoding='UTF-8'?>\n<project>\n  <actions/>\n  <description></description>\n  <keepDependencies>false</keepDependencies>\n  <properties>\n  <hudson.model.ParametersDefinitionProperty>\n    <parameterDefinitions>\n        <hudson.model.StringParameterDefinition>\n            <name>CURRENT_ZIP_URL</name>\n            <description>The first zip url of current release</description>\n            <defaultValue></defaultValue>\n        </hudson.model.StringParameterDefinition>\n        <hudson.model.StringParameterDefinition>\n            <name>REF_ZIP_URL</name>\n            <description>The firsh zip url of reference release</description>\n            <defaultValue></defaultValue>\n        </hudson.model.StringParameterDefinition>\n    </parameterDefinitions>\n</hudson.model.ParametersDefinitionProperty>\n</properties>\n  <scm class=\"hudson.scm.NullSCM\"/>\n  <canRoam>true</canRoam>\n  <disabled>false</disabled>\n  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>\n  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>\n  <triggers/>\n  <concurrentBuild>false</concurrentBuild>\n  <builders>\n    <hudson.tasks.Shell>\n      <command>\n        # download dist-diff tool\r\nwget -O dist-diff.jar http://10.66.79.92/dist-diff2-jar-with-dependencies.jar\r\n\r\n# download zip 1 and unzip it\r\nwget -O current.zip <publishers>\n  <hudson.tasks.ArtifactArchiver>\n    <artifacts>output/*</artifacts>\n    <allowEmptyArchive>true</allowEmptyArchive>\n    <onlyIfSuccessful>false</onlyIfSuccessful>\n    <fingerprint>false</fingerprint>\n    <defaultExcludes>true</defaultExcludes>\n</hudson.tasks.ArtifactArchiver>\n</publishers>\r\nunzip -q -d current current.zip\r\n\r\n# download zip 2 and unzip it\r\nwget -O previous.zip ${REF_ZIP_URL}\r\nunzip -q -d previous previous.zip\r\n\r\njava -jar dist-diff.jar -a current -b previous -i\n      </command>\n    </hudson.tasks.Shell>\n  </builders>\n  ${publishers}\n  <buildWrappers/>\n</project>",
+      "script" : "# download dist-diff tool\r\nwget -O dist-diff.jar http://10.66.79.92/dist-diff2-jar-with-dependencies.jar\r\n\r\n# download zip 1 and unzip it\r\nwget -O current.zip ${CURRENT_ZIP_URL}\r\nunzip -q -d current current.zip\r\n\r\n# download zip 2 and unzip it\r\nwget -O previous.zip ${REF_ZIP_URL}\r\nunzip -q -d previous previous.zip\r\n\r\njava -jar dist-diff.jar -a current -b previous -i",
+      "archiver" : "output/*",
+      "stringParams" : [ "CURRENT_ZIP_URL", "REF_ZIP_URL" ]
     }
   },
   "verifications" : {
