@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.dom4j.DocumentException;
 import org.jboss.logging.Logger;
 import org.jboss.pnc.pvt.execution.Execution;
 import org.jboss.pnc.pvt.execution.ExecutionException;
@@ -34,6 +35,11 @@ public class TemplateJenkinsVerifyTool extends SimpleJenkinsVerifyTool {
     @Override
     protected Execution createJenkinsExecution(VerifyParameter param) {
         Map<String, String> jobParams = new HashMap<>();
+        try {
+            jobParams = parseJobParamFromJobXML(param, getJenkinsConfigXML());
+        } catch (DocumentException e) {
+            logger.warn("Can't get parameters of job: " + getJobName(param), e);
+        }
         return Execution.createJenkinsExecution(getJobName(param), getJenkinsConfigXML(), jobParams);
     }
 

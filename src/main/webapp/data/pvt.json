@@ -22,18 +22,18 @@
     "name" : "1.0.0.DR1",
     "referenceReleaseId" : null,
     "distributions" : "http://download.devel.redhat.com/released/JBEAP-6/6.4.3/jboss-eap-6.4.3-full-build.zip",
-    "tools" : [ "7ad56ecf-dbe5-42e3-a508-b7d853e361c5" ],
+    "tools" : [ "e44990e5-454b-49c2-870e-963c4015d384" ],
     "verifications" : {
       "096ffbbe-b7ea-4f36-954a-ea639b7967ad" : "7c258a5e-a084-4b82-ab69-2a03c5cae6f1",
       "885db751-6d7f-4682-a9dc-431b2b3e5db8" : "5f6bee6f-7f0d-44b2-bde7-342026d760e4",
       "7bd1865f-21fd-4ef3-abc9-7dd271667efa" : "07f9767c-a9aa-48ab-b1f7-b48eaaf29e5e",
-      "e44990e5-454b-49c2-870e-963c4015d384" : "a54b7f22-43c8-42be-8ef9-96023c484c2d",
-      "7ad56ecf-dbe5-42e3-a508-b7d853e361c5" : "59baa38e-7d86-410f-9f69-7416fe08a6ab"
+      "7ad56ecf-dbe5-42e3-a508-b7d853e361c5" : "59baa38e-7d86-410f-9f69-7416fe08a6ab",
+      "e44990e5-454b-49c2-870e-963c4015d384" : "a54b7f22-43c8-42be-8ef9-96023c484c2d"
     },
     "description" : "JBOSS-EAP 6.4.3 release",
-    "status" : "VERIFYING",
+    "status" : "REJECTED",
     "createTime" : 1440062648090,
-    "updateTime" : 1441639817412
+    "updateTime" : 1441870406481
   }, {
     "id" : "06906f58-bf00-47dd-bde1-18e81f6163a9",
     "productId" : "df7a423b-0b4d-40f3-860c-85d178c12cf1",
@@ -43,7 +43,7 @@
     "tools" : [ ],
     "verifications" : { },
     "description" : "BRMS 1.0.0.DR1 release",
-    "status" : "NEW",
+    "status" : "VERIFYING",
     "createTime" : 1440062648090,
     "updateTime" : 1441639785630
   } ],
@@ -120,8 +120,10 @@
       "name" : "ScriptJenkinsTool",
       "description" : "This is a Script based Jenkins verify tool. \r\n\r\nIt supports bash shell.",
       "jobId" : null,
-      "jenkinsConfigXML" : "<?xml version='1.0' encoding='UTF-8'?>\n<project>\n<actions/>\n<description></description>\n<keepDependencies>false</keepDependencies>\n<properties/>\n<scm class=\"hudson.scm.NullSCM\"/>\n<canRoam>true</canRoam>\n<disabled>false</disabled>\n<blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>\n<blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>\n<triggers/>\n<concurrentBuild>false</concurrentBuild>\n<builders>\n<hudson.tasks.Shell>\n<command>\n  sleep 20;\r\necho -e \"wake up from a script\";\n</command>\n</hudson.tasks.Shell>\n</builders>\n<publishers/>\n<buildWrappers/>\n</project>",
-      "script" : "sleep 20;\r\necho -e \"wake up from a script\";"
+      "jenkinsConfigXML" : "<?xml version='1.0' encoding='UTF-8'?>\n<project>\n  <actions/>\n  <description></description>\n  <keepDependencies>false</keepDependencies>\n  <properties>\n  <hudson.model.ParametersDefinitionProperty>\n    <parameterDefinitions>\n        <hudson.model.StringParameterDefinition>\n            <name>CURRENT_RELEASE_NAME</name>\n            <description>The current release name</description>\n            <defaultValue></defaultValue>\n        </hudson.model.StringParameterDefinition>\n        <hudson.model.StringParameterDefinition>\n            <name>CURRENT_ZIP_URL</name>\n            <description>The first zip url of current release</description>\n            <defaultValue></defaultValue>\n        </hudson.model.StringParameterDefinition>\n        <hudson.model.StringParameterDefinition>\n            <name>CURRENT_PRODUCT_NAME</name>\n            <description>The current product name</description>\n            <defaultValue></defaultValue>\n        </hudson.model.StringParameterDefinition>\n    </parameterDefinitions>\n</hudson.model.ParametersDefinitionProperty>\n</properties>\n  <scm class=\"hudson.scm.NullSCM\"/>\n  <canRoam>true</canRoam>\n  <disabled>false</disabled>\n  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>\n  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>\n  <triggers/>\n  <concurrentBuild>false</concurrentBuild>\n  <builders>\n    <hudson.tasks.Shell>\n      <command>\n        echo -e \"Current product name: $CURRENT_PRODUCT_NAME\"\r\necho -e \"Current release name: $CURRENT_RELEASE_NAME\"\r\necho -e \"Current zip url: $CURRENT_ZIP_URL\"\r\n\r\nmkdir -p output\r\necho -e \"This is a plain text log\" > output/log.txt\n      </command>\n    </hudson.tasks.Shell>\n  </builders>\n  <publishers>\n  <hudson.tasks.ArtifactArchiver>\n    <artifacts>output/*</artifacts>\n    <allowEmptyArchive>true</allowEmptyArchive>\n    <onlyIfSuccessful>false</onlyIfSuccessful>\n    <fingerprint>false</fingerprint>\n    <defaultExcludes>true</defaultExcludes>\n</hudson.tasks.ArtifactArchiver>\n</publishers>\n  <buildWrappers/>\n</project>",
+      "script" : "echo -e \"Current product name: $CURRENT_PRODUCT_NAME\"\r\necho -e \"Current release name: $CURRENT_RELEASE_NAME\"\r\necho -e \"Current zip url: $CURRENT_ZIP_URL\"\r\n\r\nmkdir -p output\r\necho -e \"This is a plain text log\" > output/log.txt",
+      "archiver" : "output/*",
+      "stringParams" : [ "CURRENT_PRODUCT_NAME", "CURRENT_RELEASE_NAME", "CURRENT_ZIP_URL" ]
     },
     "c81446b7-1cf9-446d-b963-132df22d6e8c" : {
       "@class" : "org.jboss.pnc.pvt.model.VersionConventionVerifyTool",
@@ -169,7 +171,8 @@
         "report" : {
           "mainLog" : null
         },
-        "status" : "FAILED"
+        "status" : "FAILED",
+        "logFilePattern" : null
       },
       "waiveComment" : null
     },
@@ -196,7 +199,8 @@
             "content" : "This is a report in XML format in output directory\n"
           } ]
         },
-        "status" : "SUCCEEDED"
+        "status" : "SUCCEEDED",
+        "logFilePattern" : null
       },
       "waiveComment" : null
     },
@@ -216,7 +220,8 @@
         "report" : {
           "mainLog" : null
         },
-        "status" : "SUCCEEDED"
+        "status" : "SUCCEEDED",
+        "logFilePattern" : null
       },
       "waiveComment" : null
     },
@@ -225,18 +230,23 @@
       "toolId" : "e44990e5-454b-49c2-870e-963c4015d384",
       "referenceReleaseId" : null,
       "releaseId" : "06906f58-bf00-47dd-bde1-18e81f6163a8",
-      "startTime" : 1441010065050,
-      "endTime" : 1441010115295,
+      "startTime" : 1441870433852,
+      "endTime" : 1441870444026,
       "status" : "PASSED",
       "execution" : {
         "type" : "jenkins",
         "name" : "JBOSS-EAP-1.0.0.DR1-ScriptJenkinsTool",
-        "link" : "http://localhost:8090/job/JBOSS-EAP-1.0.0.DR1-ScriptJenkinsTool/10/",
+        "link" : "http://localhost:8090/job/JBOSS-EAP-1.0.0.DR1-ScriptJenkinsTool/19/",
         "exception" : null,
         "report" : {
-          "mainLog" : null
+          "mainLog" : "Started by user anonymous\r\nBuilding in workspace /home/lgao/.jenkins/workspace/JBOSS-EAP-1.0.0.DR1-ScriptJenkinsTool\r\n[JBOSS-EAP-1.0.0.DR1-ScriptJenkinsTool] $ /bin/sh -xe /tmp/hudson1580455544031212555.sh\r\n+ echo -e 'Current product name: JBOSS-EAP'\r\nCurrent product name: JBOSS-EAP\r\n+ echo -e 'Current release name: 1.0.0.DR1'\r\nCurrent release name: 1.0.0.DR1\r\n+ echo -e 'Current zip url: http://download.devel.redhat.com/released/JBEAP-6/6.4.3/jboss-eap-6.4.3-full-build.zip'\r\nCurrent zip url: http://download.devel.redhat.com/released/JBEAP-6/6.4.3/jboss-eap-6.4.3-full-build.zip\r\n+ mkdir -p output\r\n+ echo -e 'This is a plain text log'\r\nArchiving artifacts\r\nFinished: SUCCESS\r\n",
+          "externalLogs" : [ {
+            "name" : "log.txt",
+            "content" : "This is a plain text log\n"
+          } ]
         },
-        "status" : "SUCCEEDED"
+        "status" : "SUCCEEDED",
+        "logFilePattern" : null
       },
       "waiveComment" : null
     }

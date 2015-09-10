@@ -10,7 +10,6 @@ import org.jboss.pnc.pvt.model.VerifyTool;
  * @author <a href="mailto:lgao@redhat.com">Lin Gao</a>
  *
  */
-@SuppressWarnings({ "serial"})
 public class ScriptJenkinsVerifyToolEditPage extends ScriptJenkinsVerifyToolNewPage {
 
     private static final long serialVersionUID = 1L;

@@ -83,13 +83,7 @@ public class SimpleJenkinsVerifyTool extends VerifyTool {
             if (jobXml == null) {
                 return Collections.emptyMap();
             }
-            ParamJenkinsJob paramJob = new ParamJenkinsJob(jobXml);
-            List<StringParameterDefinition> stringParams = paramJob.getStringParams();
-            Map<String, String> params = new HashMap<>();
-            for (StringParameterDefinition spd: stringParams) {
-                params.put(spd.getName(), verifyParam.getProperty(spd.getName(), spd.getDefaultValue()));
-            }
-            return params;
+            return parseJobParamFromJobXML(verifyParam, jobXml);
         } catch (IOException e) {
             logger.warn("Can't get parameters of job: " + jobName, e);
         } catch (DocumentException e) {
@@ -98,6 +92,17 @@ public class SimpleJenkinsVerifyTool extends VerifyTool {
         return Collections.emptyMap();
     }
 
+    protected Map<String, String> parseJobParamFromJobXML(VerifyParameter verifyParam, String jobXml) throws DocumentException {
+        ParamJenkinsJob paramJob = new ParamJenkinsJob(jobXml);
+        List<StringParameterDefinition> stringParams = paramJob.getStringParams();
+        Map<String, String> params = new HashMap<>();
+        for (StringParameterDefinition spd: stringParams) {
+            params.put(spd.getName(), verifyParam.getProperty(spd.getName(), spd.getDefaultValue()));
+        }
+        return params;
+    }
+
+    
     protected String getJobName(VerifyParameter param) {
         String jobId = getJobId();
         if (jobId != null && jobId.trim().length() > 0) {
