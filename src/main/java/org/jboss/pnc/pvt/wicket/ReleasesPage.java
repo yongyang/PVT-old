@@ -78,20 +78,18 @@ public class ReleasesPage extends TemplatePage{
                 });
 
                 Label releaseStatusLabel = new Label("release_status", new PropertyModel(item.getModel(), "status"));
-                if(item.getModelObject().getStatus().equals(Release.Status.NEW) || item.getModelObject().getStatus().equals(Release.Status.VERIFYING)) {
-                    releaseStatusLabel.add(new AbstractAjaxTimerBehavior(Duration.seconds(5L)) {
-                        @Override
-                        protected void onTimer(AjaxRequestTarget target) {
-                            updateReleaseStatus(release);
-                            target.add(releaseStatusLabel);
-                            if (releaseStatusLabel.getDefaultModel().getObject().equals(Release.Status.NEED_INSPECT) ||
-                                    releaseStatusLabel.getDefaultModel().getObject().equals(Release.Status.REJECTED) ||
-                                    releaseStatusLabel.getDefaultModel().getObject().equals(Release.Status.PASSED)) {
-                                stop(target);
-                            }
+                releaseStatusLabel.add(new AbstractAjaxTimerBehavior(Duration.seconds(5L)) {
+                    @Override
+                    protected void onTimer(AjaxRequestTarget target) {
+                        updateReleaseStatus(release);
+                        target.add(releaseStatusLabel);
+                        if (releaseStatusLabel.getDefaultModel().getObject().equals(Release.Status.NEED_INSPECT) ||
+                                releaseStatusLabel.getDefaultModel().getObject().equals(Release.Status.REJECTED) ||
+                                releaseStatusLabel.getDefaultModel().getObject().equals(Release.Status.PASSED)) {
+                            stop(target);
                         }
-                    });
-                }
+                    }
+                });
 
                 item.add(releaseStatusLabel);
 
@@ -104,7 +102,17 @@ public class ReleasesPage extends TemplatePage{
                         Link<String> toolLink = new Link<String>("release_tool", Model.of(pvtModel.getVerifyToolById(toolId).getName())) {
                             @Override
                             public void onClick() {
-                                //TODO: open tool
+                                VerifyTool tool = pvtModel.getVerifyToolById(toolId);
+                                PageParameters pp = new PageParameters();
+                                pp.add("id", tool.getId());
+                                String newPageClassName = ToolsPage.class.getPackage().getName() + tool.getClass().getName().substring(tool.getClass().getName().lastIndexOf(".")) + "EditPage";
+                                try {
+                                    Class newPageClass = getClass().getClassLoader().loadClass(newPageClassName);
+                                    setResponsePage(newPageClass, pp);
+                                }
+                                catch (ClassNotFoundException e) {
+                                    throw new RuntimeException(e);
+                                }
                             }
 
                             @Override
@@ -112,6 +120,7 @@ public class ReleasesPage extends TemplatePage{
                                 return Model.of(pvtModel.getVerifyToolById(toolId).getName());
                             }
                         };
+
                         item.add(toolLink);
 
                         String verificationId = release.getVerificationIdByToolId(toolId);
