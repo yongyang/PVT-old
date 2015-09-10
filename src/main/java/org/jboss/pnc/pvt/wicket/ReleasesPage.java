@@ -78,7 +78,7 @@ public class ReleasesPage extends TemplatePage{
                 });
 
                 Label releaseStatusLabel = new Label("release_status", new PropertyModel(item.getModel(), "status"));
-                releaseStatusLabel.add(new AbstractAjaxTimerBehavior(Duration.seconds(5L)) {
+                releaseStatusLabel.add(new AbstractAjaxTimerBehavior(Duration.seconds(15L)) {
                     @Override
                     protected void onTimer(AjaxRequestTarget target) {
                         updateReleaseStatus(release);
@@ -249,7 +249,7 @@ public class ReleasesPage extends TemplatePage{
 
 
     private void updateReleaseStatus(Release release) {
-        Release.Status status = Release.Status.VERIFYING;
+        Release.Status status = release.getStatus();
         for(String verificationId : release.getVerifications().values()){
             Verification verification = PVTApplication.getDAO().getPvtModel().getVerificationById(verificationId);
             if(verification.getStatus().equals(Verification.Status.IN_PROGRESS)) {
@@ -271,9 +271,10 @@ public class ReleasesPage extends TemplatePage{
                 status = Release.Status.PASSED;
             }
         }
-
-        release.setStatus(status);
-        PVTApplication.getDAO().persist();
+        if(status != release.getStatus()) {
+            release.setStatus(status);
+            PVTApplication.getDAO().persist();
+        }
     }
 
 }
