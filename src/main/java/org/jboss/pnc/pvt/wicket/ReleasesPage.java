@@ -174,8 +174,10 @@ public class ReleasesPage extends TemplatePage{
                             public IModel<?> getBody() {
                                 return Model.of(item.getModelObject());
                             }
+
                         };
-                        link.add(AttributeModifier.append("target", "_blank"));
+//                        link.add(AttributeModifier.append("target", "_blank")); // target set in html
+                        link.add(AttributeModifier.append("title", item.getModelObject()));
                         item.add(link);
                     }
                 });
