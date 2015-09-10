@@ -155,6 +155,17 @@ public class PVTModel implements Serializable {
 		tools.put(tool.getId(), tool);
 	}
 
+	public boolean removeTool(VerifyTool tool) {
+		boolean success = true;
+		for(Verification verification : verifications.values()) {
+			if(verification.getToolId().equals(tool.getId())) {
+				success = false;
+				break;
+			}
+		}
+		return success;
+	}
+
 	public Map<String, Verification> getVerifications() {
 		return verifications;
 	}
@@ -170,6 +181,18 @@ public class PVTModel implements Serializable {
 
 	public void addVerification(Verification verification) {
 		verifications.put(verification.getId(), verification);
+	}
+
+	public boolean removeVerification(Verification verification) {
+		boolean success = true;
+		for (Release p : releases){
+			if (p.getVerifications().values().contains(verification.getId())){
+				success = false;
+				break;
+			}
+		}
+
+		return success;
 	}
 
 	public List<VerifyTool> getVerifyTools(String... toolsId) {

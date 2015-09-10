@@ -124,6 +124,22 @@ public class Verification implements Serializable{
         this.waiveComment = waiveComment;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Verification that = (Verification) o;
+
+        return id.equals(that.id);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
     public synchronized void syncStauts() {
         if (this.execution != null) {
             switch (execution.getStatus()) {
