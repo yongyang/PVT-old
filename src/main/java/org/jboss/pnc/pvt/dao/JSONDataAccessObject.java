@@ -41,7 +41,7 @@ public class JSONDataAccessObject extends PVTDataAccessObject implements Seriali
     public synchronized void persist() {
         try {
             JsonNode node = mapper.valueToTree(pvtModel);
-            mapper.writeValue(jsonFile, node);
+            mapper.writerWithDefaultPrettyPrinter().writeValue(jsonFile, node);
         }
         catch (Exception e) {
             throw new RuntimeException(e);

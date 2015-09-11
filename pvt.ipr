@@ -21,6 +21,7 @@
             <element id="library" level="project" name="Maven: javax.interceptor:javax.interceptor-api:1.2" />
             <element id="library" level="project" name="Maven: javax.inject:javax.inject:1" />
             <element id="library" level="project" name="Maven: javax.validation:validation-api:1.1.0.Final" />
+            <element id="library" level="project" name="Maven: jaxen:jaxen:1.1.6" />
             <element id="library" level="project" name="Maven: org.jboss.logging:jboss-logging:3.2.1.Final" />
             <element id="library" level="project" name="Maven: org.jboss.resteasy:jaxrs-api:2.3.7.Final" />
             <element id="library" level="project" name="Maven: com.offbytwo.jenkins:jenkins-client:0.3.1" />
@@ -62,12 +63,6 @@
             <element id="library" level="project" name="Maven: org.tukaani:xz:1.4" />
             <element id="library" level="project" name="Maven: commons-io:commons-io:2.4" />
             <element id="library" level="project" name="Maven: org.slf4j:slf4j-simple:1.7.12" />
-            <element id="library" level="project" name="Maven: com.googlecode.wicket-jquery-ui:wicket-jquery-ui:6.19.1" />
-            <element id="library" level="project" name="Maven: com.googlecode.wicket-jquery-ui:wicket-jquery-ui-core:6.19.1" />
-            <element id="library" level="project" name="Maven: com.googlecode.wicket-jquery-ui:wicket-jquery-ui-theme-uilightness:6.19.1" />
-            <element id="library" level="project" name="Maven: com.googlecode.wicket-jquery-ui:wicket-jquery-ui-calendar:6.19.1" />
-            <element id="library" level="project" name="Maven: org.threeten:threetenbp:1.2" />
-            <element id="library" level="project" name="Maven: com.googlecode.wicket-jquery-ui:wicket-jquery-ui-plugins:6.19.1" />
             <element id="library" level="project" name="Maven: org.apache.wicket:wicket-core:6.19.0" />
             <element id="library" level="project" name="Maven: org.apache.wicket:wicket-util:6.19.0" />
             <element id="library" level="project" name="Maven: org.apache.wicket:wicket-request:6.19.0" />
@@ -122,6 +117,7 @@
     <option name="SKIP_IMPORT_STATEMENTS" value="false" />
   </component>
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/webapp/styles" charset="UTF-8" />
   </component>
   <component name="EntryPointsManager">
@@ -413,61 +409,6 @@
         <root url="jar://$MAVEN_REPOSITORY$/com/googlecode/javaewah/JavaEWAH/0.7.9/JavaEWAH-0.7.9-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: com.googlecode.wicket-jquery-ui:wicket-jquery-ui-calendar:6.19.1">
-      <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/com/googlecode/wicket-jquery-ui/wicket-jquery-ui-calendar/6.19.1/wicket-jquery-ui-calendar-6.19.1.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/com/googlecode/wicket-jquery-ui/wicket-jquery-ui-calendar/6.19.1/wicket-jquery-ui-calendar-6.19.1-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/com/googlecode/wicket-jquery-ui/wicket-jquery-ui-calendar/6.19.1/wicket-jquery-ui-calendar-6.19.1-sources.jar!/" />
-      </SOURCES>
-    </library>
-    <library name="Maven: com.googlecode.wicket-jquery-ui:wicket-jquery-ui-core:6.19.1">
-      <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/com/googlecode/wicket-jquery-ui/wicket-jquery-ui-core/6.19.1/wicket-jquery-ui-core-6.19.1.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/com/googlecode/wicket-jquery-ui/wicket-jquery-ui-core/6.19.1/wicket-jquery-ui-core-6.19.1-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/com/googlecode/wicket-jquery-ui/wicket-jquery-ui-core/6.19.1/wicket-jquery-ui-core-6.19.1-sources.jar!/" />
-      </SOURCES>
-    </library>
-    <library name="Maven: com.googlecode.wicket-jquery-ui:wicket-jquery-ui-plugins:6.19.1">
-      <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/com/googlecode/wicket-jquery-ui/wicket-jquery-ui-plugins/6.19.1/wicket-jquery-ui-plugins-6.19.1.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/com/googlecode/wicket-jquery-ui/wicket-jquery-ui-plugins/6.19.1/wicket-jquery-ui-plugins-6.19.1-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/com/googlecode/wicket-jquery-ui/wicket-jquery-ui-plugins/6.19.1/wicket-jquery-ui-plugins-6.19.1-sources.jar!/" />
-      </SOURCES>
-    </library>
-    <library name="Maven: com.googlecode.wicket-jquery-ui:wicket-jquery-ui-theme-uilightness:6.19.1">
-      <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/com/googlecode/wicket-jquery-ui/wicket-jquery-ui-theme-uilightness/6.19.1/wicket-jquery-ui-theme-uilightness-6.19.1.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/com/googlecode/wicket-jquery-ui/wicket-jquery-ui-theme-uilightness/6.19.1/wicket-jquery-ui-theme-uilightness-6.19.1-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/com/googlecode/wicket-jquery-ui/wicket-jquery-ui-theme-uilightness/6.19.1/wicket-jquery-ui-theme-uilightness-6.19.1-sources.jar!/" />
-      </SOURCES>
-    </library>
-    <library name="Maven: com.googlecode.wicket-jquery-ui:wicket-jquery-ui:6.19.1">
-      <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/com/googlecode/wicket-jquery-ui/wicket-jquery-ui/6.19.1/wicket-jquery-ui-6.19.1.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/com/googlecode/wicket-jquery-ui/wicket-jquery-ui/6.19.1/wicket-jquery-ui-6.19.1-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/com/googlecode/wicket-jquery-ui/wicket-jquery-ui/6.19.1/wicket-jquery-ui-6.19.1-sources.jar!/" />
-      </SOURCES>
-    </library>
     <library name="Maven: com.jcraft:jsch:0.1.50">
       <CLASSES>
         <root url="jar://$MAVEN_REPOSITORY$/com/jcraft/jsch/0.1.50/jsch-0.1.50.jar!/" />
@@ -686,6 +627,17 @@
       </JAVADOC>
       <SOURCES>
         <root url="jar://$MAVEN_REPOSITORY$/javax/ws/rs/jsr311-api/1.1.1/jsr311-api-1.1.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: jaxen:jaxen:1.1.6">
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/jaxen/jaxen/1.1.6/jaxen-1.1.6.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/jaxen/jaxen/1.1.6/jaxen-1.1.6-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/jaxen/jaxen/1.1.6/jaxen-1.1.6-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="Maven: joda-time:joda-time:2.2">
@@ -983,17 +935,6 @@
       </JAVADOC>
       <SOURCES>
         <root url="jar://$MAVEN_REPOSITORY$/org/slf4j/slf4j-simple/1.7.12/slf4j-simple-1.7.12-sources.jar!/" />
-      </SOURCES>
-    </library>
-    <library name="Maven: org.threeten:threetenbp:1.2">
-      <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/threeten/threetenbp/1.2/threetenbp-1.2.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/threeten/threetenbp/1.2/threetenbp-1.2-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/threeten/threetenbp/1.2/threetenbp-1.2-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="Maven: org.tukaani:xz:1.4">
