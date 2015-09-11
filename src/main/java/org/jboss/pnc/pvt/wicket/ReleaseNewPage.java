@@ -1,5 +1,6 @@
 package org.jboss.pnc.pvt.wicket;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -16,17 +17,18 @@ import org.apache.wicket.validation.ValidationError;
 import org.jboss.pnc.pvt.dao.PVTDataAccessObject;
 import org.jboss.pnc.pvt.model.Product;
 import org.jboss.pnc.pvt.model.Release;
-
 import org.jboss.pnc.pvt.model.VerifyTool;
 
 /**
  * Created by yyang on 5/5/15.
  */
+@SuppressWarnings("rawtypes")
 public class ReleaseNewPage extends TemplatePage {
-	
 
-	protected Release release;
+    private static final long serialVersionUID = -1447200208070180900L;
+    protected Release release;
     protected FeedbackPanel feedBackPanel = new FeedbackPanel("feedbackMessage");
+
     protected Form releaseForm;
     TextField<String> nameTextField;
 
@@ -40,6 +42,7 @@ public class ReleaseNewPage extends TemplatePage {
         this(pp,"PVT release to be created.");
     }
 
+    @SuppressWarnings({ "unchecked", "serial" })
     public ReleaseNewPage(PageParameters pp, String info) {
         super(pp,info);
         
@@ -55,10 +58,11 @@ public class ReleaseNewPage extends TemplatePage {
 
         releaseForm = new Form("form-release", new CompoundPropertyModel(release));
 
-
+        List<Release> leftRelease = new ArrayList<>(dao.getPvtModel().getReleasesByProduct(release.getProductId()));
+        leftRelease.remove(release); // remove current release
         DropDownChoice<Release> previousReleaseIdDropDownChoice = new DropDownChoice<Release>("referenceReleaseId",
                 Model.of(),
-                dao.getPvtModel().getReleasesByProduct(release.getProductId()),
+                leftRelease,
                 new IChoiceRenderer<Release>() {
                     @Override
                     public Object getDisplayValue(Release object) {
@@ -69,9 +73,21 @@ public class ReleaseNewPage extends TemplatePage {
                     public String getIdValue(Release object, int index) {
                         return object.getId();
                     }
-                });
-        releaseForm.add(previousReleaseIdDropDownChoice);
+                }) {
 
+            @Override
+            protected void onModelChanged() {
+                Release modelR = getModelObject();
+                if (modelR != null) {
+                    release.setReferenceReleaseId(modelR.getId());
+                }
+            }
+        };
+        releaseForm.add(previousReleaseIdDropDownChoice);
+        String referenceReleaseId = release.getReferenceReleaseId();
+        if (referenceReleaseId != null) {
+            previousReleaseIdDropDownChoice.setModelObject(dao.getPvtModel().getReleasebyId(referenceReleaseId));
+        }
 
         Model<Product> listModel = new Model<Product>();
         ChoiceRenderer<Product> productRender = new ChoiceRenderer<Product>("name");
