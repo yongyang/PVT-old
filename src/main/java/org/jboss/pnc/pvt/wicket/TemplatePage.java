@@ -1,6 +1,5 @@
 package org.jboss.pnc.pvt.wicket;
 
-import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;

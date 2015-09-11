@@ -10,7 +10,7 @@
     Any question please contact <a href="mailto:jbossas-product@redhat.com">jbossas-prod@redhat.com</a>.
   </p>
 
-  <form accept-charset="UTF-8" action="/errata/preview" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="xqS0Zvub2y+hv8+Inq9vR5cBFTkHoRM/X6/aXBF6Zw4=" /></div>
+  <form wicket:id="verification_form" accept-charset="UTF-8" action="/errata/preview" method="post">
 
     <div class="clearfix pretty-form">
       <div class="eso-greybox" style="background-color:#eee;">
@@ -80,10 +80,16 @@
               </pre>
             </td>
           </tr>
-
+          <tr wicket:id="waive_tr">
+            <td class="header-label" width = "150">Waive comment: </td>
+            <td>
+              <textarea wicket:id="waiveComment" cols="75" id="advisory_topic" name="advisory[topic]" rows="6"></textarea>
+            </td>
+          </tr>
         </table>
 
         <div class="align-right" style="margin-top:25px;">
+          <input class="btn btn-primary" type="submit" value="Waive" wicket:id="waive_button" />
           <input class="btn btn-primary" type="button" value="OK" />
         </div>
 

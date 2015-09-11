@@ -274,6 +274,7 @@
 
 
     <!-- JQUERY-UI DEPENDENCIES -->
+<!--
     <dependency>
       <groupId>com.googlecode.wicket-jquery-ui</groupId>
       <artifactId>wicket-jquery-ui</artifactId>
@@ -294,6 +295,7 @@
       <artifactId>wicket-jquery-ui-plugins</artifactId>
       <version>${wicket-jquery-ui.version}</version>
     </dependency>
+-->
 
     <!-- KENDO-UI DEPENDENCIES -->
 <!--

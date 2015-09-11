@@ -163,6 +163,12 @@ public class Verification implements Serializable{
         }
     }
 
+    public boolean needWaive() {
+        return !(this.getStatus() == Verification.Status.NOT_PASSED
+                || getStatus() == Verification.Status.NEED_INSPECT
+                || getStatus() == Verification.Status.WAIVED);
+    }
+
     /**
      * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
      */
@@ -171,6 +177,7 @@ public class Verification implements Serializable{
         IN_PROGRESS,
         PASSED,
         NOT_PASSED,
-        NEED_INSPECT;
+        NEED_INSPECT,
+        WAIVED;
     }
 }

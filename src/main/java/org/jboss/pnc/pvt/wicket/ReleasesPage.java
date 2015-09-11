@@ -271,6 +271,7 @@ public class ReleasesPage extends TemplatePage{
                 status = Release.Status.PASSED;
             }
         }
+        //TODO: handle verification WAIVED status
         if(status != release.getStatus()) {
             release.setStatus(status);
             PVTApplication.getDAO().persist();

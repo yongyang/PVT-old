@@ -170,6 +170,11 @@ public class PVTModel implements Serializable {
 		return verifications;
 	}
 
+	public void updateVerification(Verification verification) {
+		if(verification != null) {
+			verifications.put(verification.getId(), verification);
+		}
+	}
 	@JsonIgnore
 	public List<Verification> getVerificationsList() {
 		return Arrays.asList(verifications.values().toArray(new Verification[verifications.size()]));
