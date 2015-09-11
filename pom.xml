@@ -11,6 +11,12 @@
   <name>Productization Verification Tool(PVT)</name>
   <description>Productization Verification Tool - Handle package level verification for all JBoss MW products.</description>
 
+
+  <scm>
+    <connection>scm:git:git://github.com/yongyang/PVT.git</connection>
+    <url>http://github.com/yongyang/PVT.git</url>
+  </scm>
+
   <properties>
 
       <jenkins.server.url>http://localhost:8090</jenkins.server.url>
