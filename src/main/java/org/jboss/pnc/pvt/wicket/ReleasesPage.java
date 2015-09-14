@@ -266,12 +266,12 @@ public class ReleasesPage extends TemplatePage{
                 status = Release.Status.NEED_INSPECT;
                 break;
             }
-
-            if(verification.getStatus().equals(Verification.Status.PASSED)) {
+            //handle verification WAIVED status
+            if(verification.getStatus().equals(Verification.Status.PASSED) || verification.getStatus().equals(Verification.Status.WAIVED)) {
                 status = Release.Status.PASSED;
             }
         }
-        //TODO: handle verification WAIVED status
+
         if(status != release.getStatus()) {
             release.setStatus(status);
             PVTApplication.getDAO().persist();
