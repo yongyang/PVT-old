@@ -211,19 +211,19 @@ public class ReleasesPage extends TemplatePage{
     private void verifyRelease(Release release) {
         PVTModel pvtModel = PVTApplication.getDAO().getPvtModel();
 
-        Map<String, String> existedVerifications = release.getVerifications();
+//        Collection<String> existedVerifications = release.getVerifications();
 
-        for(String toolId : release.getTools()) {
-            if(!existedVerifications.containsKey(toolId)) { // not run yet
-               runVerify(toolId, release);
+        for(Map.Entry<String, String> entry : release.getToolsMap().entrySet()) {
+            if(entry.getValue() == null) { // not run yet
+               runVerify(entry.getKey(), release);
 
             }
             else { // has run before, detect if the Tool need to run again
-                String verificationId = existedVerifications.get(toolId);
+                String verificationId = entry.getValue();
                 Verification existedVerification = pvtModel.getVerificationById(verificationId);
                 if(existedVerification == null || release.getUpdateTime() > existedVerification.getStartTime() || existedVerification.getStatus().equals(Verification.Status.NOT_PASSED)) { //need to run again
-                    existedVerifications.remove(toolId);
-                    runVerify(toolId, release);
+//                    existedVerifications.remove(toolId);
+                    runVerify(entry.getKey(), release);
                 }
             }
         }
@@ -250,7 +250,7 @@ public class ReleasesPage extends TemplatePage{
 
     private void updateReleaseStatus(Release release) {
         Release.Status status = release.getStatus();
-        for(String verificationId : release.getVerifications().values()){
+        for(String verificationId : release.getVerifications()){
             Verification verification = PVTApplication.getDAO().getPvtModel().getVerificationById(verificationId);
             if(verification.getStatus().equals(Verification.Status.IN_PROGRESS)) {
                 status = Release.Status.VERIFYING;

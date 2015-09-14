@@ -28,11 +28,11 @@ public class Release implements Serializable {
     // ex: http://download.devel.redhat.com/devel/candidates/JBEAP/JBEAP-7.0.0.DR6/jboss-eap-7.0.0.DR6.zip
     private String distributions;
 
-    // The tools applied to this release
-    private List<String> tools = new ArrayList<>();
+    // The tools applied to this release, TOOL_ID => VerificationID
+    private Map<String, String> toolsMap = new HashMap<>();
 
     // Runtime verification, {toolId => verificationId}
-    private Map<String, String> verifications = new HashMap<>();
+//    private Map<String, String> verifications = new HashMap<>();
 
     private String description;
 
@@ -117,28 +117,42 @@ public class Release implements Serializable {
         this.description = description;
     }
 
+    public Map<String, String> getToolsMap() {
+        return toolsMap;
+    }
+
+    public void setToolsMap(Map<String, String> toolsMap) {
+        this.toolsMap = toolsMap;
+    }
+
+    @JsonIgnore
     public List<String> getTools() {
-        return tools;
+        return new ArrayList<>(toolsMap.keySet());
     }
 
     public void setTools(List<String> tools) {
-        this.tools = tools;
+        for(String toolId : tools){
+            toolsMap.put(toolId, toolsMap.get(toolId));
+        }
     }
 
-    public Map<String, String> getVerifications() {
+    @JsonIgnore
+    public Collection<String> getVerifications() {
+        List<String> verifications = new ArrayList<>();
+        for(String verificationId : toolsMap.values()) {
+            if(verificationId != null) {
+                verifications.add(verificationId);
+            }
+        }
         return verifications;
     }
 
-    public void setVerifications(Map<String, String> verifications) {
-        this.verifications=verifications;
-    }
-
     public String getVerificationIdByToolId(String toolId){
-        return verifications.get(toolId);
+        return toolsMap.get(toolId);
     }
 
     public void addVerification(String toolId, String verificationId) {
-        verifications.put(toolId, verificationId);
+        toolsMap.put(toolId, verificationId);
     }
 
     public String getReferenceReleaseId() {

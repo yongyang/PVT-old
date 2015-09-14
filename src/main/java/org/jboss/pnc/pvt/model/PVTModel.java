@@ -190,13 +190,15 @@ public class PVTModel implements Serializable {
 
 	public boolean removeVerification(Verification verification) {
 		boolean success = true;
-		for (Release p : releases){
-			if (p.getVerifications().values().contains(verification.getId())){
+		for (Release p : releases) {
+			if (p.getVerifications().contains(verification.getId())){
 				success = false;
 				break;
 			}
 		}
-
+		if(success) {
+			verifications.remove(verification.getId());
+		}
 		return success;
 	}
 
