@@ -1,8 +1,12 @@
 package org.jboss.pnc.pvt.wicket;
 
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.validation.IFormValidator;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -11,41 +15,95 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.jboss.pnc.pvt.dao.PVTDataAccessObject;
 import org.jboss.pnc.pvt.model.Product;
+import org.jboss.pnc.pvt.model.Release;
 
 /**
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
  */
 public class ProductNewPage extends TemplatePage {
 
-    Product product = new Product();
-    FeedbackPanel feedBackPanel = new FeedbackPanel("feedbackMessage");
-    Form productForm;
+	protected Product product;
+	protected FeedbackPanel feedBackPanel = new FeedbackPanel("feedbackMessage");
+	protected Form productForm;
+	
+	TextField<String> nameTextField;
+	protected Button resetButton;
+    protected Button backButton;
+    protected Button removeButton;
     
     public ProductNewPage(PageParameters pp) {
-        this(pp, null);
+        this(pp, "PVT prodcut to be created.");
     }
     
     public ProductNewPage(PageParameters pp, String info) {
     	super(pp, info);
     	
         setActiveMenu(Menu.PRODUCTS);
+        product = getProduct(pp);
         add(feedBackPanel);
+        add(new Label("product_summary", getTitle()));
         
-        if (pp != null) {
-            String id = pp.get("productId").toString();
-        	PVTDataAccessObject dao = PVTApplication.getDAO();
-        	product = dao.getPvtModel().getProductById(id);
-        }
+        productForm = new Form("form-product", new CompoundPropertyModel(product));
+
+        nameTextField = new TextField<String>("name");
+        nameTextField.setRequired(true);
+        productForm.add(nameTextField);
+        productForm.add(new TextField<String>("packages"));
+        productForm.add(new TextField<String>("maintainer"));
+        productForm.add(new TextField<String>("developer"));
+        productForm.add(new TextField<String>("qe"));
+        productForm.add(new TextArea<String>("description"));
         
-        productForm = new Form("form-product", new CompoundPropertyModel(product)) {
+        productForm.add(new Button("submit") {
             @Override
-            protected void onSubmit() {
-            	doSubmit();
+            public void onSubmit() {
+                doSubmit();
+            }
+        });
+        
+        backButton = new Button("back") {
+            @Override
+            public void onSubmit() {
+                PageParameters pp = new PageParameters();
+                setResponsePage(ProductsPage.class, pp);
             }
         };
+        backButton.setDefaultFormProcessing(false);
+        productForm.add(backButton);
+        
+        resetButton = new Button("reset") {
+            @Override
+            public void onSubmit() {
+                doReset();
+            }
+        };
+        productForm.add(resetButton);
+        
+        removeButton = new Button("remove") {
+            @Override
+            public void onSubmit() {
+                doRemove();
+            }
+        };
+        removeButton.setDefaultFormProcessing(false);
+        productForm.add(removeButton);
 
-        TextField<String> nameTextField = new TextField<String>("name");
-        nameTextField.setRequired(true);
+        add(productForm);
+    }
+    
+    protected Product getProduct(PageParameters pp){
+        return new Product();
+    }
+    
+    public String getTitle() {
+        return "Create a Product";
+    }
+    
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+        removeButton.setVisible(false);
+
         nameTextField.add(new IValidator<String>() {
             @Override
             public void validate(IValidatable<String> validatable) {
@@ -65,22 +123,23 @@ public class ProductNewPage extends TemplatePage {
                 }
             }
         });
-        productForm.add(nameTextField);
-        productForm.add(new TextField<String>("packages"));
-        productForm.add(new TextField<String>("maintainer"));
-        productForm.add(new TextField<String>("developer"));
-        productForm.add(new TextField<String>("qe"));
-        productForm.add(new TextArea<String>("description"));
-
-        add(productForm);
     }
     
-    protected void doSubmit(){
-    	PageParameters pp = new PageParameters();
+    public void doSubmit(){
         PVTDataAccessObject dao = PVTApplication.getDAO();
         dao.getPvtModel().addProduct(product);
         dao.persist();
+        PageParameters pp = new PageParameters();
+    	pp.set("name", product.getName());
         setResponsePage(new ProductsPage(pp,("Product: " + product.getName() + " Created.")));
+    }
+    
+    public void doReset() {
+    	productForm.getModel().setObject(new Release());
+    }
+
+    public boolean doRemove() {
+        return false;
     }
 
 }

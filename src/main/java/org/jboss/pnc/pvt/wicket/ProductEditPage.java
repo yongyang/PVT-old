@@ -1,11 +1,6 @@
 package org.jboss.pnc.pvt.wicket;
 
-import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextArea;
-import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.model.CompoundPropertyModel;
+
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.jboss.pnc.pvt.dao.PVTDataAccessObject;
 import org.jboss.pnc.pvt.model.Product;
@@ -14,71 +9,58 @@ import org.jboss.pnc.pvt.model.Product;
  * @author <a href="mailto:huwang@redhat.com">Hui Wang</a>
  *
  */
-public class ProductEditPage extends TemplatePage {
+public class ProductEditPage extends ProductNewPage {
 	
-	Product product = new Product();
-    FeedbackPanel feedBackPanel = new FeedbackPanel("feedbackMessage");
-    Form productForm;
-    
     public ProductEditPage(PageParameters pp) {
-        this(pp, null);
+        this(pp, "PVT product is to be modified.");
     }
     
     public ProductEditPage(PageParameters pp, String info) {
     	super(pp, info);
-    	
-        setActiveMenu(Menu.PRODUCTS);
-        add(feedBackPanel);
-        
-        PVTDataAccessObject dao = PVTApplication.getDAO();
-        if (pp != null) {
-        	if (!pp.get("productId").isNull())
-        		product = dao.getPvtModel().getProductById(pp.get("productId").toString());
-        }
-        
-        productForm = new Form("form-product", new CompoundPropertyModel(product)) {
-            @Override
-            protected void onSubmit() {
-            	PageParameters pp = new PageParameters();
-                dao.getPvtModel().updateProduct(product);
-                dao.persist();                        
-                setResponsePage(new ProductsPage(pp,("Product: " + product.getName() + " Updated.")));
-            }
-        };
-        
-        productForm.add(new TextField<String>("name"));
-        productForm.add(new TextField<String>("packages"));
-        productForm.add(new TextField<String>("maintainer"));
-        productForm.add(new TextField<String>("developer"));
-        productForm.add(new TextField<String>("qe"));
-        productForm.add(new TextArea<String>("description"));
-        
-        Button backButton = new Button("back"){
-        	@Override
-			public void onSubmit() {
-        		PageParameters pp = new PageParameters();
-                setResponsePage(ProductsPage.class, pp);
-            }
-        };
-        backButton.setDefaultFormProcessing(false);
-        
-        Button removeButton = new Button("remove"){
-        	@Override
-			public void onSubmit() {  
-        		PageParameters pp = new PageParameters();
-        		PVTDataAccessObject dao = PVTApplication.getDAO();
-                dao.getPvtModel().removeProduct(product);
-                dao.persist();
-                setResponsePage(ProductsPage.class, pp);
-            }
-        };
-        removeButton.setDefaultFormProcessing(false);
-        
-        productForm.add(backButton);
-        productForm.add(removeButton);
-        
-        add(productForm);
-        
+    }
+    
+    @Override
+    public String getTitle() {
+        return "Modify a Prodcut";
     }
 	
+    @Override
+    protected Product getProduct(PageParameters pp) {
+        if (pp != null) {
+            if (!pp.get("productId").isNull()) {
+                PVTDataAccessObject dao = PVTApplication.getDAO();
+                return dao.getPvtModel().getProductById(pp.get("productId").toString());
+            }
+        }
+
+        return null;
+    }
+    
+    @Override
+    public void doSubmit() {
+        PVTDataAccessObject dao = PVTApplication.getDAO();
+        dao.getPvtModel().updateProduct(product);
+        dao.persist();
+        setInfo("Product: " + product.getName() + " is Updated.");
+    }
+    
+    @Override
+    public void doReset() {
+    	productForm.getModel().setObject(product);
+    }
+    
+    @Override
+    public boolean doRemove() {
+        PVTDataAccessObject dao = PVTApplication.getDAO();
+        boolean success = dao.getPvtModel().removeProduct(product);
+        if(success) {
+            dao.persist();
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    
+    
 }
