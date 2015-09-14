@@ -3,11 +3,17 @@ package org.jboss.pnc.pvt.wicket;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.MultiLineLabel;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
@@ -47,15 +53,33 @@ public class ScriptJenkinsVerifyToolNewPage extends AbstractVerifyToolPage {
         form.add(new TextField<String>("jobId"));
         form.add(new TextField<String>("archiver"));
 
-        final ScriptJenkinsVerifyTool scriptTool = (ScriptJenkinsVerifyTool) tool;
+        ScriptJenkinsVerifyTool scriptTool = (ScriptJenkinsVerifyTool) tool;
 
-        List<String> varables = new ArrayList<>();
-        varables.addAll(ExecutionVariable.getVariables().keySet());
+        List<ExecutionVariable> varables = new ArrayList<>();
+        varables.addAll(ExecutionVariable.getVariables().values());
+
+        final MarkupContainer rowPanel = new WebMarkupContainer("rowPanel");
+        rowPanel.setOutputMarkupId(true);
+        form.add(rowPanel);
+
         final ListView<String> paramsListView = new ListView<String>("stringParams") {
 
             @Override
             protected void populateItem(final ListItem<String> item) {
-                DropDownChoice<String> stringParam = new DropDownChoice<String>("paramName", Model.of(), varables) {
+
+                ListView<String> theListView = this;
+                final DropDownChoice<ExecutionVariable> stringParam = new DropDownChoice<ExecutionVariable>("paramName",
+                        Model.of(), varables, new IChoiceRenderer<ExecutionVariable>() {
+                            @Override
+                            public Object getDisplayValue(ExecutionVariable var) {
+                                return var.getName();
+                            }
+
+                            @Override
+                            public String getIdValue(ExecutionVariable var, int index) {
+                                return var.getName();
+                            }
+                        }) {
 
                     @Override
                     public boolean isNullValid() {
@@ -63,45 +87,40 @@ public class ScriptJenkinsVerifyToolNewPage extends AbstractVerifyToolPage {
                     }
 
                     @Override
-                    protected boolean wantOnSelectionChangedNotifications() {
-                        return true;
-                    }
-
-                    @Override
-                    protected void onSelectionChanged(String newParam) {
-                        setModelObject(newParam);
-                        item.setModelObject(newParam);
+                    protected void onModelChanged() {
+                        item.setModelObject(getModelObject().getName());
                     }
 
                 };
-
-                stringParam.setRequired(true);
-                stringParam.setModelObject(item.getModelObject());
+                stringParam.setOutputMarkupId(true);
                 item.add(stringParam);
 
-                final Button removeParamBtn = new Button("removeParamBtn") {
-                    @Override
-                    public void onSubmit() {
-                        scriptTool.getStringParams().remove(stringParam.getModelObject());
-                        item.remove();
-                    }
-                };
-                removeParamBtn.setDefaultFormProcessing(false);
-                item.add(removeParamBtn);
-            }
-        };
-        form.add(paramsListView);
+                stringParam.setRequired(true);
+                stringParam.setModelObject(ExecutionVariable.getVariables().get(item.getModelObject()));
+                Link<Void> removeLink = theListView.removeLink("removeParamLink", item);
+                removeLink.setOutputMarkupId(true);
+                item.add(removeLink);
 
-        // add button
-        Button addParamBtn = new Button("addParamBtn"){
-            @Override
-            public void onSubmit() {
-                scriptTool.getStringParams().add(ExecutionVariable.CURRENT_PRODUCT_ID.getName()); // default 
-                paramsListView.setModelObject(scriptTool.getStringParams());
             }
+
         };
-        addParamBtn.setDefaultFormProcessing(false);
-        form.add(addParamBtn);
+        paramsListView.setReuseItems(true);
+        paramsListView.setOutputMarkupId(true);
+        rowPanel.add(paramsListView);
+
+        AjaxLink<String> addParamLink = new AjaxLink<String>("addParamLink") {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                scriptTool.getStringParams().add(ExecutionVariable.CURRENT_PRODUCT_ID.getName()); // default
+                paramsListView.setModelObject(scriptTool.getStringParams());
+                paramsListView.removeAll();
+                if (target != null)
+                    target.add(rowPanel);
+            }
+
+        };
+        form.add(addParamLink);
     }
 
     @Override
