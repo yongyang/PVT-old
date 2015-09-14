@@ -2,6 +2,7 @@ package org.jboss.pnc.pvt.model;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.jboss.pnc.pvt.wicket.PVTApplication;
 
 import java.io.Serializable;
 import java.util.*;
@@ -206,6 +207,36 @@ public class Release implements Serializable {
     @Override
     public String toString() {
         return "Release [productId=" + productId + ", name=" + name + ", referenceReleaseId=" + referenceReleaseId + "]";
+    }
+
+    public Status updateStatus() {
+        Release.Status status = this.getStatus();
+        for(String verificationId : this.getVerifications()){
+            Verification verification = PVTApplication.getDAO().getPvtModel().getVerificationById(verificationId);
+            if(verification.getStatus().equals(Verification.Status.IN_PROGRESS)) {
+                status = Release.Status.VERIFYING;
+                break;
+            }
+
+            if(verification.getStatus().equals(Verification.Status.NOT_PASSED)) {
+                status = Release.Status.REJECTED;
+                break;
+            }
+
+            if(verification.getStatus().equals(Verification.Status.NEED_INSPECT)) {
+                status = Release.Status.NEED_INSPECT;
+                break;
+            }
+            //handle verification WAIVED status
+            if(verification.getStatus().equals(Verification.Status.PASSED) || verification.getStatus().equals(Verification.Status.WAIVED)) {
+                status = Release.Status.PASSED;
+            }
+        }
+
+        if(status != this.getStatus()) {
+            this.setStatus(status);
+        }
+        return status;
     }
 
     /**
