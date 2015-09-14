@@ -78,7 +78,7 @@ public class ReleasesPage extends TemplatePage{
                 });
 
                 Label releaseStatusLabel = new Label("release_status", new PropertyModel(item.getModel(), "status"));
-                releaseStatusLabel.add(new AbstractAjaxTimerBehavior(Duration.seconds(15L)) {
+                releaseStatusLabel.add(new AbstractAjaxTimerBehavior(Duration.seconds(10L)) {
                     @Override
                     protected void onTimer(AjaxRequestTarget target) {
                         if (release.getStatus() != release.updateStatus()){

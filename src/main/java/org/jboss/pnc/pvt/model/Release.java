@@ -210,8 +210,14 @@ public class Release implements Serializable {
     }
 
     public Status updateStatus() {
-        Release.Status status = this.getStatus();
-        for(String verificationId : this.getVerifications()){
+        Release.Status status = Status.NEW;
+        for(Map.Entry<String, String> entry : this.getToolsMap().entrySet()){
+            String toolId = entry.getKey();
+            String verificationId = entry.getValue();
+            if(verificationId == null) {
+                status = Status.NEW;
+                break;
+            }
             Verification verification = PVTApplication.getDAO().getPvtModel().getVerificationById(verificationId);
             if(verification.getStatus().equals(Verification.Status.IN_PROGRESS)) {
                 status = Release.Status.VERIFYING;
