@@ -32,7 +32,6 @@ public class ProductEditPage extends ProductNewPage {
                 return dao.getPvtModel().getProductById(pp.get("productId").toString());
             }
         }
-
         return null;
     }
     
