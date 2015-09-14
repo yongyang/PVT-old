@@ -3,7 +3,6 @@ package org.jboss.pnc.pvt.wicket;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -13,7 +12,6 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
@@ -88,18 +86,28 @@ public class ScriptJenkinsVerifyToolNewPage extends AbstractVerifyToolPage {
 
                     @Override
                     protected void onModelChanged() {
-                        item.setModelObject(getModelObject().getName());
+                        String newV = getModelObject().getName();
+                        item.setModelObject(newV);
+                        item.modelChanged();
+                        theListView.modelChanged();
                     }
 
                 };
-                stringParam.setOutputMarkupId(true);
                 item.add(stringParam);
 
                 stringParam.setRequired(true);
                 stringParam.setModelObject(ExecutionVariable.getVariables().get(item.getModelObject()));
-                Link<Void> removeLink = theListView.removeLink("removeParamLink", item);
-                removeLink.setOutputMarkupId(true);
-                item.add(removeLink);
+                AjaxLink<String> removeParamLink = new AjaxLink<String>("removeParamLink") {
+
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        getList().remove(item.getIndex()); // removed data from list
+                        if (target != null)
+                            target.add(rowPanel);
+                    }
+
+                };
+                item.add(removeParamLink);
 
             }
 
@@ -112,9 +120,7 @@ public class ScriptJenkinsVerifyToolNewPage extends AbstractVerifyToolPage {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                scriptTool.getStringParams().add(ExecutionVariable.CURRENT_PRODUCT_ID.getName()); // default
-                paramsListView.setModelObject(scriptTool.getStringParams());
-                paramsListView.removeAll();
+                paramsListView.getModelObject().add(ExecutionVariable.CURRENT_PRODUCT_ID.getName()); // default
                 if (target != null)
                     target.add(rowPanel);
             }
