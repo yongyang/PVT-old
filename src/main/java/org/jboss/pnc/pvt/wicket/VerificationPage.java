@@ -99,13 +99,18 @@ public class VerificationPage extends TemplatePage {
         };
         form.add(waiveButton);
 
+
         form.add(new Button("cancel_button") {
             @Override
             public void onSubmit() {
-                //TODO: STOP this verification, for example: to cancel a unlinked verification
-                super.onSubmit();
+                //STOP this verification, for example: to cancel a unlinked verification
+                String toolId = verification.getToolId();
+                release.getToolsMap().put(toolId, null);
+                PVTApplication.getDAO().persist();
+                setResponsePage(ReleasesPage.class);
+//                super.onSubmit();
             }
-        });
+        }.setDefaultFormProcessing(false));
 
 
         if(verification.needWaive()) {
