@@ -81,10 +81,11 @@ public class ReleasesPage extends TemplatePage{
                 releaseStatusLabel.add(new AbstractAjaxTimerBehavior(Duration.seconds(15L)) {
                     @Override
                     protected void onTimer(AjaxRequestTarget target) {
-                        updateReleaseStatus(release);
+                        if (release.getStatus() != release.updateStatus()){
+                            PVTApplication.getDAO().persist();
+                        }
                         target.add(releaseStatusLabel);
-                        if (releaseStatusLabel.getDefaultModel().getObject().equals(Release.Status.NEED_INSPECT) ||
-                                releaseStatusLabel.getDefaultModel().getObject().equals(Release.Status.REJECTED) ||
+                        if (releaseStatusLabel.getDefaultModel().getObject().equals(Release.Status.REJECTED) ||
                                 releaseStatusLabel.getDefaultModel().getObject().equals(Release.Status.PASSED)) {
                             stop(target);
                         }
@@ -109,8 +110,7 @@ public class ReleasesPage extends TemplatePage{
                                 try {
                                     Class newPageClass = getClass().getClassLoader().loadClass(newPageClassName);
                                     setResponsePage(newPageClass, pp);
-                                }
-                                catch (ClassNotFoundException e) {
+                                } catch (ClassNotFoundException e) {
                                     throw new RuntimeException(e);
                                 }
                             }
@@ -139,7 +139,7 @@ public class ReleasesPage extends TemplatePage{
                                     @Override
                                     public Verification.Status getObject() {
                                         String verificationId = release.getVerificationIdByToolId(toolId);
-                                        return (verificationId != null &&  pvtModel.getVerificationById(verificationId) != null) ? pvtModel.getVerificationById(verificationId).getStatus() : Verification.Status.NEW;
+                                        return (verificationId != null && pvtModel.getVerificationById(verificationId) != null) ? pvtModel.getVerificationById(verificationId).getStatus() : Verification.Status.NEW;
                                     }
                                 }
                         );
@@ -150,8 +150,7 @@ public class ReleasesPage extends TemplatePage{
                                 @Override
                                 protected void onTimer(AjaxRequestTarget target) {
                                     target.add(verificationStatus);
-                                    if (verificationStatus.getDefaultModel().getObject().equals(Verification.Status.NEED_INSPECT) ||
-                                            verificationStatus.getDefaultModel().getObject().equals(Verification.Status.NOT_PASSED) ||
+                                    if (verificationStatus.getDefaultModel().getObject().equals(Verification.Status.NOT_PASSED) ||
                                             verificationStatus.getDefaultModel().getObject().equals(Verification.Status.PASSED)) {
                                         stop(target);
                                     }
@@ -211,19 +210,19 @@ public class ReleasesPage extends TemplatePage{
     private void verifyRelease(Release release) {
         PVTModel pvtModel = PVTApplication.getDAO().getPvtModel();
 
-        Map<String, String> existedVerifications = release.getVerifications();
+//        Collection<String> existedVerifications = release.getVerifications();
 
-        for(String toolId : release.getTools()) {
-            if(!existedVerifications.containsKey(toolId)) { // not run yet
-               runVerify(toolId, release);
+        for(Map.Entry<String, String> entry : release.getToolsMap().entrySet()) {
+            if(entry.getValue() == null) { // not run yet
+               runVerify(entry.getKey(), release);
 
             }
             else { // has run before, detect if the Tool need to run again
-                String verificationId = existedVerifications.get(toolId);
+                String verificationId = entry.getValue();
                 Verification existedVerification = pvtModel.getVerificationById(verificationId);
                 if(existedVerification == null || release.getUpdateTime() > existedVerification.getStartTime() || existedVerification.getStatus().equals(Verification.Status.NOT_PASSED)) { //need to run again
-                    existedVerifications.remove(toolId);
-                    runVerify(toolId, release);
+//                    existedVerifications.remove(toolId);
+                    runVerify(entry.getKey(), release);
                 }
             }
         }
@@ -245,37 +244,6 @@ public class ReleasesPage extends TemplatePage{
         pvtModel.addVerification(verification);
         pvtModel.updateRelease(release);
 //        pvtModel.addVerification(verification);
-    }
-
-
-    private void updateReleaseStatus(Release release) {
-        Release.Status status = release.getStatus();
-        for(String verificationId : release.getVerifications().values()){
-            Verification verification = PVTApplication.getDAO().getPvtModel().getVerificationById(verificationId);
-            if(verification.getStatus().equals(Verification.Status.IN_PROGRESS)) {
-                status = Release.Status.VERIFYING;
-                break;
-            }
-
-            if(verification.getStatus().equals(Verification.Status.NOT_PASSED)) {
-                status = Release.Status.REJECTED;
-                break;
-            }
-
-            if(verification.getStatus().equals(Verification.Status.NEED_INSPECT)) {
-                status = Release.Status.NEED_INSPECT;
-                break;
-            }
-
-            if(verification.getStatus().equals(Verification.Status.PASSED)) {
-                status = Release.Status.PASSED;
-            }
-        }
-        //TODO: handle verification WAIVED status
-        if(status != release.getStatus()) {
-            release.setStatus(status);
-            PVTApplication.getDAO().persist();
-        }
     }
 
 }
