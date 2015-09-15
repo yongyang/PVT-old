@@ -203,6 +203,16 @@ public class ReleasesPage extends TemplatePage{
                 };
                 item.add(verifyLink);
 
+                Link<String> releaseLink = new Link<String>("release_view") {
+                    @Override
+                    public void onClick() {
+                        PageParameters pp = new PageParameters();
+                        pp.set("releaseId", item.getModel().getObject().getId());
+                        setResponsePage(ReleaseEditPage.class, pp);
+                    }
+                };
+                item.add(releaseLink);
+
             }
         });
     }
