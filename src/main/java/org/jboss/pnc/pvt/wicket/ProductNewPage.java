@@ -101,8 +101,28 @@ public class ProductNewPage extends TemplatePage {
     protected void onConfigure() {
         super.onConfigure();
         removeButton.setVisible(false);
+    }
+    
+    public void doSubmit(){
+    	validator();
+        PVTDataAccessObject dao = PVTApplication.getDAO();
+        dao.getPvtModel().addProduct(product);
+        dao.persist();
+        PageParameters pp = new PageParameters();
+    	pp.set("name", product.getName());
+        setResponsePage(new ProductsPage(pp,("Product: " + product.getName() + " Created.")));
+    }
+    
+    public void doReset() {
+    	productForm.getModel().setObject(new Release());
+    }
 
-        nameTextField.add(new IValidator<String>() {
+    public boolean doRemove() {
+        return false;
+    }
+    
+    public void validator(){
+    	nameTextField.add(new IValidator<String>() {
             @Override
             public void validate(IValidatable<String> validatable) {
                 String inputName = validatable.getValue();
@@ -121,23 +141,6 @@ public class ProductNewPage extends TemplatePage {
                 }
             }
         });
-    }
-    
-    public void doSubmit(){
-        PVTDataAccessObject dao = PVTApplication.getDAO();
-        dao.getPvtModel().addProduct(product);
-        dao.persist();
-        PageParameters pp = new PageParameters();
-    	pp.set("name", product.getName());
-        setResponsePage(new ProductsPage(pp,("Product: " + product.getName() + " Created.")));
-    }
-    
-    public void doReset() {
-    	productForm.getModel().setObject(new Release());
-    }
-
-    public boolean doRemove() {
-        return false;
     }
 
 }

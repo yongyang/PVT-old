@@ -20,6 +20,12 @@ public class ProductEditPage extends ProductNewPage {
     }
     
     @Override
+    protected void onConfigure() {
+        super.onConfigure();
+        removeButton.setVisible(true);
+    }
+    
+    @Override
     public String getTitle() {
         return "Modify a Prodcut";
     }
@@ -54,6 +60,7 @@ public class ProductEditPage extends ProductNewPage {
         boolean success = dao.getPvtModel().removeProduct(product);
         if(success) {
             dao.persist();
+            setResponsePage(ProductsPage.class, new PageParameters());
             return true;
         }
         else {
