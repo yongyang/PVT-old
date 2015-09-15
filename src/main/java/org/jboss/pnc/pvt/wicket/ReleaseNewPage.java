@@ -83,6 +83,7 @@ public class ReleaseNewPage extends TemplatePage {
                 }
             }
         };
+        previousReleaseIdDropDownChoice.setNullValid(true);
         releaseForm.add(previousReleaseIdDropDownChoice);
         String referenceReleaseId = release.getReferenceReleaseId();
         if (referenceReleaseId != null) {
