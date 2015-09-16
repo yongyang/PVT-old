@@ -30,6 +30,7 @@ public class ReleaseEditPage extends ReleaseNewPage {
         dao.getPvtModel().updateRelease(release);
         dao.persist();
         setInfo("Release: " + release.getName() + " is Updated.");
+        setResponsePage(ReleasesPage.class);
     }
 
     @Override
