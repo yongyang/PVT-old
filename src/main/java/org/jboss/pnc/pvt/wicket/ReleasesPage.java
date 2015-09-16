@@ -222,7 +222,7 @@ public class ReleasesPage extends TemplatePage{
         });
     }
 
-    private void verifyRelease(Release release) {
+    public static void verifyRelease(Release release) {
         PVTModel pvtModel = PVTApplication.getDAO().getPvtModel();
 
 //        Collection<String> existedVerifications = release.getVerifications();
@@ -245,7 +245,7 @@ public class ReleasesPage extends TemplatePage{
         PVTApplication.getDAO().persist();
     }
 
-    private void runVerify(String toolId, Release release){
+    public static Verification runVerify(String toolId, Release release){
         PVTModel pvtModel = PVTApplication.getDAO().getPvtModel();
         VerifyTool tool = pvtModel.getVerifyToolById(toolId);
         // start verification and link to Release
@@ -258,7 +258,8 @@ public class ReleasesPage extends TemplatePage{
         release.setStatus(Release.Status.VERIFYING);
         pvtModel.addVerification(verification);
         pvtModel.updateRelease(release);
-//        pvtModel.addVerification(verification);
+//      pvtModel.addVerification(verification);
+        return verification;
     }
 
 }

@@ -62,14 +62,12 @@ public class PVTModel implements Serializable {
     }
     
     public Product getProductById(String id){
-    	Product product = new Product();
     	for (Product p : products){
     		if (p.getId().equals(id)){
-    			product = p;
-    			break;	
+    			return p;	
     		}	
     	}
-    	return product;
+    	return null;
     }
 
     public List<Product> getProducts() {
@@ -101,14 +99,12 @@ public class PVTModel implements Serializable {
     }
     
     public Release getReleasebyId(String id){
-    	Release release = new Release();
     	for (Release p : releases){
     		if (p.getId().equals(id)){
-    			release = p;
-    			break;	
+    			return p;
     		}	
     	}
-    	return release;
+    	return null;
     }
 
 	public List<Release> getReleasesByProduct(String productId) {
