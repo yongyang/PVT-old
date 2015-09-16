@@ -39,6 +39,7 @@ public class TemplateJenkinsVerifyToolNewPage extends AbstractVerifyToolPage {
     private final ListView<SerializableStringParam> paramsListView;
     private final Label archiverLabel;
     private final TextArea<String> configXMLTxtArea;
+    private TextField<String> jobIdTextField;
 
     public TemplateJenkinsVerifyToolNewPage(PageParameters pp) {
         this(pp, null);
@@ -46,7 +47,9 @@ public class TemplateJenkinsVerifyToolNewPage extends AbstractVerifyToolPage {
 
     public TemplateJenkinsVerifyToolNewPage(PageParameters pp, String info) {
         super(pp, info);
-        configXMLTxtArea = new TextArea<String>("jenkinsConfigXML");
+        configXMLTxtArea = new TextArea<String>("jenkinsConfigXML") {
+
+        };
         configXMLTxtArea.setLabel(Model.of("Jenkins Config XML"));
         configXMLTxtArea.add(new IValidator<String>() {
 
@@ -63,8 +66,10 @@ public class TemplateJenkinsVerifyToolNewPage extends AbstractVerifyToolPage {
                 }
             }
         });
+        configXMLTxtArea.setRequired(true);
         form.add(configXMLTxtArea);
-        form.add(new TextField<String>("jobId"));
+        jobIdTextField = new TextField<String>("jobId");
+        form.add(jobIdTextField);
 
         final MarkupContainer stringParamsPanel = new WebMarkupContainer("stringParamsPanel");
         stringParamsPanel.setOutputMarkupId(true);
@@ -112,6 +117,8 @@ public class TemplateJenkinsVerifyToolNewPage extends AbstractVerifyToolPage {
                     }
                 }
             }
+
+
         };
         form.add(checkJobLink);
     }

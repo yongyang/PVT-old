@@ -38,16 +38,13 @@ public abstract class AbstractVerifyToolPage extends TemplatePage {
 
         tool = getVerifyTool(pp);
 
-        form = new Form<VerifyTool>("form-tool"){
+        form = new Form<VerifyTool>("form-tool", new CompoundPropertyModel<VerifyTool>(tool)){
             @Override
             protected void onSubmit() {
                 doSubmit(pp);
             }
 
         };
-
-        CompoundPropertyModel<VerifyTool> toolModel = new CompoundPropertyModel<VerifyTool>(tool);
-        form.setModel(toolModel);
 
         // adds common fields
         form.add(new RequiredTextField<String>("name"));
