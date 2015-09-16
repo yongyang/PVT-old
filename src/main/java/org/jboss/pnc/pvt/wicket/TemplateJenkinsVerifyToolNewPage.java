@@ -14,6 +14,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
@@ -91,7 +92,7 @@ public class TemplateJenkinsVerifyToolNewPage extends AbstractVerifyToolPage {
                 configXMLTxtArea.validate();
                 if (configXMLTxtArea.isValid()) {
                     try {
-                        ParamJenkinsJob paramJob = new ParamJenkinsJob(configXMLTxtArea.getValue());
+                        ParamJenkinsJob paramJob = new ParamJenkinsJob(Strings.unescapeMarkup(configXMLTxtArea.getValue()).toString());
                         List<SerializableStringParam> stringParams = paramJob.getStringParams();
                         paramsListView.setModelObject(stringParams);
 
