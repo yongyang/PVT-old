@@ -197,7 +197,12 @@ public class ReleasesPage extends TemplatePage{
                     @Override
                     protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
                         AjaxCallListener ajaxCallListener = new AjaxCallListener();
-                        ajaxCallListener.onPrecondition("return confirm('" + "Start to verify release: " + item.getModelObject().getName() + "?');");
+                        if(release.getTools().isEmpty()){
+                            ajaxCallListener.onPrecondition("alert('No tool configed!'); return false;");
+                        }
+                        else {
+                            ajaxCallListener.onPrecondition("return confirm('" + "Start to verify release: " + item.getModelObject().getName() + "?');");
+                        }
                         attributes.getAjaxCallListeners().add(ajaxCallListener);
                     }
                 };
