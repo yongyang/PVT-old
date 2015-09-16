@@ -13,6 +13,7 @@ import org.jboss.pnc.pvt.execution.ExecutionException;
 import org.jboss.pnc.pvt.execution.Executor;
 import org.jboss.pnc.pvt.execution.JenkinsConfiguration;
 import org.jboss.pnc.pvt.execution.ParamJenkinsJob;
+import org.jboss.pnc.pvt.execution.ParamJenkinsJob.SerializableStringParam;
 import org.jboss.pnc.pvt.wicket.PVTApplication;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -60,7 +61,7 @@ public class SimpleJenkinsVerifyTool extends VerifyTool {
 
     protected void doExecute(final Execution execution, final Verification verification) {
         try {
-            verification.setStatus(Verification.Status.IN_PROGRESS); //TODO: when to save the status
+            verification.setStatus(Verification.Status.IN_PROGRESS); // TODO: when to save the status
             Executor.getJenkinsExecutor().execute(execution, defaultVerificationCallBack(verification));
         } catch (ExecutionException e) {
             verification.setStatus(Verification.Status.NOT_PASSED);
@@ -87,22 +88,21 @@ public class SimpleJenkinsVerifyTool extends VerifyTool {
         } catch (IOException e) {
             logger.warn("Can't get parameters of job: " + jobName, e);
         } catch (DocumentException e) {
-            logger.warn("Invalid Jenkins Job XML of job: "  + jobName, e);
+            logger.warn("Invalid Jenkins Job XML of job: " + jobName, e);
         }
         return Collections.emptyMap();
     }
 
     protected Map<String, String> parseJobParamFromJobXML(VerifyParameter verifyParam, String jobXml) throws DocumentException {
         ParamJenkinsJob paramJob = new ParamJenkinsJob(jobXml);
-        List<StringParameterDefinition> stringParams = paramJob.getStringParams();
+        List<SerializableStringParam> stringParams = paramJob.getStringParams();
         Map<String, String> params = new HashMap<>();
-        for (StringParameterDefinition spd: stringParams) {
+        for (SerializableStringParam spd : stringParams) {
             params.put(spd.getName(), verifyParam.getProperty(spd.getName(), spd.getDefaultValue()));
         }
         return params;
     }
 
-    
     protected String getJobName(VerifyParameter param) {
         String jobId = getJobId();
         if (jobId != null && jobId.trim().length() > 0) {

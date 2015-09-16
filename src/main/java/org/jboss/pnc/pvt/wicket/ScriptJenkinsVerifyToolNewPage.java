@@ -51,8 +51,6 @@ public class ScriptJenkinsVerifyToolNewPage extends AbstractVerifyToolPage {
         form.add(new TextField<String>("jobId"));
         form.add(new TextField<String>("archiver"));
 
-        ScriptJenkinsVerifyTool scriptTool = (ScriptJenkinsVerifyTool) tool;
-
         List<ExecutionVariable> varables = new ArrayList<>();
         varables.addAll(ExecutionVariable.getVariables().values());
 

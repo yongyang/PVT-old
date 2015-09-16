@@ -17,6 +17,7 @@
 
 package org.jboss.pnc.pvt.execution;
 
+import java.io.Serializable;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -48,33 +49,58 @@ public class ParamJenkinsJob {
 
     private final SAXReader reader;
 
-    private final List<StringParameterDefinition> stringParams;
+    private final List<SerializableStringParam> stringParams;
+
+    private final JenkinsArchiver archiver;
 
     public ParamJenkinsJob(String configXml) throws DocumentException {
         this.configXml = configXml;
         reader = new SAXReader();
         doc = reader.read(new StringReader(configXml));
         stringParams = readJobParams();
+        archiver = readJobArchiver();
     }
 
-    private List<StringParameterDefinition> readJobParams() {
+    private JenkinsArchiver readJobArchiver() {
+        List<Node> nodes = doc.selectNodes("//hudson.tasks.ArtifactArchiver");
+        if (null == nodes || 0 == nodes.size()) {
+            return null;
+        }
+        Element ele = (Element) nodes.get(0);
+        String artifacts = ele.elementText("artifacts");
+        String excludes = ele.elementText("excludes");
+        boolean allowEmptyArchive = Boolean.valueOf(ele.elementText("allowEmptyArchive"));
+        boolean onlyIfSuccessful = Boolean.valueOf(ele.elementText("onlyIfSuccessful"));
+        boolean fingerprint = Boolean.valueOf(ele.elementText("fingerprint"));
+        boolean defaultExcludes = Boolean.valueOf(ele.elementText("defaultExcludes"));
+        JenkinsArchiver jar = new JenkinsArchiver();
+        jar.setAllowEmptyArchive(allowEmptyArchive);
+        jar.setArtifacts(artifacts);
+        jar.setDefaultExcludes(defaultExcludes);
+        jar.setExcludes(excludes);
+        jar.setFingerprint(fingerprint);
+        jar.setOnlyIfSuccessful(onlyIfSuccessful);
+        return jar;
+    }
+
+    private List<SerializableStringParam> readJobParams() {
         List<Node> nodes = doc.selectNodes("//hudson.model.StringParameterDefinition");
         if (null == nodes || 0 == nodes.size()) {
             return Collections.emptyList();
         }
-        List<StringParameterDefinition> params = new ArrayList<>();
+        List<SerializableStringParam> params = new ArrayList<>();
         for (Node node : nodes) {
             Element paramEle = (Element) node;
             String name = paramEle.elementText("name");
             String description = paramEle.elementText("description");
             String defaultValue = paramEle.elementText("defaultValue");
             StringParameterDefinition spd = new StringParameterDefinition(name, description, defaultValue);
-            params.add(spd);
+            params.add(new SerializableStringParam(spd));
         }
         return params;
     }
 
-    public List<StringParameterDefinition> getStringParams() {
+    public List<SerializableStringParam> getStringParams() {
         return this.stringParams;
     }
 
@@ -84,6 +110,80 @@ public class ParamJenkinsJob {
 
     public String getConfigXml() {
         return configXml;
+    }
+
+    public String getArchiver() {
+        if (this.archiver != null) {
+            return this.archiver.getArtifacts();
+        }
+        return null;
+    }
+
+    public static class SerializableStringParam implements Serializable {
+
+        private static final long serialVersionUID = -6511932106227048197L;
+
+        private String name;
+
+        private String description;
+
+        private String defaultValue;
+
+        public SerializableStringParam() {
+        }
+
+        private SerializableStringParam(StringParameterDefinition spd) {
+            super();
+            if (spd == null) {
+                throw new IllegalArgumentException("StringParameterDefinition is null.");
+            }
+            this.name = spd.getName();
+            this.description = spd.getDescription();
+            this.defaultValue = spd.getDefaultValue();
+        }
+
+        /**
+         * @return the name
+         */
+        public String getName() {
+            return name;
+        }
+
+        /**
+         * @param name the name to set
+         */
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        /**
+         * @return the description
+         */
+        public String getDescription() {
+            return description;
+        }
+
+        /**
+         * @param description the description to set
+         */
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        /**
+         * @return the defaultValue
+         */
+        public String getDefaultValue() {
+            return defaultValue;
+        }
+
+        /**
+         * @param defaultValue the defaultValue to set
+         */
+        public void setDefaultValue(String defaultValue) {
+            this.defaultValue = defaultValue;
+        }
+
     }
 
 }
