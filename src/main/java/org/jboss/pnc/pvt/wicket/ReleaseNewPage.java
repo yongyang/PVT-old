@@ -154,8 +154,7 @@ public class ReleaseNewPage extends TemplatePage {
                 PageParameters pp = new PageParameters();
                 setResponsePage(ReleasesPage.class, pp);
             }
-        };
-        backButton.setDefaultFormProcessing(false);
+        }.setDefaultFormProcessing(false);
         releaseForm.add(backButton);
 
         resetButton = new Button("reset") {
@@ -187,7 +186,7 @@ public class ReleaseNewPage extends TemplatePage {
                     setResponsePage(new ReleasesPage(pp, "Release: " + release.getName() + " is removed."));
                 }
             }
-        };
+        }.setDefaultFormProcessing(false);
         releaseForm.add(removeButton);
 
         add(releaseForm);
@@ -207,7 +206,7 @@ public class ReleaseNewPage extends TemplatePage {
                 PVTDataAccessObject dao = PVTApplication.getDAO();
                 boolean existed = false;
                 for (Release rel : dao.getPvtModel().getReleases()) {
-                    if ((!rel.getId().equalsIgnoreCase(release.getId())) && rel.getName().equalsIgnoreCase(nameTextField.getInput()) && rel.getProductId().equalsIgnoreCase(productDropDownChoice.getInput())) {
+                    if ((!rel.getId().equalsIgnoreCase(release.getId())) && rel.getName().equalsIgnoreCase(nameTextField.getInput()) && rel.getProductId().equalsIgnoreCase(productDropDownChoice.getModelObject().getId())) {
                         existed = true;
                         break;
                     }
