@@ -1,5 +1,6 @@
 package org.jboss.pnc.pvt.model;
 
+import java.util.Objects;
 import java.util.Properties;
 
 import org.jboss.pnc.pvt.execution.ExecutionVariable;
@@ -13,13 +14,16 @@ public class VerifyParameter {
     /** Property key which indicates whether skip the passed verification or not. Default false **/
     public static final String SKIP_PASSED = "skip.passed";
     
-    private String toolId;
+    private final String toolId;
 
-    private Release referenceRelease;
-    private Release release;
+    private final Release referenceRelease;
+    private final Release release;
 
-    private Properties properties = new Properties();
+    private final Properties properties = new Properties();
 
+    public VerifyParameter(String toolId, Release release) {
+        this(toolId, null, release, null);
+    }
 
     public VerifyParameter(String toolId, Release referenceRelease, Release release) {
         this(toolId, referenceRelease, release, null);
@@ -30,11 +34,22 @@ public class VerifyParameter {
     }
 
     public VerifyParameter(String toolId,Release referenceRelease, Release release, Properties properties, boolean prefillVars) {
+        Objects.requireNonNull(toolId, "toolId can't be null");
+        Objects.requireNonNull(release, "release can't be null");
         this.toolId = toolId;
-        this.referenceRelease = referenceRelease;
         this.release = release;
+        if (referenceRelease == null) {
+            String refId = release.getReferenceReleaseId();
+            if (refId != null) {
+                this.referenceRelease = PVTApplication.getDAO().getPvtModel().getReleasebyId(refId);
+            } else {
+                this.referenceRelease = null;
+            }
+        } else {
+            this.referenceRelease = referenceRelease;
+        }
         if(properties != null && !properties.isEmpty()) {
-            this.properties = properties;
+            this.properties.putAll(properties);
         }
         if (prefillVars) {
             prefillInternalVariables();
