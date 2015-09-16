@@ -20,8 +20,9 @@ import java.util.Calendar;
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
  */
 public class VerificationPage extends TemplatePage {
+	
     public VerificationPage(PageParameters pp) {
-        this(pp, "PVT verification loaded.");
+        this(pp, "PVT verifications loaded.");
     }
 
     public VerificationPage(PageParameters pp, String info) {
@@ -29,59 +30,56 @@ public class VerificationPage extends TemplatePage {
 
         setActiveMenu(Menu.VERIFICATIONS);
 
-        String verifyId = pp.get(0).toString();
+        String verifyId = pp.get("verificationId").toString();
         Verification verification = PVTApplication.getDAO().getPvtModel().getVerificationById(verifyId);
         VerifyTool tool = PVTApplication.getDAO().getPvtModel().getVerifyToolById(verification.getToolId());
         Release release = PVTApplication.getDAO().getPvtModel().getReleasebyId(verification.getReleaseId());
         Product product = PVTApplication.getDAO().getPvtModel().getProductById(release.getProductId());
 //        Release refRelease = PVTApplication.getDAO().getPvtModel().getReleasebyId(verification.getReferenceReleaseId());
 
-        Form form = new Form("verification_form", new CompoundPropertyModel(verification));
-        add(form);
+        Form verificationForm = new Form("verification_form", new CompoundPropertyModel(verification));
+        add(verificationForm);
 
-        form.add(new Label("id", verifyId));
-
-
-        form.add(new Label("tool_name", tool.toString()));
+        verificationForm.add(new Label("id", verifyId));
+        verificationForm.add(new Label("tool_name", tool.getName()));
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(verification.getStartTime());
-        form.add(new Label("startTime", calendar.getTime().toString()));
+        verificationForm.add(new Label("startTime", calendar.getTime().toString()));
 
         long endTime = verification.getEndTime();
         Calendar endCalendar = Calendar.getInstance();
         if(endTime != 0) {
             calendar.setTimeInMillis(endTime);
         }
+        verificationForm.add(new Label("endTime", endTime == 0 ? " - " : endCalendar.getTime().toString()));
 
-        form.add(new Label("endTime", endTime == 0 ? " - " : endCalendar.getTime().toString()));
-
-        form.add(new Label("status", verification.getStatus()));
-        form.add(new Label("release", product.getName() + " " + release.getName()));
+        verificationForm.add(new Label("status", verification.getStatus()));
+        verificationForm.add(new Label("release", product.getName() + " " + release.getName()));
 
         if(verification.getExecution().getLink() != null) {
-            form.add(new ExternalLink("execution_link", verification.getExecution().getLink(), verification.getExecution().getLink()));
+        	verificationForm.add(new ExternalLink("execution_link", verification.getExecution().getLink(), verification.getExecution().getLink()));
         }
         else {
-            form.add(new ExternalLink("execution_link", "#", verification.getExecution().getLink()));
+        	verificationForm.add(new ExternalLink("execution_link", "#", verification.getExecution().getLink()));
         }
 
         if(verification.getExecution().getReport().getMainLog() != null) {
-            form.add(new Label("execution_log", verification.getExecution().getReport().getMainLog()));
+        	verificationForm.add(new Label("execution_log", verification.getExecution().getReport().getMainLog()));
         }
         else {
-            form.add(new Label("execution_log", ""));
+        	verificationForm.add(new Label("execution_log", ""));
         }
 
         if(verification.getExecution().getException() != null) {
-            form.add(new Label("execution_exception", verification.getExecution().getException()));
+        	verificationForm.add(new Label("execution_exception", verification.getExecution().getException()));
         }
         else {
-            form.add(new Label("execution_exception", ""));
+        	verificationForm.add(new Label("execution_exception", ""));
         }
 
         WebMarkupContainer waiveTR = new WebMarkupContainer("waive_tr");
-        form.add(waiveTR);
+        verificationForm.add(waiveTR);
         TextArea<String> waiveComment = new TextArea<String>("waiveComment");
         waiveTR.add(waiveComment);
 
@@ -97,10 +95,10 @@ public class VerificationPage extends TemplatePage {
             }
 
         };
-        form.add(waiveButton);
+        verificationForm.add(waiveButton);
 
 
-        form.add(new Button("cancel_button") {
+        verificationForm.add(new Button("cancel_button") {
             @Override
             public void onSubmit() {
                 //STOP this verification, for example: to cancel a unlinked verification

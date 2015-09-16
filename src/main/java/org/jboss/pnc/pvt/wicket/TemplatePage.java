@@ -87,7 +87,7 @@ public abstract class TemplatePage extends WebPage {
         verificationsLi.add(new Link<String>("link-verifications") {
             @Override
             public void onClick() {
-                setResponsePage(ToolsPage.class);
+                setResponsePage(VerificationsPage.class);
             }
         });
 

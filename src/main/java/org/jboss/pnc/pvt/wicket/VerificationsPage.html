@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:head>
+  <meta charset="utf-8"/>
+</wicket:head>
+<body>
+
+<wicket:extend>
+
+  <h1>Verifications</h1>
+
+
+  <span class="superlight tiny">
+    <!--(Select a default filter in <a href="/user/preferences">preferences</a>).-->
+  </span>
+
+  <form accept-charset="UTF-8" class="edit_system_errata_filter" id="filter_form_form" method="get">
+    <div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;"/></div>
+
+    <div class="filter_form_box">
+
+      <div class="clearfix float-child-divs">
+        <div class="filter_explanation" style="float:right;max-width:490px;text-align:right;line-height:95%;">
+          (Active, sorted by newest)
+        </div>
+        <div class="filter_label">Filter:</div>
+        <div class="filter_select_div">
+          <input type="text" id="filer" size="10" style="background-color: #EEEEEE; margin-bottom:0px" />
+        </div>
+        <div class="filter_buttons_div">
+          <a href="" class="btn btn-small submit-button refresh-submit-button" id="filter_btn_refresh">Go</a>
+        </div>
+      </div>
+
+    </div>
+  </form>
+
+  <div id="filter_waiting" class="wait-spinner" style="margin-left:2em;display:none;"></div>
+
+  <div id="filter_results">
+
+    <div class="small light" style="margin-bottom:9px;">
+      <span wicket:id="verification_count">0</span> releases found.
+    </div>
+
+    <table class="errata_list" style="width:100%;">
+      <thead>
+      <tr class="errata_list_head">
+        <th>Release</th>
+        <th>Tool</th>
+        <th>Status<br/></th>
+      </tr>
+      </thead>
+
+      <tbody wicket:id="verification_rows " class="errata_row even">
+      <tr class="upper">
+        <td class="norightpad first">
+          <big>
+            <a wicket:id="verification_link" class="advisory_link show_type show_type_RHBA"><span wicket:id="product_name"></span></a> - &nbsp;
+          </big>
+        </td>
+        <td rowspan="2">
+          <div class="clipwidth " style="max-width:160px"><span wicket:id="tool_name"></span></div>
+        </td>
+        <td rowspan="2" style="white-space:nowrap;">
+          <div class="clipwidth " style="max-width:100px">
+            <span style="font-size:120%;"><span wicket:id="verification_status" class="state_indicator state_indicator_qe"></span></span>
+          </div>
+        </td>
+      </tr>
+      <tr class="lower">
+        <td colspan="1" class="first">
+          <span wicket:id="release_name"></span>
+        </td>
+      </tr>
+      </tbody>
+
+    </table>
+
+  </div>
+
+</wicket:extend>
+</body>
+</html>
