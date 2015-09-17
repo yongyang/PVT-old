@@ -26,7 +26,7 @@ public class VerificationsPage extends TemplatePage{
 
     public VerificationsPage(PageParameters pp, String info) {
     	super(pp, info);
-        setActiveMenu(Menu.PRODUCTS);
+        setActiveMenu(Menu.VERIFICATIONS);
 
         PVTModel pvtModel = PVTApplication.getDAO().getPvtModel();
         List<Verification> verifications = pvtModel.getVerificationsList();
