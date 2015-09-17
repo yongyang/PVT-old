@@ -50,6 +50,7 @@
         <th>Tool</th>
         <th>Status<br/></th>
         <th>Referenced?</th>
+        <th>Actions</th>
       </tr>
       </thead>
 
@@ -73,10 +74,22 @@
             <span style="font-size:120%;"><span wicket:id="valid" class="state_indicator state_indicator_qe"></span></span>
           </div>
         </td>
+        <td>
+          <div class="clipwidth " style="max-width:130px">
+            <a href="" wicket:id="verification_remove" class="btn btn-small submit-button refresh-submit-button">REMOVE</a>
+          </div>
+        </td>
       </tr>
       <tr class="lower">
         <td colspan="1" class="first">
           <span wicket:id="release_name"></span>
+        </td>
+        <td>
+          <div class="clipwidth " style="max-width:95px" title="">
+            <div class="clipwidth " style="max-width:130px">
+              <a href="" wicket:id="verification_view" class="btn btn-small submit-button refresh-submit-button">&nbsp;VIEW&nbsp;</a>
+            </div>
+          </div>
         </td>
       </tr>
       </tbody>

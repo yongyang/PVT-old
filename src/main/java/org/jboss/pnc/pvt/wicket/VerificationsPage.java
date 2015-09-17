@@ -7,6 +7,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.jboss.pnc.pvt.dao.PVTDataAccessObject;
 import org.jboss.pnc.pvt.model.PVTModel;
 import org.jboss.pnc.pvt.model.Product;
 import org.jboss.pnc.pvt.model.Release;
@@ -57,8 +58,32 @@ public class VerificationsPage extends TemplatePage{
                 
                 if(item.getModel().getObject().getReferenceReleaseId() != null ){
                 	item.add(new Label("valid", "Valid"));
-                }else
+                }else {
                 	item.add(new Label("valid", "Invalid"));
+                	
+                	Link<String> verificationRemoveLink = new Link<String>("verification_remove") {
+                        @Override
+                        public void onClick() {
+                        	PVTDataAccessObject dao = PVTApplication.getDAO();
+                            boolean success = dao.getPvtModel().removeVerification(item.getModel().getObject());
+                            if(success) {
+                                dao.persist();
+                                setResponsePage(VerificationsPage.class, new PageParameters());
+                            }
+                        }
+                    };
+                    item.add(verificationRemoveLink);
+                }
+                
+                Link<String> verificationLink = new Link<String>("verification_view") {
+                    @Override
+                    public void onClick() {
+                        PageParameters pp = new PageParameters();
+                        pp.set("verificationId", item.getModel().getObject().getId());
+                        setResponsePage(VerificationPage.class, pp);
+                    }
+                };
+                item.add(verificationLink);
                 
                 if(verifications.indexOf(item.getModel().getObject()) % 2 == 1) {
                     item.add(AttributeModifier.replace("class", "errata_row odd"));
