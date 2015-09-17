@@ -54,6 +54,12 @@ public class VerificationsPage extends TemplatePage{
                 item.add(new Label("tool_name", tool.getName()));
                 
                 item.add(new Label("verification_status", item.getModel().getObject().getStatus().name()));
+                
+                if(item.getModel().getObject().getReferenceReleaseId() != null ){
+                	item.add(new Label("valid", "Valid"));
+                }else
+                	item.add(new Label("valid", "Invalid"));
+                
                 if(verifications.indexOf(item.getModel().getObject()) % 2 == 1) {
                     item.add(AttributeModifier.replace("class", "errata_row odd"));
                 }
