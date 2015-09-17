@@ -22,7 +22,7 @@ import java.util.*;
 public class VerificationsPage extends TemplatePage{
 
     public VerificationsPage(PageParameters pp) {
-        this(pp,"PVT products loaded.");
+        this(pp,"PVT verifications loaded.");
     }
 
     public VerificationsPage(PageParameters pp, String info) {
