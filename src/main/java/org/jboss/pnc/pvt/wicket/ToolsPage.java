@@ -1,10 +1,12 @@
 package org.jboss.pnc.pvt.wicket;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -12,6 +14,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.StringValue;
 import org.jboss.pnc.pvt.dao.PVTDataAccessObject;
 import org.jboss.pnc.pvt.model.VerifyTool;
 import org.jboss.pnc.pvt.model.VerifyToolType;
@@ -33,6 +36,25 @@ public class ToolsPage extends TemplatePage {
         setActiveMenu(Menu.TOOLS);
 
         List<VerifyToolType> toolTypes = PVTApplication.getDAO().getPvtModel().getToolTypes();
+        StringValue strValue = pp.get("filter");
+        String filter = null;
+        if (strValue != null) {
+            filter = strValue.toOptionalString();
+        }
+        final TextField<String> filterText = new TextField<String>("filter", filter == null ? Model.of("") : Model.of(filter));
+        Form<String> searchForm = new Form<String>("tools_form") {
+
+            @Override
+            protected void onSubmit() {
+                String filter = getRequest().getPostParameters().getParameterValue("filter").toOptionalString();
+                PageParameters pp = new PageParameters();
+                pp.set("filter", filter);
+                setResponsePage(ToolsPage.class, pp);
+            }
+        };
+        searchForm.add(filterText);
+        searchForm.setMarkupId("tools_form");
+        add(searchForm);
 
         add(new ListView<VerifyToolType>("tool_lables", toolTypes) {
             @Override
@@ -62,7 +84,7 @@ public class ToolsPage extends TemplatePage {
             }
         });
 
-        List<VerifyTool> tools = getTools(pp);
+        List<VerifyTool> tools = getTools(filter);
 
         add(new Label("tool_count", Model.of("" + tools.size())));
 
@@ -105,15 +127,25 @@ public class ToolsPage extends TemplatePage {
     }
 
     /**
-     * Gets Tools according to the page parameters.
+     * Gets Tools according to the filter.
      * 
      * @param pp the page parameters, if null, list all tools
      * @return the list of tools specified by the filter in pp.
      */
-    private List<VerifyTool> getTools(PageParameters pp) {
-        //TODO no filter yet
+    private List<VerifyTool> getTools(String filter) {
         PVTDataAccessObject dao = PVTApplication.getDAO();
-        return dao.getPvtModel().getToolsList();
+        List<VerifyTool> tools = dao.getPvtModel().getToolsList();
+        List<VerifyTool> result = new ArrayList<>();
+        for (VerifyTool tool: tools) {
+            if (filter != null && filter.trim().length() > 0) {
+                if (tool.getName().toLowerCase().contains(filter.toLowerCase())) {
+                    result.add(tool);
+                }
+            } else {
+                result.add(tool);
+            }
+        }
+        return result;
     }
 
 }

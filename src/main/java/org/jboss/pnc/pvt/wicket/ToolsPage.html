@@ -23,8 +23,7 @@
     (Select a filter in dropdown list below).
   </span>
 
-  <form accept-charset="UTF-8" action="/errata" class="edit_system_errata_filter" id="filter_form_form" method="get">
-    <div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;"/></div>
+  <form accept-charset="UTF-8" wicket:id="tools_form" class="edit_system_errata_filter" id="tools_form" method="post">
 
     <div class="filter_form_box">
 
@@ -34,26 +33,15 @@
         </div>
         <div class="filter_label">Filter:</div>
         <div class="filter_select_div">
-          <select class="" id="filter_select" name="errata_filter[id]" style="min-width:200px;">
-            <option value="" selected="selected">(Unsaved Filter)</option>
-            <optgroup label="System Filters" id="system_filters_optgroup">
-              <option value="1" selected="selected">Active Advisories (Default)</option>
-            </optgroup>
-            <optgroup label="User Defined Filters" id="user_filters_optgroup"></optgroup>
-          </select>
+          <input type="text" id="filter" wicket:id="filter" size="10" style="background-color: #EEEEEE; margin-bottom:0px" />
         </div>
         <div class="filter_buttons_div">
-          <a href="" class="btn btn-small submit-button refresh-submit-button" id="filter_btn_refresh">Refresh</a>
-          <a href="" class="btn btn-small" id="filter_btn_modify">Modify</a>
-          <a href="" class="btn btn-small" id="filter_btn_new">New</a>
-        </div>
-        <div class="please_wait_div" style="display:none;">
-          Please wait...
+          <a onclick="document.getElementById('tools_form').submit();" class="btn btn-small submit-button refresh-submit-button" id="filter_btn_refresh">Go</a>
         </div>
       </div>
-
-    </div>
-  </form>
+  
+      </div>
+   </form>
 
   <div id="filter_waiting" class="wait-spinner" style="margin-left:2em;display:none;"></div>
 
