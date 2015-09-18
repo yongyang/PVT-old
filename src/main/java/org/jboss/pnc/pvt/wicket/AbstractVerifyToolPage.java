@@ -1,6 +1,5 @@
 package org.jboss.pnc.pvt.wicket;
 
-import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -9,12 +8,16 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.validation.IValidatable;
+import org.apache.wicket.validation.IValidator;
+import org.apache.wicket.validation.ValidationError;
 import org.jboss.pnc.pvt.model.PVTModel;
 import org.jboss.pnc.pvt.model.VerifyTool;
 
 /**
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
  */
+@SuppressWarnings("serial")
 public abstract class AbstractVerifyToolPage extends TemplatePage {
 
     protected Form<VerifyTool> form;
@@ -28,6 +31,7 @@ public abstract class AbstractVerifyToolPage extends TemplatePage {
         this(pp, null);
     }
 
+    
     public AbstractVerifyToolPage(final PageParameters pp, String info) {
         super(pp, info);
         setActiveMenu(Menu.TOOLS);
@@ -38,7 +42,7 @@ public abstract class AbstractVerifyToolPage extends TemplatePage {
 
         tool = getVerifyTool(pp);
 
-        form = new Form<VerifyTool>("form-tool", new CompoundPropertyModel<VerifyTool>(tool)){
+        form = new Form<VerifyTool>("form-tool", new CompoundPropertyModel<VerifyTool>(tool)) {
             @Override
             protected void onSubmit() {
                 doSubmit(pp);
@@ -47,7 +51,21 @@ public abstract class AbstractVerifyToolPage extends TemplatePage {
         };
 
         // adds common fields
-        form.add(new RequiredTextField<String>("name"));
+        final RequiredTextField<String> toolNameTextField = new RequiredTextField<String>("name");
+        toolNameTextField.add(new IValidator<String>() {
+            @Override
+            public void validate(IValidatable<String> validatable) {
+                String toolName = validatable.getValue();
+                PVTModel pvtModel = PVTApplication.getDAO().getPvtModel();
+                if (pvtModel.getToolsList().stream().anyMatch(p -> p.getName().equals(toolName))
+                        && !toolName.equals(tool.getName())) {
+                    ValidationError error = new ValidationError();
+                    error.addKey("toolName.unique").setVariable("toolName", toolName);
+                    validatable.error(error);
+                }
+            }
+        });
+        form.add(toolNameTextField);
 
         form.add(new TextArea<String>("description"));
 
@@ -84,7 +102,7 @@ public abstract class AbstractVerifyToolPage extends TemplatePage {
 
         };
         removeButton.setDefaultFormProcessing(false);
-//        removeButton.setVisible(mode == MODE_EDIT || mode == MODE_VIEW);
+        // removeButton.setVisible(mode == MODE_EDIT || mode == MODE_VIEW);
         form.add(removeButton);
 
         add(form);
