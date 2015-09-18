@@ -7,14 +7,14 @@
           <tr>
             <td class="header-label" width = "150">Jenkins Job ID:</td>
             <td>
-              <input wicket:id="jobId" maxlength="80" size="30" type="text" /> &nbsp;&nbsp;&nbsp;
-              <a class="btn btn-primary"  wicket:id="checkJob" style="margin-bottom:10px;">Check Job</a>
+              <input wicket:id="jobId" id="jobId" maxlength="80" size="30" type="text" /> &nbsp;&nbsp;&nbsp;
+              <a class="btn btn-primary" id="checkJob" style="margin-bottom:10px;">Check Job</a>
             </td>
           </tr>
 
           <tr>
             <td class="header-label" width = "150">Archiver:</td>
-            <td><span wicket:id="archiver" /></td>
+            <td><span id="archiverInfo" /></td>
           </tr>
 
           <tr>
@@ -29,23 +29,31 @@
 			      </tr>
 			      </thead>
 
-			      <tbody wicket:id="stringParamsPanel" class="errata_row even">
-			      <tr class="upper" wicket:id="stringParams">
-			        <td class="norightpad first">
-			          <span wicket:id="name" />
-			        </td>
-			        <td class="norightpad first">
-			          <span wicket:id="defaultValue" />
-			        </td>
-			        <td class="norightpad first">
-			          <span wicket:id="description" />
-			        </td>
-			      </tr>
-			      </tbody>
+			      <tbody id="stringParamsPanel" class="errata_row even"></tbody>
 			    </table>
             </td>
           </tr>
-
+<script>
+$().ready(function(){
+  $("#checkJob").click(function(){
+      $("#ajaxFeekBack").html("");
+      $("#archiverInfo").html("");
+      $("#stringParamsPanel").html("");
+      $.ajax({
+          type: "get",
+          url: "/pvt/rest/jenkinsInfo/" + $("#jobId").val(),
+          success: function(data, textStatus){
+              $("#ajaxFeekBack").html(data.feedback);
+              $("#archiverInfo").html(data.archiver);
+              $("#stringParamsPanel").html(data.stringparams);
+          },
+          error: function() {
+        	  $("#ajaxFeekBack").html("Error to check Jenkins Job: " + $("#jobId").val());
+          }
+      });
+  });
+});
+</script>
 </wicket:extend>
 
 </body>

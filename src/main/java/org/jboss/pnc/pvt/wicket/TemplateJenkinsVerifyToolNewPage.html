@@ -14,14 +14,14 @@
             <td>
               <div>
                 <DIV style="float:left;"><textarea wicket:id="jenkinsConfigXML" cols="75" id="jenkinsConfigXML" rows="12" wrap="soft"></textarea></DIV>
-                <div style="float:right; margin-left: 20px;"><a class="btn btn-primary"  wicket:id="checkJob" style="margin-bottom:10px;">Check Job</a></div>
+                <div style="float:right; margin-left: 20px;"><a class="btn btn-primary" id="checkJob" style="margin-bottom:10px;">Check Job</a></div>
               </div>
             </td>
           </tr>
 
           <tr>
             <td class="header-label" width = "150">Archiver:</td>
-            <td><span wicket:id="archiver" /></td>
+            <td><span id="archiverInfo" /></td>
           </tr>
 
           <tr>
@@ -36,19 +36,7 @@
 			      </tr>
 			      </thead>
 
-			      <tbody wicket:id="stringParamsPanel" class="errata_row even">
-			      <tr class="upper" wicket:id="stringParams">
-			        <td class="norightpad first">
-			          <span wicket:id="name" />
-			        </td>
-			        <td class="norightpad first">
-			          <span wicket:id="defaultValue" />
-			        </td>
-			        <td class="norightpad first">
-			          <span wicket:id="description" />
-			        </td>
-			      </tr>
-			      </tbody>
+			      <tbody id="stringParamsPanel" class="errata_row even"></tbody>
 			    </table>
             </td>
           </tr>
@@ -58,6 +46,28 @@
 	    lineNumbers: true,
 	    matchBrackets: true
 	  });
+</script>
+<script>
+$().ready(function(){
+  $("#checkJob").click(function(){
+      $("#ajaxFeekBack").html("");
+      $("#archiverInfo").html("");
+      $("#stringParamsPanel").html("");
+      $.ajax({
+          type: "POST",
+          url: "/pvt/rest/jenkinsInfo/content/xml",
+          data: {jobContent: $("#jenkinsConfigXML").val()},
+          success: function(data, textStatus){
+              $("#ajaxFeekBack").html(data.feedback);
+              $("#archiverInfo").html(data.archiver);
+              $("#stringParamsPanel").html(data.stringparams);
+          },
+          error: function() {
+        	  $("#ajaxFeekBack").html("Error to check Jenkins Job format.");
+          }
+      });
+  });
+});
 </script>
 </wicket:extend>
 
