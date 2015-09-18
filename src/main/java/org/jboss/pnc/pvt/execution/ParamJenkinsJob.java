@@ -67,12 +67,18 @@ public class ParamJenkinsJob {
             return null;
         }
         Element ele = (Element) nodes.get(0);
-        String artifacts = ele.elementText("artifacts");
-        String excludes = ele.elementText("excludes");
-        boolean allowEmptyArchive = Boolean.valueOf(ele.elementText("allowEmptyArchive"));
-        boolean onlyIfSuccessful = Boolean.valueOf(ele.elementText("onlyIfSuccessful"));
-        boolean fingerprint = Boolean.valueOf(ele.elementText("fingerprint"));
-        boolean defaultExcludes = Boolean.valueOf(ele.elementText("defaultExcludes"));
+        Element subEle = ele.element("artifacts");
+        String artifacts = subEle == null ? "" : subEle.getTextTrim();
+        subEle = ele.element("excludes");
+        String excludes = subEle == null ? "" : subEle.getTextTrim();
+        subEle = ele.element("allowEmptyArchive");
+        boolean allowEmptyArchive = subEle == null ?  true : Boolean.valueOf(subEle.getTextTrim());
+        subEle = ele.element("onlyIfSuccessful");
+        boolean onlyIfSuccessful = subEle == null ?  false : Boolean.valueOf(subEle.getTextTrim());
+        subEle = ele.element("fingerprint");
+        boolean fingerprint = subEle == null ?  false : Boolean.valueOf(subEle.getTextTrim());
+        subEle = ele.element("defaultExcludes");
+        boolean defaultExcludes = subEle == null ?  true : Boolean.valueOf(subEle.getTextTrim());
         JenkinsArchiver jar = new JenkinsArchiver();
         jar.setAllowEmptyArchive(allowEmptyArchive);
         jar.setArtifacts(artifacts);

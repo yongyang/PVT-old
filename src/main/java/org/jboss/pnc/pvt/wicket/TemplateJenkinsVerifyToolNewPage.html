@@ -11,8 +11,12 @@
 
           <tr>
             <td class="header-label" width = "150">Jenkins Configuration:</td>
-            <td><textarea wicket:id="jenkinsConfigXML" cols="75" id="jenkinsConfigXML" rows="12" wrap="soft"></textarea> &nbsp;&nbsp;&nbsp;
-            <a class="btn btn-primary"  wicket:id="checkJob" style="margin-bottom:10px;">Check Job</a></td>
+            <td>
+              <div>
+                <DIV style="float:left;"><textarea wicket:id="jenkinsConfigXML" cols="75" id="jenkinsConfigXML" rows="12" wrap="soft"></textarea></DIV>
+                <div style="float:right; margin-left: 20px;"><a class="btn btn-primary"  wicket:id="checkJob" style="margin-bottom:10px;">Check Job</a></div>
+              </div>
+            </td>
           </tr>
 
           <tr>
@@ -48,7 +52,13 @@
 			    </table>
             </td>
           </tr>
-
+<script>
+  var editor = CodeMirror.fromTextArea(document.getElementById('jenkinsConfigXML'), {
+	    mode: 'xml',
+	    lineNumbers: true,
+	    matchBrackets: true
+	  });
+</script>
 </wicket:extend>
 
 </body>
