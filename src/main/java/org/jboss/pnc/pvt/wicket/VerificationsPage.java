@@ -45,22 +45,22 @@ public class VerificationsPage extends TemplatePage{
                         setResponsePage(VerificationPage.class, pp);
                     }
                 };
+                VerifyTool tool = PVTApplication.getDAO().getPvtModel().getVerifyToolById(item.getModel().getObject().getToolId());
+                verification_link.add(new Label("tool_name", tool.getName()));
+                item.add(verification_link);
+                
                 Release release = PVTApplication.getDAO().getPvtModel().getReleasebyId(item.getModel().getObject().getReleaseId());
                 Product product = PVTApplication.getDAO().getPvtModel().getProductById(release.getProductId());
-                verification_link.add(new Label("product_name", product.getName()));
-                item.add(verification_link);
+                item.add(new Label("product_name", product.getName()));
                 item.add(new Label("release_name", release.getName()));
                 
-                VerifyTool tool = PVTApplication.getDAO().getPvtModel().getVerifyToolById(item.getModel().getObject().getToolId());
-                item.add(new Label("tool_name", tool.getName()));
+                
                 
                 item.add(new Label("verification_status", item.getModel().getObject().getStatus().name()));
                 
-                if(item.getModel().getObject().getReferenceReleaseId() != null ){
-                	item.add(new Label("valid", "Valid"));
-                }else {
-                	item.add(new Label("valid", "Invalid"));
-                	
+                String isReferenced = "Valid";
+                if(item.getModel().getObject().getReferenceReleaseId()== null ){
+                	isReferenced = "Invalid";
                 	Link<String> verificationRemoveLink = new Link<String>("verification_remove") {
                         @Override
                         public void onClick() {
@@ -74,6 +74,7 @@ public class VerificationsPage extends TemplatePage{
                     };
                     item.add(verificationRemoveLink);
                 }
+                item.add(new Label("valid", isReferenced));
                 
                 Link<String> verificationLink = new Link<String>("verification_view") {
                     @Override
