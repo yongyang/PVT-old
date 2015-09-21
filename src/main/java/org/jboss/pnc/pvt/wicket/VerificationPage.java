@@ -32,6 +32,7 @@ public class VerificationPage extends TemplatePage {
 
         String verifyId = pp.get("verificationId").toString();
         Verification verification = PVTApplication.getDAO().getPvtModel().getVerificationById(verifyId);
+
         VerifyTool tool = PVTApplication.getDAO().getPvtModel().getVerifyToolById(verification.getToolId());
         Release release = PVTApplication.getDAO().getPvtModel().getReleasebyId(verification.getReleaseId());
         Product product = PVTApplication.getDAO().getPvtModel().getProductById(release.getProductId());

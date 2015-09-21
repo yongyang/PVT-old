@@ -129,7 +129,7 @@ public class ReleasesPage extends TemplatePage{
                             @Override
                             public void onClick() {
                                 PageParameters pageParameters = new PageParameters();
-                                pageParameters.set(0, verificationId);
+                                pageParameters.set("verificationId", verificationId);
                                 setResponsePage(VerificationPage.class, pageParameters);
                             }
                         };
