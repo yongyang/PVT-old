@@ -46,15 +46,16 @@ public class VerificationsPage extends TemplatePage{
                     }
                 };
                 VerifyTool tool = PVTApplication.getDAO().getPvtModel().getVerifyToolById(item.getModel().getObject().getToolId());
-                verification_link.add(new Label("tool_name", tool.getName()));
-                item.add(verification_link);
+
+
                 
                 Release release = PVTApplication.getDAO().getPvtModel().getReleasebyId(item.getModel().getObject().getReleaseId());
                 Product product = PVTApplication.getDAO().getPvtModel().getProductById(release.getProductId());
                 item.add(new Label("product_name", product.getName()));
                 item.add(new Label("release_name", release.getName()));
-                
-                
+
+                verification_link.add(new Label("tool_name", tool.getName() + " @" + product.getName() +"-" + release.getName()));
+                item.add(verification_link);
                 
                 item.add(new Label("verification_status", item.getModel().getObject().getStatus().name()));
                 
