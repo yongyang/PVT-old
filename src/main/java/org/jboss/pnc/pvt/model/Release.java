@@ -29,6 +29,9 @@ public class Release implements Serializable {
     // ex: http://download.devel.redhat.com/devel/candidates/JBEAP/JBEAP-7.0.0.DR6/jboss-eap-7.0.0.DR6.zip
     private String distributions;
 
+    // the maven repo zip, wolf-validator uses it
+    private String repo;
+
     // The tools applied to this release, TOOL_ID => VerificationID
     private Map<String, String> toolsMap = new HashMap<>();
 
@@ -80,6 +83,14 @@ public class Release implements Serializable {
         else {
             return new String[0];
         }
+    }
+
+    public String getRepo() {
+        return repo;
+    }
+
+    public void setRepo(String repo) {
+        this.repo = repo;
     }
 
     public void setDistributions(String distributions) {

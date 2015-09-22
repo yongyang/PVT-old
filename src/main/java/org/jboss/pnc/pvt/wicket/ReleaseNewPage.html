@@ -43,9 +43,13 @@
               <textarea wicket:id="distributions" cols="75" id="advisory_topic" name="advisory[topic]" rows="6"></textarea>
               <br/> NOTE: one zip one line, ex:
               <br/> http://abc.com/a.zip
-              <br/> http://abc.com/b.zip
             </td>
           </tr>
+          <tr id='repo' >
+            <td class="header-label" width = "100">Maven Repo zip:</td>
+            <td><input wicket:id="repo" id="advisory_repo" maxlength="500" name="advisory[synopsis]" size="80" type="text" /> NOTE: maven zip url, needed by wolf-validator</td>
+          </tr>
+
           <tr>
             <td class="header-label" width = "150">Description:</td>
             <td>

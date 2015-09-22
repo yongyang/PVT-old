@@ -129,6 +129,7 @@ public class ReleaseNewPage extends TemplatePage {
         nameTextField.setRequired(true);
         releaseForm.add(nameTextField);
         releaseForm.add(new TextArea<String>("distributions"));
+        releaseForm.add(new TextField<String>("repo"));
         releaseForm.add(new TextArea<String>("description"));
 
         toolCheckBoxMultipleChoice = new CheckBoxMultipleChoice<VerifyTool>(
