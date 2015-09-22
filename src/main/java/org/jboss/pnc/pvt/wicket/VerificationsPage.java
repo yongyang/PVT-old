@@ -58,9 +58,9 @@ public class VerificationsPage extends TemplatePage{
                 
                 item.add(new Label("verification_status", item.getModel().getObject().getStatus().name()));
                 
-                String isReferenced = "Valid";
+                String isReferenced = "Yes";
                 if(item.getModel().getObject().getReferenceReleaseId()== null ){
-                	isReferenced = "Invalid";
+                	isReferenced = "No";
                 	Link<String> verificationRemoveLink = new Link<String>("verification_remove") {
                         @Override
                         public void onClick() {

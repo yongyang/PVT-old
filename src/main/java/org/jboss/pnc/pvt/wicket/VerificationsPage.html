@@ -40,14 +40,14 @@
   <div id="filter_results">
 
     <div class="small light" style="margin-bottom:9px;">
-      <span wicket:id="verification_count">0</span> releases found.
+      <span wicket:id="verification_count">0</span> verifications found.
     </div>
 
     <table class="errata_list" style="width:100%;">
       <thead>
       <tr class="errata_list_head">
-        <th>Tool</th>
-        <th>Release</th>
+        <th>Verification</th>
+        <th>Product / Release</th>
         <th>Status<br/></th>
         <th>Referenced?</th>
         <th>Actions</th>
@@ -63,8 +63,8 @@
           </div>
         </td>
         <td>
-          <div class="clipwidth">
-            <span wicket:id="product_name"></span> - &nbsp;
+          <div class="clipwidth" style="white-space:nowrap;">
+            <span wicket:id="product_name"></span>
           </div>
         </td>
         <td rowspan="2" style="white-space:nowrap;">
@@ -73,8 +73,8 @@
           </div>
         </td>
         <td rowspan="2" style="white-space:nowrap;">
-          <div class="clipwidth " style="max-width:100px">
-            <span style="font-size:120%;"><span wicket:id="valid" class="state_indicator state_indicator_qe"></span></span>
+          <div class="clipwidth " style="max-width:50px">
+            <span style="font-size:120%;"><span wicket:id="valid" class="state_indicator state_indicator_rel_prep"></span></span>
           </div>
         </td>
         <td>
