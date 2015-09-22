@@ -93,6 +93,10 @@ public final class ExecutionVariable implements Serializable {
     
     public static final ExecutionVariable REF_ZIP_URL = new ExecutionVariable("REF_ZIP_URL", "The firsh zip url of reference release");
 
+    public static final ExecutionVariable CURRENT_MVN_REPO_URL = new ExecutionVariable("CURRENT_MVN_REPO_URL", "The current maven repository zip url");
+
+    public static final ExecutionVariable REF_MVN_REPO_URL = new ExecutionVariable("REF_MVN_REPO_URL", "The reference maven repository zip url");
+
     /* (non-Javadoc)
      * @see java.lang.Object#hashCode()
      */

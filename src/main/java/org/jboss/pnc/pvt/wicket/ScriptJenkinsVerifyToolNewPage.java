@@ -1,6 +1,8 @@
 package org.jboss.pnc.pvt.wicket;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.wicket.MarkupContainer;
@@ -53,6 +55,13 @@ public class ScriptJenkinsVerifyToolNewPage extends AbstractVerifyToolPage {
 
         List<ExecutionVariable> varables = new ArrayList<>();
         varables.addAll(ExecutionVariable.getVariables().values());
+        Collections.sort(varables, new Comparator<ExecutionVariable>() {
+
+            @Override
+            public int compare(ExecutionVariable o1, ExecutionVariable o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
 
         final MarkupContainer rowPanel = new WebMarkupContainer("rowPanel");
         rowPanel.setOutputMarkupId(true);
@@ -118,7 +127,7 @@ public class ScriptJenkinsVerifyToolNewPage extends AbstractVerifyToolPage {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                paramsListView.getModelObject().add(ExecutionVariable.CURRENT_PRODUCT_ID.getName()); // default
+                paramsListView.getModelObject().add(ExecutionVariable.CURRENT_ZIP_URL.getName()); // default to current zip url
                 if (target != null)
                     target.add(rowPanel);
             }

@@ -152,7 +152,7 @@ public class Verification implements Serializable{
                     break;
                 }
                 case FAILED: {
-                    setStatus(Verification.Status.NOT_PASSED);
+                    setStatus(Verification.Status.NEED_INSPECT);
                     break;
                 }
                 case SUCCEEDED: {

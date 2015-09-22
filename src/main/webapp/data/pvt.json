@@ -22,6 +22,7 @@
     "name" : "1.0.0.DR1",
     "referenceReleaseId" : null,
     "distributions" : "http://10.66.79.92/jboss-eap-6.4.2-full-build.zip",
+    "repo" : null,
     "toolsMap" : {
       "7bd1865f-21fd-4ef3-abc9-7dd271667efa" : null,
       "e44990e5-454b-49c2-870e-963c4015d384" : null
@@ -35,20 +36,22 @@
     "productId" : "df7a423b-0b4d-40f3-860c-85d178c12cf1",
     "name" : "1.0.0.DR1",
     "referenceReleaseId" : null,
-    "distributions" : "http://10.66.79.92/jboss-brms-6.1.0.GA-maven-repository.zip",
+    "distributions" : null,
+    "repo" : "http://10.66.79.92/jboss-brms-6.1.0.GA-maven-repository.zip",
     "toolsMap" : {
       "dc75a16a-567c-4acf-8752-c6a815a7b45e" : null
     },
     "description" : "BRMS 1.0.0.DR1 release",
     "status" : "NEW",
     "createTime" : 1440062648090,
-    "updateTime" : 1442844812692
+    "updateTime" : 1442903330237
   }, {
     "id" : "9048d848-2c57-4c14-8f36-e0e5e3f9bd1b",
     "productId" : "df7a423b-0b4d-40f3-860c-85d178c12cf0",
     "name" : "1.0.0.DR2",
     "referenceReleaseId" : "06906f58-bf00-47dd-bde1-18e81f6163a8",
     "distributions" : "http://10.66.79.92/jboss-eap-6.4.3-full-build.zip",
+    "repo" : null,
     "toolsMap" : {
       "a4d685cf-04a9-499d-9097-426106721233" : null
     },
@@ -160,10 +163,10 @@
       "name" : "wolf-validator",
       "description" : "Wolf-validator is a tool used to validate the internal consistency of a maven artifact repository. It can also be used for validation of the associated distribution directory.",
       "jobId" : null,
-      "jenkinsConfigXML" : "<?xml version='1.0' encoding='UTF-8'?>\n<project>\n  <actions/>\n  <description></description>\n  <keepDependencies>false</keepDependencies>\n  <properties>\n  <hudson.model.ParametersDefinitionProperty>\n    <parameterDefinitions>\n        <hudson.model.StringParameterDefinition>\n            <name>CURRENT_ZIP_URL</name>\n            <description>The first zip url of current release</description>\n            <defaultValue></defaultValue>\n        </hudson.model.StringParameterDefinition>\n    </parameterDefinitions>\n</hudson.model.ParametersDefinitionProperty>\n</properties>\n  <scm class=\"hudson.scm.NullSCM\"/>\n  <canRoam>true</canRoam>\n  <disabled>false</disabled>\n  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>\n  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>\n  <triggers/>\n  <concurrentBuild>true</concurrentBuild>\n  <builders>\n    <hudson.tasks.Shell>\n      <command>\n        # download wolf-validator tool\r\nwget --no-check-certificate -O wolf-validator.zip https://repository.engineering.redhat.com/nexus/content/groups/hudson-jb-bxms-6.2-build-jboss-central/org/jboss/wolf-validator/0.1.0/wolf-validator-0.1.0.zip\r\nunzip -q wolf-validator.zip\r\n\r\n# download zip 1 and unzip it\r\nwget -O current.zip ${CURRENT_ZIP_URL}\r\nunzip -q -d current current.zip\r\n\r\n./wolf-validator-0.1.0/wolf-validator -vr current\n      </command>\n    </hudson.tasks.Shell>\n  </builders>\n  <publishers>\n  <hudson.tasks.ArtifactArchiver>\n    <artifacts>wolf-validator-0.1.0/workspace/*</artifacts>\n    <allowEmptyArchive>true</allowEmptyArchive>\n    <onlyIfSuccessful>false</onlyIfSuccessful>\n    <fingerprint>false</fingerprint>\n    <defaultExcludes>true</defaultExcludes>\n</hudson.tasks.ArtifactArchiver>\n</publishers>\n  <buildWrappers/>\n</project>",
-      "script" : "# download wolf-validator tool\r\nwget --no-check-certificate -O wolf-validator.zip https://repository.engineering.redhat.com/nexus/content/groups/hudson-jb-bxms-6.2-build-jboss-central/org/jboss/wolf-validator/0.1.0/wolf-validator-0.1.0.zip\r\nunzip -q wolf-validator.zip\r\n\r\n# download zip 1 and unzip it\r\nwget -O current.zip ${CURRENT_ZIP_URL}\r\nunzip -q -d current current.zip\r\n\r\n./wolf-validator-0.1.0/wolf-validator -vr current",
+      "jenkinsConfigXML" : "<?xml version='1.0' encoding='UTF-8'?>\n<project>\n  <actions/>\n  <description></description>\n  <keepDependencies>false</keepDependencies>\n  <properties>\n  <hudson.model.ParametersDefinitionProperty>\n    <parameterDefinitions>\n        <hudson.model.StringParameterDefinition>\n            <name>CURRENT_MVN_REPO_URL</name>\n            <description>The current maven repository zip url</description>\n            <defaultValue></defaultValue>\n        </hudson.model.StringParameterDefinition>\n    </parameterDefinitions>\n</hudson.model.ParametersDefinitionProperty>\n</properties>\n  <scm class=\"hudson.scm.NullSCM\"/>\n  <canRoam>true</canRoam>\n  <disabled>false</disabled>\n  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>\n  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>\n  <triggers/>\n  <concurrentBuild>true</concurrentBuild>\n  <builders>\n    <hudson.tasks.Shell>\n      <command>\n        # download wolf-validator tool\r\nwget --no-check-certificate -O wolf-validator.zip https://repository.engineering.redhat.com/nexus/content/groups/hudson-jb-bxms-6.2-build-jboss-central/org/jboss/wolf-validator/0.1.0/wolf-validator-0.1.0.zip\r\nunzip -q wolf-validator.zip\r\n\r\n# download zip 1 and unzip it\r\nwget -O current.zip ${CURRENT_MVN_REPO_URL}\r\nunzip -q -d current current.zip\r\n\r\n./wolf-validator-0.1.0/wolf-validator -vr current\n      </command>\n    </hudson.tasks.Shell>\n  </builders>\n  <publishers>\n  <hudson.tasks.ArtifactArchiver>\n    <artifacts>wolf-validator-0.1.0/workspace/*</artifacts>\n    <allowEmptyArchive>true</allowEmptyArchive>\n    <onlyIfSuccessful>false</onlyIfSuccessful>\n    <fingerprint>false</fingerprint>\n    <defaultExcludes>true</defaultExcludes>\n</hudson.tasks.ArtifactArchiver>\n</publishers>\n  <buildWrappers/>\n</project>",
+      "script" : "# download wolf-validator tool\r\nwget --no-check-certificate -O wolf-validator.zip https://repository.engineering.redhat.com/nexus/content/groups/hudson-jb-bxms-6.2-build-jboss-central/org/jboss/wolf-validator/0.1.0/wolf-validator-0.1.0.zip\r\nunzip -q wolf-validator.zip\r\n\r\n# download zip 1 and unzip it\r\nwget -O current.zip ${CURRENT_MVN_REPO_URL}\r\nunzip -q -d current current.zip\r\n\r\n./wolf-validator-0.1.0/wolf-validator -vr current",
       "archiver" : "wolf-validator-0.1.0/workspace/*",
-      "stringParams" : [ "CURRENT_ZIP_URL" ]
+      "stringParams" : [ "CURRENT_MVN_REPO_URL" ]
     }
   },
   "verifications" : {

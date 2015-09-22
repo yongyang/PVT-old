@@ -71,6 +71,10 @@ public class VerifyParameter {
                 addProperty(ExecutionVariable.CURRENT_ZIP_URL.getName(), zipUrls[0]);
                 addProperty(ExecutionVariable.CURRENT_ZIP_URLS.getName(), String.join(" ", zipUrls));
             }
+            String mvnRepo = this.release.getRepo();
+            if (mvnRepo != null && mvnRepo.trim().length() > 0) {
+                addProperty(ExecutionVariable.CURRENT_MVN_REPO_URL.getName(), mvnRepo);
+            }
         }
         if (this.referenceRelease != null) {
             addProperty(ExecutionVariable.REF_RELEASE_ID.getName(), this.referenceRelease.getId());
@@ -84,6 +88,10 @@ public class VerifyParameter {
                 // choose the first one as the main url
                 addProperty(ExecutionVariable.REF_ZIP_URL.getName(), zipUrls[0]);
                 addProperty(ExecutionVariable.REF_ZIP_URLS.getName(), String.join(" ", zipUrls));
+            }
+            String mvnRepo = this.referenceRelease.getRepo();
+            if (mvnRepo != null && mvnRepo.trim().length() > 0) {
+                addProperty(ExecutionVariable.REF_MVN_REPO_URL.getName(), mvnRepo);
             }
         }
     }
