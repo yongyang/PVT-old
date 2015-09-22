@@ -142,10 +142,13 @@ public class Release implements Serializable {
         return new ArrayList<>(toolsMap.keySet());
     }
 
+    @JsonIgnore
     public void setTools(List<String> tools) {
+        HashMap<String, String> newToolsMap = new HashMap<>();
         for(String toolId : tools){
-            toolsMap.put(toolId, toolsMap.get(toolId));
+            newToolsMap.put(toolId, toolsMap.get(toolId));
         }
+        setToolsMap(newToolsMap);
     }
 
     @JsonIgnore
