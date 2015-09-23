@@ -845,16 +845,16 @@ body .ui-tooltip {
 }
 .ui-widget-content {
 	border: 1px solid #7e7783;
-	background: #3d3644 url("images/ui-bg_gloss-wave_30_3d3644_500x100.png") 50% top repeat-x;
-	color: #ffffff;
+	background-color: #cccccc; 
+	color: #555;
 }
 .ui-widget-content a {
 	color: #ffffff;
 }
 .ui-widget-header {
 	border: 1px solid #231d2b;
-	background: #30273a url("images/ui-bg_highlight-soft_25_30273a_1x100.png") 50% 50% repeat-x;
-	color: #ffffff;
+	background-color: #aaaaaa; 
+	color: #555;
 	font-weight: bold;
 }
 .ui-widget-header a {

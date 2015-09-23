@@ -16,6 +16,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.jboss.pnc.pvt.dao.PVTDataAccessObject;
+import org.jboss.pnc.pvt.model.PVTModel;
 import org.jboss.pnc.pvt.model.VerifyTool;
 import org.jboss.pnc.pvt.model.VerifyToolType;
 
@@ -114,8 +115,12 @@ public class ToolsPage extends TemplatePage {
                         return new PropertyModel(item.getModel(), "name");
                     }
                 });
-                IModel<String> labelModel = Model.of(item.getModelObject().getName());
-                item.add(new Label("tool_label", labelModel));
+                PVTModel pvtModel = PVTApplication.getDAO().getPvtModel();
+                String toolType = pvtModel.getToolTypes().stream()
+                        .filter(t -> item.getModelObject().getClass().getName().equals(t.getImplClass()))
+                        .findAny()
+                        .get().getName();
+                item.add(new Label("tool_type", Model.of(toolType)));
                 item.add(new Label("tool_description", new PropertyModel(item.getModel(), "description")));
                 if(tools.indexOf(item.getModel().getObject()) % 2 == 1) {
                     item.add(AttributeModifier.replace("class", "errata_row odd"));

@@ -90,7 +90,7 @@
     "096ffbbe-b7ea-4f36-954a-ea639b7967ad" : {
       "@class" : "org.jboss.pnc.pvt.model.JDKCompatibleVerifyTool",
       "id" : "096ffbbe-b7ea-4f36-954a-ea639b7967ad",
-      "name" : "JDK_Compatible_Verify_Tool_1.8",
+      "name" : "JDK_compatible[1.8,1.8]",
       "description" : "jdk version >= 1.8",
       "minJDK" : "JDK8",
       "maxJDK" : "JDK8",
@@ -99,7 +99,7 @@
     "0c61451b-a883-4b22-bc20-e5d5589e4d82" : {
       "@class" : "org.jboss.pnc.pvt.model.JDKCompatibleVerifyTool",
       "id" : "0c61451b-a883-4b22-bc20-e5d5589e4d82",
-      "name" : "JDK_Compatible_Verify_Tool_1.6",
+      "name" : "JDK_compatible[1.6,1.8]",
       "description" : "jdk version >= 1.6",
       "minJDK" : "JDK6",
       "maxJDK" : "JDK8",
@@ -108,21 +108,21 @@
     "885db751-6d7f-4682-a9dc-431b2b3e5db8" : {
       "@class" : "org.jboss.pnc.pvt.model.SimpleJenkinsVerifyTool",
       "id" : "885db751-6d7f-4682-a9dc-431b2b3e5db8",
-      "name" : "BadJenkinsJob",
+      "name" : "Test_FailureJenkinsJob",
       "description" : "This Jenkins job will fail after 20 seconds",
       "jobId" : "BadJob"
     },
     "7ad56ecf-dbe5-42e3-a508-b7d853e361c5" : {
       "@class" : "org.jboss.pnc.pvt.model.SimpleJenkinsVerifyTool",
       "id" : "7ad56ecf-dbe5-42e3-a508-b7d853e361c5",
-      "name" : "GoodJenkinsJob",
+      "name" : "Test_SuccessJenkinsJob",
       "description" : "This Jenkins job will succeed after 20 seconds.",
       "jobId" : "GoodJob"
     },
     "7bd1865f-21fd-4ef3-abc9-7dd271667efa" : {
       "@class" : "org.jboss.pnc.pvt.model.TemplateJenkinsVerifyTool",
       "id" : "7bd1865f-21fd-4ef3-abc9-7dd271667efa",
-      "name" : "TempateJenkinsJob",
+      "name" : "Test_TemplateJenkinsJob",
       "description" : "This is a template Jenkins job, will execute just like what the 'GoodJob' does.\r\n\r\nIf the optional jobId is not set, it will be created automatically by execution framework.\r\n\r\nIt will override existed job if any",
       "jobId" : null,
       "jenkinsConfigXML" : "<project>\r\n<actions/>\r\n<description>This will be Good</description>\r\n<keepDependencies>false</keepDependencies>\r\n<properties/>\r\n<scm class=\"hudson.scm.NullSCM\"/>\r\n<canRoam>true</canRoam>\r\n<disabled>false</disabled>\r\n<blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>\r\n<blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>\r\n<triggers/>\r\n<concurrentBuild>false</concurrentBuild>\r\n<builders>\r\n<hudson.tasks.Shell>\r\n<command>sleep 20; echo -e \"wake up\"</command>\r\n</hudson.tasks.Shell>\r\n</builders>\r\n<publishers/>\r\n<buildWrappers/>\r\n</project>"
@@ -130,17 +130,17 @@
     "e44990e5-454b-49c2-870e-963c4015d384" : {
       "@class" : "org.jboss.pnc.pvt.model.ScriptJenkinsVerifyTool",
       "id" : "e44990e5-454b-49c2-870e-963c4015d384",
-      "name" : "ScriptJenkinsTool",
+      "name" : "Test_ScriptJenkinsJob",
       "description" : "This is a Script based Jenkins verify tool. \r\n\r\nIt supports bash shell.",
       "jobId" : null,
-      "jenkinsConfigXML" : "<?xml version='1.0' encoding='UTF-8'?>\n<project>\n  <actions/>\n  <description></description>\n  <keepDependencies>false</keepDependencies>\n  <properties>\n  <hudson.model.ParametersDefinitionProperty>\n    <parameterDefinitions>\n        <hudson.model.StringParameterDefinition>\n            <name>CURRENT_RELEASE_NAME</name>\n            <description>The current release name</description>\n            <defaultValue></defaultValue>\n        </hudson.model.StringParameterDefinition>\n        <hudson.model.StringParameterDefinition>\n            <name>CURRENT_ZIP_URL</name>\n            <description>The first zip url of current release</description>\n            <defaultValue></defaultValue>\n        </hudson.model.StringParameterDefinition>\n        <hudson.model.StringParameterDefinition>\n            <name>CURRENT_PRODUCT_NAME</name>\n            <description>The current product name</description>\n            <defaultValue></defaultValue>\n        </hudson.model.StringParameterDefinition>\n    </parameterDefinitions>\n</hudson.model.ParametersDefinitionProperty>\n</properties>\n  <scm class=\"hudson.scm.NullSCM\"/>\n  <canRoam>true</canRoam>\n  <disabled>false</disabled>\n  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>\n  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>\n  <triggers/>\n  <concurrentBuild>true</concurrentBuild>\n  <builders>\n    <hudson.tasks.Shell>\n      <command>\n        echo -e \"Current product name: $CURRENT_PRODUCT_NAME\"\r\necho -e \"Current release name: $CURRENT_RELEASE_NAME\"\r\necho -e \"Current zip url: $CURRENT_ZIP_URL\"\r\n\r\nmkdir -p output\r\necho -e \"This is a plain text log\" > output/log.txt\n      </command>\n    </hudson.tasks.Shell>\n  </builders>\n  <publishers>\n  <hudson.tasks.ArtifactArchiver>\n    <artifacts>output/*</artifacts>\n    <allowEmptyArchive>true</allowEmptyArchive>\n    <onlyIfSuccessful>false</onlyIfSuccessful>\n    <fingerprint>false</fingerprint>\n    <defaultExcludes>true</defaultExcludes>\n</hudson.tasks.ArtifactArchiver>\n</publishers>\n  <buildWrappers/>\n</project>",
+      "jenkinsConfigXML" : "<?xml version='1.0' encoding='UTF-8'?>\n<project>\n  <actions/>\n  <description></description>\n  <keepDependencies>false</keepDependencies>\n  <properties/>\n  <scm class=\"hudson.scm.NullSCM\"/>\n  <canRoam>true</canRoam>\n  <disabled>false</disabled>\n  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>\n  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>\n  <triggers/>\n  <concurrentBuild>true</concurrentBuild>\n  <builders>\n    <hudson.tasks.Shell>\n      <command>\n        echo -e \"Current product name: $CURRENT_PRODUCT_NAME\"\r\necho -e \"Current release name: $CURRENT_RELEASE_NAME\"\r\necho -e \"Current zip url: $CURRENT_ZIP_URL\"\r\n\r\nmkdir -p output\r\necho -e \"This is a plain text log\" > output/log.txt\n      </command>\n    </hudson.tasks.Shell>\n  </builders>\n  <publishers>\n  <hudson.tasks.ArtifactArchiver>\n    <artifacts>output/*</artifacts>\n    <allowEmptyArchive>true</allowEmptyArchive>\n    <onlyIfSuccessful>false</onlyIfSuccessful>\n    <fingerprint>false</fingerprint>\n    <defaultExcludes>true</defaultExcludes>\n</hudson.tasks.ArtifactArchiver>\n</publishers>\n  <buildWrappers>\n    <hudson.plugins.ws__cleanup.PreBuildCleanup plugin=\"ws-cleanup@0.26\">\n      <deleteDirs>false</deleteDirs>\n      <cleanupParameter/>\n      <externalDelete/>\n    </hudson.plugins.ws__cleanup.PreBuildCleanup>\n  </buildWrappers>\n</project>",
       "script" : "echo -e \"Current product name: $CURRENT_PRODUCT_NAME\"\r\necho -e \"Current release name: $CURRENT_RELEASE_NAME\"\r\necho -e \"Current zip url: $CURRENT_ZIP_URL\"\r\n\r\nmkdir -p output\r\necho -e \"This is a plain text log\" > output/log.txt",
       "archiver" : "output/*"
     },
     "c81446b7-1cf9-446d-b963-132df22d6e8c" : {
       "@class" : "org.jboss.pnc.pvt.model.VersionConventionVerifyTool",
       "id" : "c81446b7-1cf9-446d-b963-132df22d6e8c",
-      "name" : "eap6+ version check",
+      "name" : "Test_VersionConversion_OSGI_redhat_suffix",
       "description" : "Check OSGI compatible and redhat-X suffix",
       "checkOSGI" : true,
       "versionPattern" : ".+[\\.|-]redhat-\\d+$"
@@ -148,20 +148,20 @@
     "a4d685cf-04a9-499d-9097-426106721233" : {
       "@class" : "org.jboss.pnc.pvt.model.ScriptJenkinsVerifyTool",
       "id" : "a4d685cf-04a9-499d-9097-426106721233",
-      "name" : "zip-diff",
+      "name" : "Test_zip-diff",
       "description" : "The demo zip-diff tool used to run zip difference for 2 zip files",
       "jobId" : null,
-      "jenkinsConfigXML" : "<?xml version='1.0' encoding='UTF-8'?>\n<project>\n  <actions/>\n  <description></description>\n  <keepDependencies>false</keepDependencies>\n  <properties>\n  <hudson.model.ParametersDefinitionProperty>\n    <parameterDefinitions>\n        <hudson.model.StringParameterDefinition>\n            <name>CURRENT_ZIP_URL</name>\n            <description>The first zip url of current release</description>\n            <defaultValue></defaultValue>\n        </hudson.model.StringParameterDefinition>\n        <hudson.model.StringParameterDefinition>\n            <name>REF_ZIP_URL</name>\n            <description>The firsh zip url of reference release</description>\n            <defaultValue></defaultValue>\n        </hudson.model.StringParameterDefinition>\n    </parameterDefinitions>\n</hudson.model.ParametersDefinitionProperty>\n</properties>\n  <scm class=\"hudson.scm.NullSCM\"/>\n  <canRoam>true</canRoam>\n  <disabled>false</disabled>\n  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>\n  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>\n  <triggers/>\n  <concurrentBuild>true</concurrentBuild>\n  <builders>\n    <hudson.tasks.Shell>\n      <command>\n        # download dist-diff tool\r\nwget -O dist-diff.jar http://10.66.79.92/dist-diff2-jar-with-dependencies.jar\r\n\r\n# download zip 1 and unzip it\r\nwget -O current.zip ${CURRENT_ZIP_URL}\r\nunzip -q -d current current.zip\r\n\r\n# download zip 2 and unzip it\r\nwget -O previous.zip ${REF_ZIP_URL}\r\nunzip -q -d previous previous.zip\r\n\r\njava -Xmx2048m -Xms256m -jar dist-diff.jar -a current -b previous -i\n      </command>\n    </hudson.tasks.Shell>\n  </builders>\n  <publishers>\n  <hudson.tasks.ArtifactArchiver>\n    <artifacts>output/*</artifacts>\n    <allowEmptyArchive>true</allowEmptyArchive>\n    <onlyIfSuccessful>false</onlyIfSuccessful>\n    <fingerprint>false</fingerprint>\n    <defaultExcludes>true</defaultExcludes>\n</hudson.tasks.ArtifactArchiver>\n</publishers>\n  <buildWrappers/>\n</project>",
+      "jenkinsConfigXML" : "<?xml version='1.0' encoding='UTF-8'?>\n<project>\n  <actions/>\n  <description></description>\n  <keepDependencies>false</keepDependencies>\n  <properties/>\n  <scm class=\"hudson.scm.NullSCM\"/>\n  <canRoam>true</canRoam>\n  <disabled>false</disabled>\n  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>\n  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>\n  <triggers/>\n  <concurrentBuild>true</concurrentBuild>\n  <builders>\n    <hudson.tasks.Shell>\n      <command>\n        # download dist-diff tool\r\nwget -O dist-diff.jar http://10.66.79.92/dist-diff2-jar-with-dependencies.jar\r\n\r\n# download zip 1 and unzip it\r\nwget -O current.zip ${CURRENT_ZIP_URL}\r\nunzip -q -d current current.zip\r\n\r\n# download zip 2 and unzip it\r\nwget -O previous.zip ${REF_ZIP_URL}\r\nunzip -q -d previous previous.zip\r\n\r\njava -Xmx2048m -Xms256m -jar dist-diff.jar -a current -b previous -i\n      </command>\n    </hudson.tasks.Shell>\n  </builders>\n  <publishers>\n  <hudson.tasks.ArtifactArchiver>\n    <artifacts>output/*</artifacts>\n    <allowEmptyArchive>true</allowEmptyArchive>\n    <onlyIfSuccessful>false</onlyIfSuccessful>\n    <fingerprint>false</fingerprint>\n    <defaultExcludes>true</defaultExcludes>\n</hudson.tasks.ArtifactArchiver>\n</publishers>\n  <buildWrappers>\n    <hudson.plugins.ws__cleanup.PreBuildCleanup plugin=\"ws-cleanup@0.26\">\n      <deleteDirs>false</deleteDirs>\n      <cleanupParameter/>\n      <externalDelete/>\n    </hudson.plugins.ws__cleanup.PreBuildCleanup>\n  </buildWrappers>\n</project>",
       "script" : "# download dist-diff tool\r\nwget -O dist-diff.jar http://10.66.79.92/dist-diff2-jar-with-dependencies.jar\r\n\r\n# download zip 1 and unzip it\r\nwget -O current.zip ${CURRENT_ZIP_URL}\r\nunzip -q -d current current.zip\r\n\r\n# download zip 2 and unzip it\r\nwget -O previous.zip ${REF_ZIP_URL}\r\nunzip -q -d previous previous.zip\r\n\r\njava -Xmx2048m -Xms256m -jar dist-diff.jar -a current -b previous -i",
       "archiver" : "output/*"
     },
     "dc75a16a-567c-4acf-8752-c6a815a7b45e" : {
       "@class" : "org.jboss.pnc.pvt.model.ScriptJenkinsVerifyTool",
       "id" : "dc75a16a-567c-4acf-8752-c6a815a7b45e",
-      "name" : "wolf-validator",
+      "name" : "Test_wolf-validator",
       "description" : "Wolf-validator is a tool used to validate the internal consistency of a maven artifact repository. It can also be used for validation of the associated distribution directory.",
       "jobId" : null,
-      "jenkinsConfigXML" : "<?xml version='1.0' encoding='UTF-8'?>\n<project>\n  <actions/>\n  <description></description>\n  <keepDependencies>false</keepDependencies>\n  <properties>\n  <hudson.model.ParametersDefinitionProperty>\n    <parameterDefinitions>\n        <hudson.model.StringParameterDefinition>\n            <name>CURRENT_MVN_REPO_URL</name>\n            <description>The current maven repository zip url</description>\n            <defaultValue></defaultValue>\n        </hudson.model.StringParameterDefinition>\n    </parameterDefinitions>\n</hudson.model.ParametersDefinitionProperty>\n</properties>\n  <scm class=\"hudson.scm.NullSCM\"/>\n  <canRoam>true</canRoam>\n  <disabled>false</disabled>\n  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>\n  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>\n  <triggers/>\n  <concurrentBuild>true</concurrentBuild>\n  <builders>\n    <hudson.tasks.Shell>\n      <command>\n        # download wolf-validator tool\r\nwget http://10.66.79.92/wolf-validator.zip\r\nunzip -q wolf-validator.zip\r\n\r\n# download zip 1 and unzip it\r\nwget -O current.zip ${CURRENT_MVN_REPO_URL}\r\nunzip -q -d current current.zip\r\n\r\ncd wolf-validator-0.1.0\r\n./wolf-validator -vr ../current\n      </command>\n    </hudson.tasks.Shell>\n  </builders>\n  <publishers>\n  <hudson.tasks.ArtifactArchiver>\n    <artifacts>wolf-validator-0.1.0/workspace/log.txt</artifacts>\n    <allowEmptyArchive>true</allowEmptyArchive>\n    <onlyIfSuccessful>false</onlyIfSuccessful>\n    <fingerprint>false</fingerprint>\n    <defaultExcludes>true</defaultExcludes>\n</hudson.tasks.ArtifactArchiver>\n</publishers>\n  <buildWrappers/>\n</project>",
+      "jenkinsConfigXML" : "<?xml version='1.0' encoding='UTF-8'?>\n<project>\n  <actions/>\n  <description></description>\n  <keepDependencies>false</keepDependencies>\n  <properties/>\n  <scm class=\"hudson.scm.NullSCM\"/>\n  <canRoam>true</canRoam>\n  <disabled>false</disabled>\n  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>\n  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>\n  <triggers/>\n  <concurrentBuild>true</concurrentBuild>\n  <builders>\n    <hudson.tasks.Shell>\n      <command>\n        # download wolf-validator tool\r\nwget http://10.66.79.92/wolf-validator.zip\r\nunzip -q wolf-validator.zip\r\n\r\n# download zip 1 and unzip it\r\nwget -O current.zip ${CURRENT_MVN_REPO_URL}\r\nunzip -q -d current current.zip\r\n\r\ncd wolf-validator-0.1.0\r\n./wolf-validator -vr ../current\n      </command>\n    </hudson.tasks.Shell>\n  </builders>\n  <publishers>\n  <hudson.tasks.ArtifactArchiver>\n    <artifacts>wolf-validator-0.1.0/workspace/log.txt</artifacts>\n    <allowEmptyArchive>true</allowEmptyArchive>\n    <onlyIfSuccessful>false</onlyIfSuccessful>\n    <fingerprint>false</fingerprint>\n    <defaultExcludes>true</defaultExcludes>\n</hudson.tasks.ArtifactArchiver>\n</publishers>\n  <buildWrappers>\n    <hudson.plugins.ws__cleanup.PreBuildCleanup plugin=\"ws-cleanup@0.26\">\n      <deleteDirs>false</deleteDirs>\n      <cleanupParameter/>\n      <externalDelete/>\n    </hudson.plugins.ws__cleanup.PreBuildCleanup>\n  </buildWrappers>\n</project>",
       "script" : "# download wolf-validator tool\r\nwget http://10.66.79.92/wolf-validator.zip\r\nunzip -q wolf-validator.zip\r\n\r\n# download zip 1 and unzip it\r\nwget -O current.zip ${CURRENT_MVN_REPO_URL}\r\nunzip -q -d current current.zip\r\n\r\ncd wolf-validator-0.1.0\r\n./wolf-validator -vr ../current",
       "archiver" : "wolf-validator-0.1.0/workspace/log.txt"
     }

@@ -1,0 +1,4 @@
+/* Overrides jquery-ui */
+.ui-widget {
+    font-size: 1.0em !important;
+}
