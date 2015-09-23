@@ -21,12 +21,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.io.StringWriter;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -34,13 +30,8 @@ import javax.xml.bind.Marshaller;
 
 import org.apache.wicket.util.io.IOUtils;
 import org.jboss.logging.Logger;
-import org.jboss.pnc.pvt.execution.ExecutionVariable;
 import org.jboss.pnc.pvt.execution.JenkinsArchiver;
 import org.jboss.pnc.pvt.util.StringFormatter;
-
-import com.offbytwo.jenkins.model.ParameterDefinitions;
-import com.offbytwo.jenkins.model.ParametersDefinitionProperty;
-import com.offbytwo.jenkins.model.StringParameterDefinition;
 
 /**
  *
@@ -59,8 +50,6 @@ public class ScriptJenkinsVerifyTool extends TemplateJenkinsVerifyTool implement
     private String script;
 
     private String archiver;
-
-    private List<String> stringParams = new ArrayList<>();
 
     public static final String LABEL = "Script Jenkins Tool";
 
@@ -85,20 +74,6 @@ public class ScriptJenkinsVerifyTool extends TemplateJenkinsVerifyTool implement
      */
     public void setArchiver(String archiver) {
         this.archiver = archiver;
-    }
-
-    /**
-     * @return the stringParams
-     */
-    public List<String> getStringParams() {
-        return stringParams;
-    }
-
-    /**
-     * @param stringParams the stringParams to set
-     */
-    public void setStringParams(List<String> stringParams) {
-        this.stringParams = stringParams;
     }
 
     /**
@@ -156,37 +131,37 @@ public class ScriptJenkinsVerifyTool extends TemplateJenkinsVerifyTool implement
 
     private String getStrParams() {
         logger.debug("Compose properties for jenkins job");
-        if (stringParams != null && stringParams.size() > 0) {
-            Set<String> uniqueParams = new HashSet<String>(stringParams);
-            ParametersDefinitionProperty paramProp = new ParametersDefinitionProperty();
-            ParameterDefinitions pd = new ParameterDefinitions();
-            paramProp.setPd(pd);
-            for (String param : uniqueParams) {
-                ExecutionVariable var = ExecutionVariable.getVariables().get(param);
-                String description = "";
-                if (var != null) {
-                    description = var.getDescription();
-                }
-                pd.addParam(new StringParameterDefinition(param, description, ""));
-            }
-            StringWriter sw = new StringWriter();
-            try {
-                JAXBContext jaxbContext = JAXBContext.newInstance(ParametersDefinitionProperty.class);
-                Marshaller marshaller = jaxbContext.createMarshaller();
-                marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
-                marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-                marshaller.marshal(paramProp, sw);
-
-            } catch (JAXBException e) {
-                throw new RuntimeException(
-                        "Can't marshalle Jenkins String Parameters of ScriptJenkinsVerityTool: " + getName(), e);
-            }
-            StringBuilder sb = new StringBuilder();
-            sb.append("<properties>\n  ");
-            sb.append(sw.getBuffer().toString());
-            sb.append("\n</properties>");
-            return sb.toString();
-        }
+        // if (stringParams != null && stringParams.size() > 0) {
+        // Set<String> uniqueParams = new HashSet<String>(stringParams);
+        // ParametersDefinitionProperty paramProp = new ParametersDefinitionProperty();
+        // ParameterDefinitions pd = new ParameterDefinitions();
+        // paramProp.setPd(pd);
+        // for (String param : uniqueParams) {
+        // ExecutionVariable var = ExecutionVariable.getVariables().get(param);
+        // String description = "";
+        // if (var != null) {
+        // description = var.getDescription();
+        // }
+        // pd.addParam(new StringParameterDefinition(param, description, ""));
+        // }
+        // StringWriter sw = new StringWriter();
+        // try {
+        // JAXBContext jaxbContext = JAXBContext.newInstance(ParametersDefinitionProperty.class);
+        // Marshaller marshaller = jaxbContext.createMarshaller();
+        // marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
+        // marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        // marshaller.marshal(paramProp, sw);
+        //
+        // } catch (JAXBException e) {
+        // throw new RuntimeException(
+        // "Can't marshalle Jenkins String Parameters of ScriptJenkinsVerityTool: " + getName(), e);
+        // }
+        // StringBuilder sb = new StringBuilder();
+        // sb.append("<properties>\n  ");
+        // sb.append(sw.getBuffer().toString());
+        // sb.append("\n</properties>");
+        // return sb.toString();
+        // }
         return "<properties/>";
     }
 }

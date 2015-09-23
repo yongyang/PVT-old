@@ -19,7 +19,6 @@ import org.jboss.pnc.pvt.wicket.PVTApplication;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.offbytwo.jenkins.JenkinsServer;
-import com.offbytwo.jenkins.model.StringParameterDefinition;
 
 /**
  * A jenkins verify tool to call a defined/existed jenkins job
@@ -93,7 +92,7 @@ public class SimpleJenkinsVerifyTool extends VerifyTool {
         return Collections.emptyMap();
     }
 
-    protected Map<String, String> parseJobParamFromJobXML(VerifyParameter verifyParam, String jobXml) throws DocumentException {
+    private Map<String, String> parseJobParamFromJobXML(VerifyParameter verifyParam, String jobXml) throws DocumentException {
         ParamJenkinsJob paramJob = new ParamJenkinsJob(jobXml);
         List<SerializableStringParam> stringParams = paramJob.getStringParams();
         Map<String, String> params = new HashMap<>();

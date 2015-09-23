@@ -19,9 +19,14 @@ package org.jboss.pnc.pvt.execution;
 
 import java.io.Serializable;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -29,6 +34,8 @@ import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 
+import com.offbytwo.jenkins.model.ParameterDefinitions;
+import com.offbytwo.jenkins.model.ParametersDefinitionProperty;
 import com.offbytwo.jenkins.model.StringParameterDefinition;
 
 /**
@@ -72,13 +79,13 @@ public class ParamJenkinsJob {
         subEle = ele.element("excludes");
         String excludes = subEle == null ? "" : subEle.getTextTrim();
         subEle = ele.element("allowEmptyArchive");
-        boolean allowEmptyArchive = subEle == null ?  true : Boolean.valueOf(subEle.getTextTrim());
+        boolean allowEmptyArchive = subEle == null ? true : Boolean.valueOf(subEle.getTextTrim());
         subEle = ele.element("onlyIfSuccessful");
-        boolean onlyIfSuccessful = subEle == null ?  false : Boolean.valueOf(subEle.getTextTrim());
+        boolean onlyIfSuccessful = subEle == null ? false : Boolean.valueOf(subEle.getTextTrim());
         subEle = ele.element("fingerprint");
-        boolean fingerprint = subEle == null ?  false : Boolean.valueOf(subEle.getTextTrim());
+        boolean fingerprint = subEle == null ? false : Boolean.valueOf(subEle.getTextTrim());
         subEle = ele.element("defaultExcludes");
-        boolean defaultExcludes = subEle == null ?  true : Boolean.valueOf(subEle.getTextTrim());
+        boolean defaultExcludes = subEle == null ? true : Boolean.valueOf(subEle.getTextTrim());
         JenkinsArchiver jar = new JenkinsArchiver();
         jar.setAllowEmptyArchive(allowEmptyArchive);
         jar.setArtifacts(artifacts);
@@ -91,10 +98,11 @@ public class ParamJenkinsJob {
 
     private List<SerializableStringParam> readJobParams() {
         List<Node> nodes = doc.selectNodes("//hudson.model.StringParameterDefinition");
-        if (null == nodes || 0 == nodes.size()) {
-            return Collections.emptyList();
-        }
         List<SerializableStringParam> params = new ArrayList<>();
+        if (null == nodes || 0 == nodes.size()) {
+            return params;
+        }
+
         for (Node node : nodes) {
             Element paramEle = (Element) node;
             String name = paramEle.elementText("name");
@@ -107,7 +115,52 @@ public class ParamJenkinsJob {
     }
 
     public List<SerializableStringParam> getStringParams() {
-        return this.stringParams;
+        return Collections.unmodifiableList(this.stringParams);
+    }
+
+    public ParamJenkinsJob addStringParam(String name, String desc, String defaultValue) throws JAXBException,
+            DocumentException {
+        if (stringParams.stream().anyMatch(p -> p.name.equals(name))) {
+            return this; // string parameter with same name has been added already.
+        }
+        StringParameterDefinition spd = new StringParameterDefinition(name, desc, defaultValue);
+        List<Node> nodes = doc.selectNodes("//hudson.model.ParametersDefinitionProperty");
+        StringWriter sw = new StringWriter();
+        if (null == nodes || 0 == nodes.size()) {
+            ParameterDefinitions pd = new ParameterDefinitions();
+            pd.addParam(spd);
+            ParametersDefinitionProperty pdp = new ParametersDefinitionProperty(pd);
+            JAXBContext jaxbContext = JAXBContext.newInstance(ParametersDefinitionProperty.class);
+            Marshaller marshaller = jaxbContext.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            marshaller.marshal(pdp, sw);
+            Document docInterlude = reader.read(new StringReader(sw.toString()));
+            List<Node> propertiesNode = doc.selectNodes("//project/properties");
+            for (Node node : propertiesNode) {
+                if (node instanceof Element) {
+                    Element e = (Element) node;
+                    e.add(docInterlude.getRootElement());
+                }
+            }
+        } else {
+            JAXBContext jaxbContext = JAXBContext.newInstance(StringParameterDefinition.class);
+            Marshaller marshaller = jaxbContext.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            marshaller.marshal(spd, sw);
+            Document docInterlude = reader.read(new StringReader(sw.toString()));
+            List<Node> propertiesNode = doc.selectNodes("//parameterDefinitions");
+            for (Node node : propertiesNode) {
+                if (node instanceof Element) {
+                    Element e = (Element) node;
+                    e.add(docInterlude.getRootElement());
+                }
+            }
+        }
+        this.stringParams.add(new SerializableStringParam(spd));
+        return this;
+
     }
 
     public String asXml() {
@@ -189,7 +242,6 @@ public class ParamJenkinsJob {
         public void setDefaultValue(String defaultValue) {
             this.defaultValue = defaultValue;
         }
-
     }
 
 }

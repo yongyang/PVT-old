@@ -124,3 +124,8 @@ table#wrapper {
 .ui-widget {
     font-size: 1.0em !important;
 }
+
+.helpVarCls {
+    color: #000000;
+    background: #cccccc url("images/ui-bg_flat_0_aaaaaa_40x100.png) 50% 50% repeat-x;
+}

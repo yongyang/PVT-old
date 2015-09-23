@@ -3,22 +3,7 @@
   <actions/>
   <description></description>
   <keepDependencies>false</keepDependencies>
-  <properties>
-  <hudson.model.ParametersDefinitionProperty>
-    <parameterDefinitions>
-        <hudson.model.StringParameterDefinition>
-            <name>CURRENT_ZIP_URL</name>
-            <description>The first zip url of current release</description>
-            <defaultValue></defaultValue>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-            <name>REF_ZIP_URL</name>
-            <description>The firsh zip url of reference release</description>
-            <defaultValue></defaultValue>
-        </hudson.model.StringParameterDefinition>
-    </parameterDefinitions>
-</hudson.model.ParametersDefinitionProperty>
-</properties>
+  <properties/>
   <scm class="hudson.scm.NullSCM"/>
   <canRoam>true</canRoam>
   <disabled>false</disabled>

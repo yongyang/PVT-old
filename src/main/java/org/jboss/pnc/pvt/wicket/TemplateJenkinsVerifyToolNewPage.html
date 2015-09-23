@@ -15,10 +15,13 @@
               <div>
                 <DIV style="float:left;"><textarea wicket:id="jenkinsConfigXML" cols="75" id="jenkinsConfigXML" rows="12" wrap="soft"></textarea></DIV>
                 <div style="float:right; margin-left: 20px;"><a class="btn btn-primary" id="checkJob" style="margin-bottom:10px;">Check Job</a></div>
+                <div style="margin-top: 8px; float: left;">
+                  <div>Besides normal Jenkins variables, more PVT variables can be used in the script.</div>
+                  <div>See the <a style="cursor: pointer;"  onclick="showVariables();">list of available pvt variables</a></div>
+                </div>
               </div>
             </td>
           </tr>
-
           <tr>
             <td class="header-label" width = "150">Archiver:</td>
             <td><span id="archiverInfo" /></td>
@@ -40,6 +43,9 @@
 			    </table>
             </td>
           </tr>
+		<div id="dialog" title="PVT Variables">
+		  <p id="dialogContent">Retrieving PVT Variables...</p>
+		</div>
 <script>
   var editor = CodeMirror.fromTextArea(document.getElementById('jenkinsConfigXML'), {
 	    mode: 'xml',

@@ -123,10 +123,6 @@ public class VerifyToolTest {
                 + "java -jar dist-diff.jar -a current -b previous -i\n";
         tool.setScript(script);
         tool.setArchiver("output/*");
-        List<String> params = new ArrayList<>();
-        params.add("CURRENT_ZIP_URL");
-        params.add("REF_ZIP_URL");
-        tool.setStringParams(params);
 
         String jenkinsConfigXML = tool.getJenkinsConfigXML();
         URL expectedLog = getClass().getClassLoader().getResource("script_tool.txt");
