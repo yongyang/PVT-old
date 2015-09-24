@@ -59,13 +59,8 @@ public class VerificationsPage extends TemplatePage{
                 
                 item.add(new Label("verification_status", item.getModel().getObject().getStatus().name()));
                 
-                String isReferenced = "No";
-                for(Release release1 : pvtModel.getReleases()) {
-                    if(release1.getVerifications().contains(item.getModel().getObject().getId())) {
-                        isReferenced = "Yes";
-                        break;
-                    }
-                }
+                boolean isReferenced = release.getVerifications().contains(item.getModel().getObject().getId());
+                item.add(new Label("valid", isReferenced ? "Yes" : "No"));
 
                 Link<String> verificationRemoveLink = new Link<String>("verification_remove") {
                     @Override
@@ -78,9 +73,8 @@ public class VerificationsPage extends TemplatePage{
                         }
                     }
                 };
-                item.add(new Label("valid", isReferenced));
                 item.add(verificationRemoveLink);
-                if(isReferenced.equals("Yes")) {
+                if(isReferenced) {
                     verificationRemoveLink.setVisible(false);
                 }
                 
