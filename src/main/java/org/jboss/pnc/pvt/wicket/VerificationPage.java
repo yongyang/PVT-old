@@ -94,7 +94,7 @@ public class VerificationPage extends TemplatePage {
                 verification.setStatus(Verification.Status.WAIVED);
                 PVTApplication.getDAO().getPvtModel().updateVerification(verification);
                 PVTApplication.getDAO().persist();
-                setResponsePage(VerificationPage.class, new PageParameters().set(0, verification.getId())); // reload
+                setResponsePage(VerificationPage.class, new PageParameters().add("verificationId", verification.getId())); // reload
             }
 
         };
