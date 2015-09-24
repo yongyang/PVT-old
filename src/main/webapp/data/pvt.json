@@ -140,7 +140,7 @@
     "c81446b7-1cf9-446d-b963-132df22d6e8c" : {
       "@class" : "org.jboss.pnc.pvt.model.VersionConventionVerifyTool",
       "id" : "c81446b7-1cf9-446d-b963-132df22d6e8c",
-      "name" : "Test_VersionConversion_OSGI_redhat_suffix",
+      "name" : "VersionConversion_OSGI_redhat_suffix",
       "description" : "Check OSGI compatible and redhat-X suffix",
       "checkOSGI" : true,
       "versionPattern" : ".+[\\.|-]redhat-\\d+$"
@@ -148,7 +148,7 @@
     "a4d685cf-04a9-499d-9097-426106721233" : {
       "@class" : "org.jboss.pnc.pvt.model.ScriptJenkinsVerifyTool",
       "id" : "a4d685cf-04a9-499d-9097-426106721233",
-      "name" : "Test_zip-diff",
+      "name" : "zip-diff",
       "description" : "The demo zip-diff tool used to run zip difference for 2 zip files",
       "jobId" : null,
       "jenkinsConfigXML" : "<?xml version='1.0' encoding='UTF-8'?>\n<project>\n  <actions/>\n  <description></description>\n  <keepDependencies>false</keepDependencies>\n  <properties/>\n  <scm class=\"hudson.scm.NullSCM\"/>\n  <canRoam>true</canRoam>\n  <disabled>false</disabled>\n  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>\n  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>\n  <triggers/>\n  <concurrentBuild>true</concurrentBuild>\n  <builders>\n    <hudson.tasks.Shell>\n      <command>\n        # download dist-diff tool\r\nwget -O dist-diff.jar http://10.66.79.92/dist-diff2-jar-with-dependencies.jar\r\n\r\n# download zip 1 and unzip it\r\nwget -O current.zip ${CURRENT_ZIP_URL}\r\nunzip -q -d current current.zip\r\n\r\n# download zip 2 and unzip it\r\nwget -O previous.zip ${REF_ZIP_URL}\r\nunzip -q -d previous previous.zip\r\n\r\njava -Xmx2048m -Xms256m -jar dist-diff.jar -a current -b previous -i\n      </command>\n    </hudson.tasks.Shell>\n  </builders>\n  <publishers>\n  <hudson.tasks.ArtifactArchiver>\n    <artifacts>output/*</artifacts>\n    <allowEmptyArchive>true</allowEmptyArchive>\n    <onlyIfSuccessful>false</onlyIfSuccessful>\n    <fingerprint>false</fingerprint>\n    <defaultExcludes>true</defaultExcludes>\n</hudson.tasks.ArtifactArchiver>\n</publishers>\n  <buildWrappers>\n    <hudson.plugins.ws__cleanup.PreBuildCleanup plugin=\"ws-cleanup@0.26\">\n      <deleteDirs>false</deleteDirs>\n      <cleanupParameter/>\n      <externalDelete/>\n    </hudson.plugins.ws__cleanup.PreBuildCleanup>\n  </buildWrappers>\n</project>",
@@ -158,7 +158,7 @@
     "dc75a16a-567c-4acf-8752-c6a815a7b45e" : {
       "@class" : "org.jboss.pnc.pvt.model.ScriptJenkinsVerifyTool",
       "id" : "dc75a16a-567c-4acf-8752-c6a815a7b45e",
-      "name" : "Test_wolf-validator",
+      "name" : "wolf-validator",
       "description" : "Wolf-validator is a tool used to validate the internal consistency of a maven artifact repository. It can also be used for validation of the associated distribution directory.",
       "jobId" : null,
       "jenkinsConfigXML" : "<?xml version='1.0' encoding='UTF-8'?>\n<project>\n  <actions/>\n  <description></description>\n  <keepDependencies>false</keepDependencies>\n  <properties/>\n  <scm class=\"hudson.scm.NullSCM\"/>\n  <canRoam>true</canRoam>\n  <disabled>false</disabled>\n  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>\n  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>\n  <triggers/>\n  <concurrentBuild>true</concurrentBuild>\n  <builders>\n    <hudson.tasks.Shell>\n      <command>\n        # download wolf-validator tool\r\nwget http://10.66.79.92/wolf-validator.zip\r\nunzip -q wolf-validator.zip\r\n\r\n# download zip 1 and unzip it\r\nwget -O current.zip ${CURRENT_MVN_REPO_URL}\r\nunzip -q -d current current.zip\r\n\r\ncd wolf-validator-0.1.0\r\n./wolf-validator -vr ../current\n      </command>\n    </hudson.tasks.Shell>\n  </builders>\n  <publishers>\n  <hudson.tasks.ArtifactArchiver>\n    <artifacts>wolf-validator-0.1.0/workspace/log.txt</artifacts>\n    <allowEmptyArchive>true</allowEmptyArchive>\n    <onlyIfSuccessful>false</onlyIfSuccessful>\n    <fingerprint>false</fingerprint>\n    <defaultExcludes>true</defaultExcludes>\n</hudson.tasks.ArtifactArchiver>\n</publishers>\n  <buildWrappers>\n    <hudson.plugins.ws__cleanup.PreBuildCleanup plugin=\"ws-cleanup@0.26\">\n      <deleteDirs>false</deleteDirs>\n      <cleanupParameter/>\n      <externalDelete/>\n    </hudson.plugins.ws__cleanup.PreBuildCleanup>\n  </buildWrappers>\n</project>",
