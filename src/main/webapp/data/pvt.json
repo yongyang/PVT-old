@@ -91,7 +91,7 @@
       "@class" : "org.jboss.pnc.pvt.model.JDKCompatibleVerifyTool",
       "id" : "096ffbbe-b7ea-4f36-954a-ea639b7967ad",
       "name" : "JDK_compatible[1.8,1.8]",
-      "description" : "jdk version >= 1.8",
+      "description" : "jdk-version == 1.8",
       "minJDK" : "JDK8",
       "maxJDK" : "JDK8",
       "fastReturn" : true
@@ -100,7 +100,7 @@
       "@class" : "org.jboss.pnc.pvt.model.JDKCompatibleVerifyTool",
       "id" : "0c61451b-a883-4b22-bc20-e5d5589e4d82",
       "name" : "JDK_compatible[1.6,1.8]",
-      "description" : "jdk version >= 1.6",
+      "description" : " 1.6 <= jdk-version <= 1.8",
       "minJDK" : "JDK6",
       "maxJDK" : "JDK8",
       "fastReturn" : true
