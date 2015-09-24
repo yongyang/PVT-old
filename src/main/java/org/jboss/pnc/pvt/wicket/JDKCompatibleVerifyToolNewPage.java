@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -13,6 +14,7 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.jboss.pnc.pvt.dao.PVTDataAccessObject;
 import org.jboss.pnc.pvt.model.JDKCompatibleVerifyTool;
+import org.jboss.pnc.pvt.model.PVTModel;
 import org.jboss.pnc.pvt.model.JDKCompatibleVerifyTool.JDK;
 import org.jboss.pnc.pvt.model.VerifyTool;
 
@@ -98,6 +100,11 @@ public class JDKCompatibleVerifyToolNewPage extends AbstractVerifyToolPage {
     }
 
     @Override
+    protected void addValidatorToToolName(TextField<String> toolNameTextField) {
+        // do nothing;
+    }
+
+    @Override
     protected VerifyTool getVerifyTool(PageParameters pp) {
         return new JDKCompatibleVerifyTool();
     }
@@ -108,11 +115,46 @@ public class JDKCompatibleVerifyToolNewPage extends AbstractVerifyToolPage {
     }
 
     @Override
+    protected void doPreSubmit() {
+        if (tool.getName() == null) {
+            String toolName = guessJDKToolName((JDKCompatibleVerifyTool)tool);
+            tool.setName(toolName);
+        }
+    }
+
+    // make sure the name will be unique
+    private String guessJDKToolName(JDKCompatibleVerifyTool jdkVerifyTool) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("JDK_compatible[");
+        sb.append(jdkVerifyTool.getMinJDK().name());
+        sb.append(",");
+        sb.append(jdkVerifyTool.getMaxJDK().name());
+        sb.append("]");
+        String proposeName = sb.toString();
+        PVTModel pvtModel = PVTApplication.getDAO().getPvtModel();
+        if (pvtModel.getToolsList().stream().anyMatch(p -> proposeName.equals(p.getName())) == false) {
+            return proposeName;
+        }
+
+        for (int i = 1; i <= getMaxGuess(); i ++) { // guess 10 times
+            String name = proposeName + "_" + String.valueOf(i);
+            if (pvtModel.getToolsList().stream().anyMatch(p -> name.equals(p.getName())) == false) {
+                return name;
+            }
+        }
+        throw new RuntimeException("Can't guess jdk tool name with prefix: " + proposeName);
+    }
+
+    private int getMaxGuess() {
+        return 10;
+    }
+
+    @Override
     protected void doSubmit(PageParameters pp) {
         PVTDataAccessObject dao = PVTApplication.getDAO();
         dao.getPvtModel().addTool(tool);
         dao.persist();
         pp.add("id", tool.getId());
-        setResponsePage(new JDKCompatibleVerifyToolEditPage(pp, "Tool: " + form.getModelObject().getName() + " is created."));
+        setResponsePage(new JDKCompatibleVerifyToolEditPage(pp, "Tool: " + tool.getName() + " is created."));
     }
 }

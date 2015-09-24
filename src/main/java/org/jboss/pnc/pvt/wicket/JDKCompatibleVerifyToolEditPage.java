@@ -40,6 +40,6 @@ public class JDKCompatibleVerifyToolEditPage extends JDKCompatibleVerifyToolNewP
     @Override
     protected void doSubmit(PageParameters pp) {
         //TODO nothing to do with DB yet
-        setResponsePage(new JDKCompatibleVerifyToolEditPage(pp, "Tool: " + form.getModelObject().getName() + " is updated."));
+        setResponsePage(new JDKCompatibleVerifyToolEditPage(pp, "Tool: " + tool.getName() + " is updated."));
     }
 }

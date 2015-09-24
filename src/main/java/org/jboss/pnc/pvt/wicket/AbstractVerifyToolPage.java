@@ -3,8 +3,8 @@ package org.jboss.pnc.pvt.wicket;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -25,7 +25,7 @@ public abstract class AbstractVerifyToolPage extends TemplatePage {
     protected Button resetButton;
     protected Button removeButton;
 
-    protected VerifyTool tool;
+    protected final VerifyTool tool;
 
     public AbstractVerifyToolPage(PageParameters pp) {
         this(pp, null);
@@ -45,26 +45,15 @@ public abstract class AbstractVerifyToolPage extends TemplatePage {
         form = new Form<VerifyTool>("form-tool", new CompoundPropertyModel<VerifyTool>(tool)) {
             @Override
             protected void onSubmit() {
+                doPreSubmit();
                 doSubmit(pp);
             }
 
         };
 
         // adds common fields
-        final RequiredTextField<String> toolNameTextField = new RequiredTextField<String>("name");
-        toolNameTextField.add(new IValidator<String>() {
-            @Override
-            public void validate(IValidatable<String> validatable) {
-                String toolName = validatable.getValue();
-                PVTModel pvtModel = PVTApplication.getDAO().getPvtModel();
-                if (pvtModel.getToolsList().stream().anyMatch(p -> p.getName().equals(toolName))
-                        && !toolName.equals(tool.getName())) {
-                    ValidationError error = new ValidationError();
-                    error.addKey("toolName.unique").setVariable("toolName", toolName);
-                    validatable.error(error);
-                }
-            }
-        });
+        final TextField<String> toolNameTextField = new TextField<String>("name");
+        addValidatorToToolName(toolNameTextField);
         form.add(toolNameTextField);
 
         form.add(new TextArea<String>("description"));
@@ -107,6 +96,28 @@ public abstract class AbstractVerifyToolPage extends TemplatePage {
 
         add(form);
     }
+
+    // This method is called after form validation, and before the real doSubmit method.
+    protected void doPreSubmit() {
+    }
+
+    protected void addValidatorToToolName(TextField<String> toolNameTextField) {
+        toolNameTextField.setRequired(true);
+        toolNameTextField.add(new IValidator<String>() {
+            @Override
+            public void validate(IValidatable<String> validatable) {
+                String toolName = validatable.getValue();
+                PVTModel pvtModel = PVTApplication.getDAO().getPvtModel();
+                if (pvtModel.getToolsList().stream().anyMatch(p -> p.getName().equals(toolName))
+                        && !toolName.equals(tool.getName())) {
+                    ValidationError error = new ValidationError();
+                    error.addKey("toolName.unique").setVariable("toolName", toolName);
+                    validatable.error(error);
+                }
+            }
+        });
+    }
+
 
     @Override
     protected void onConfigure() {
