@@ -1,5 +1,7 @@
 package org.jboss.pnc.pvt.wicket;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
@@ -98,8 +100,8 @@ public class VerificationPage extends TemplatePage {
         };
         verificationForm.add(waiveButton);
 
+        Button cancelButton = new Button("cancel_button") {
 
-        verificationForm.add(new Button("cancel_button") {
             @Override
             public void onSubmit() {
                 //STOP this verification, for example: to cancel a unlinked verification
@@ -108,6 +110,24 @@ public class VerificationPage extends TemplatePage {
                 PVTApplication.getDAO().persist();
                 setResponsePage(ReleasesPage.class);
 //                super.onSubmit();
+            }
+        }.setDefaultFormProcessing(false);
+
+        verificationForm.add(cancelButton);
+        if(verification.getStatus() != Verification.Status.IN_PROGRESS) {
+            cancelButton.setVisible(false);
+        }
+
+        verificationForm.add(new AjaxButton("back_button") {
+            @Override
+            public void onSubmit() {
+                //STOP this verification, for example: to cancel a unlinked verification
+//                super.onSubmit();
+            }
+
+            @Override
+            protected void onAfterSubmit(AjaxRequestTarget target, Form<?> form) {
+                target.appendJavaScript("history.go(-1)");
             }
         }.setDefaultFormProcessing(false));
 

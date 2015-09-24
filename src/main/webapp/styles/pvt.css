@@ -2,3 +2,7 @@
 .ui-widget {
     font-size: 1.0em !important;
 }
+
+.show_type {
+    padding: 2px
+}
