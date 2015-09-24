@@ -63,6 +63,7 @@ public class VerificationsPage extends TemplatePage{
                 for(Release release1 : pvtModel.getReleases()) {
                     if(release1.getVerifications().contains(item.getModel().getObject().getId())) {
                         isReferenced = "Yes";
+                        break;
                     }
                 }
 
