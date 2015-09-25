@@ -4,7 +4,6 @@ import java.util.Objects;
 import java.util.Properties;
 
 import org.jboss.pnc.pvt.execution.ExecutionVariable;
-import org.jboss.pnc.pvt.util.PVTEnvrionment;
 import org.jboss.pnc.pvt.wicket.PVTApplication;
 
 /**
@@ -14,7 +13,7 @@ public class VerifyParameter {
 
     /** Property key which indicates whether skip the passed verification or not. Default false **/
     public static final String SKIP_PASSED = "skip.passed";
-    
+
     private final String toolId;
 
     private final Release referenceRelease;
@@ -30,11 +29,11 @@ public class VerifyParameter {
         this(toolId, referenceRelease, release, null);
     }
 
-    public VerifyParameter(String toolId,Release referenceRelease, Release release, Properties properties) {
+    public VerifyParameter(String toolId, Release referenceRelease, Release release, Properties properties) {
         this(toolId, referenceRelease, release, properties, true);
     }
 
-    public VerifyParameter(String toolId,Release referenceRelease, Release release, Properties properties, boolean prefillVars) {
+    public VerifyParameter(String toolId, Release referenceRelease, Release release, Properties properties, boolean prefillVars) {
         Objects.requireNonNull(toolId, "toolId can't be null");
         Objects.requireNonNull(release, "release can't be null");
         this.toolId = toolId;
@@ -49,17 +48,17 @@ public class VerifyParameter {
         } else {
             this.referenceRelease = referenceRelease;
         }
-        if(properties != null && !properties.isEmpty()) {
+        if (properties != null && !properties.isEmpty()) {
             this.properties.putAll(properties);
         }
         if (prefillVars) {
             prefillInternalVariables();
         }
     }
-    
+
     private void prefillInternalVariables() {
         PVTModel pvtModel = PVTApplication.getDAO().getPvtModel();
-        addProperty(ExecutionVariable.PVT_REST_BASE.getName(), PVTEnvrionment.getRESTURLBase());
+        addProperty(ExecutionVariable.PVT_REST_BASE.getName(), PVTApplication.get().getRESTURLBase());
         if (this.release != null) {
             addProperty(ExecutionVariable.CURRENT_RELEASE_ID.getName(), this.release.getId());
             addProperty(ExecutionVariable.CURRENT_RELEASE_NAME.getName(), this.release.getName());

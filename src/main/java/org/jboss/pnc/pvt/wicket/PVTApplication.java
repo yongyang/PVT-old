@@ -6,7 +6,6 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.jboss.pnc.pvt.dao.JSONDataAccessObject;
 import org.jboss.pnc.pvt.dao.PVTDataAccessObject;
-import org.jboss.pnc.pvt.util.PVTEnvrionment;
 
 /**
  * Created by yyang on 4/30/15.
@@ -39,8 +38,6 @@ public class PVTApplication extends WebApplication
         setMetaData(DAO_KEY, dao);
 
         pvtApplication = (PVTApplication)Application.get();
-        String ctxPath = pvtApplication.getServletContext().getContextPath();
-        PVTEnvrionment.setCtxPath(ctxPath);
 
         // add your configuration here
     }
@@ -56,5 +53,24 @@ public class PVTApplication extends WebApplication
         return pvtApplication;
     }
 
-}
+    public String getHttpURLBase() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("http://");
+        String host = System.getProperty("pvt.http.host", System.getProperty("jboss.bind.address", "localhost"));
 
+        sb.append(host);
+        String port = System.getProperty("pvt.http.port", "8080");
+        if (!"80".equals(port)) {
+            sb.append(":");
+            sb.append(port);
+        }
+        return sb.toString();
+    }
+
+    public String getRESTURLBase() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getHttpURLBase());
+        sb.append(pvtApplication.getServletContext().getContextPath());
+        return sb.toString();
+    }
+}
