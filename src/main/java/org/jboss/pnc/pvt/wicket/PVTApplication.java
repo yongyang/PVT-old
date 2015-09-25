@@ -6,6 +6,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.jboss.pnc.pvt.dao.JSONDataAccessObject;
 import org.jboss.pnc.pvt.dao.PVTDataAccessObject;
+import org.jboss.pnc.pvt.util.PVTEnvrionment;
 
 /**
  * Created by yyang on 4/30/15.
@@ -38,6 +39,8 @@ public class PVTApplication extends WebApplication
         setMetaData(DAO_KEY, dao);
 
         pvtApplication = (PVTApplication)Application.get();
+        String ctxPath = pvtApplication.getServletContext().getContextPath();
+        PVTEnvrionment.setCtxPath(ctxPath);
 
         // add your configuration here
     }

@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.Properties;
 
 import org.jboss.pnc.pvt.execution.ExecutionVariable;
+import org.jboss.pnc.pvt.util.PVTEnvrionment;
 import org.jboss.pnc.pvt.wicket.PVTApplication;
 
 /**
@@ -58,6 +59,7 @@ public class VerifyParameter {
     
     private void prefillInternalVariables() {
         PVTModel pvtModel = PVTApplication.getDAO().getPvtModel();
+        addProperty(ExecutionVariable.PVT_REST_BASE.getName(), PVTEnvrionment.getRESTURLBase());
         if (this.release != null) {
             addProperty(ExecutionVariable.CURRENT_RELEASE_ID.getName(), this.release.getId());
             addProperty(ExecutionVariable.CURRENT_RELEASE_NAME.getName(), this.release.getName());
