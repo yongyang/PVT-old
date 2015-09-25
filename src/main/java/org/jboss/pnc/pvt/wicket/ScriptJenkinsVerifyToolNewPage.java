@@ -5,8 +5,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.jboss.pnc.pvt.dao.PVTDataAccessObject;
 import org.jboss.pnc.pvt.execution.ExecutionVariable;
@@ -41,6 +43,18 @@ public class ScriptJenkinsVerifyToolNewPage extends AbstractVerifyToolPage {
             @Override
             public int compare(ExecutionVariable o1, ExecutionVariable o2) {
                 return o1.getName().compareTo(o2.getName());
+            }
+        });
+        form.add(new Link<String>("varLink") {
+
+            @Override
+            protected void onComponentTag(ComponentTag tag) {
+                String ctxPath = PVTApplication.get().getServletContext().getContextPath();
+                tag.put("onclick", "showVariables('" + ctxPath + "');");
+            }
+
+            @Override
+            public void onClick() {
             }
         });
     }

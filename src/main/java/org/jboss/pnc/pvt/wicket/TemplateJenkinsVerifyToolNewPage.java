@@ -1,7 +1,9 @@
 package org.jboss.pnc.pvt.wicket;
 
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.validation.IValidatable;
@@ -56,6 +58,30 @@ public class TemplateJenkinsVerifyToolNewPage extends AbstractVerifyToolPage {
         form.add(configXMLTxtArea);
         jobIdTextField = new TextField<String>("jobId");
         form.add(jobIdTextField);
+        form.add(new Link<String>("varLink") {
+
+            @Override
+            protected void onComponentTag(ComponentTag tag) {
+                String ctxPath = PVTApplication.get().getServletContext().getContextPath();
+                tag.put("onclick", "showVariables('" + ctxPath + "');");
+            }
+
+            @Override
+            public void onClick() {
+            }
+        });
+        form.add(new Link<String>("checkJob") {
+
+            @Override
+            protected void onComponentTag(ComponentTag tag) {
+                String ctxPath = PVTApplication.get().getServletContext().getContextPath();
+                tag.put("onclick", "checkJenkinsJob('" + ctxPath + "');");
+            }
+
+            @Override
+            public void onClick() {
+            }
+        });
     }
 
     @Override

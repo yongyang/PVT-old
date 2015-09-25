@@ -8,7 +8,7 @@
             <td class="header-label" width = "150">Jenkins Job ID:</td>
             <td>
               <input wicket:id="jobId" id="jobId" maxlength="80" size="30" type="text" /> &nbsp;&nbsp;&nbsp;
-              <a class="btn btn-primary" id="checkJob" style="margin-bottom:10px;">Check Job</a>
+              <a class="btn btn-primary" id="checkJob" wicket:id="checkJob" style="margin-bottom:10px;">Check Job</a>
             </td>
           </tr>
 
@@ -34,25 +34,23 @@
             </td>
           </tr>
 <script>
-$().ready(function(){
-  $("#checkJob").click(function(){
-      $("#ajaxFeekBack").html("");
-      $("#archiverInfo").html("");
-      $("#stringParamsPanel").html("");
-      $.ajax({
-          type: "get",
-          url: "/pvt/rest/jenkinsInfo/" + $("#jobId").val(),
-          success: function(data, textStatus){
-              $("#ajaxFeekBack").html(data.feedback);
-              $("#archiverInfo").html(data.archiver);
-              $("#stringParamsPanel").html(data.stringparams);
-          },
-          error: function() {
-        	  $("#ajaxFeekBack").html("Error to check Jenkins Job: " + $("#jobId").val());
-          }
-      });
-  });
-});
+function checkJenkinsJob(ctxPath) {
+	$("#ajaxFeekBack").html("");
+    $("#archiverInfo").html("");
+    $("#stringParamsPanel").html("");
+    $.ajax({
+        type: "get",
+        url: ctxPath + "/rest/jenkinsInfo/" + $("#jobId").val(),
+        success: function(data, textStatus){
+            $("#ajaxFeekBack").html(data.feedback);
+            $("#archiverInfo").html(data.archiver);
+            $("#stringParamsPanel").html(data.stringparams);
+        },
+        error: function() {
+      	  $("#ajaxFeekBack").html("Error to check Jenkins Job: " + $("#jobId").val());
+        }
+    });
+}
 </script>
 </wicket:extend>
 

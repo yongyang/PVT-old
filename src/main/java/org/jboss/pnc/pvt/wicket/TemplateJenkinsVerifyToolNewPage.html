@@ -14,10 +14,10 @@
             <td>
               <div>
                 <DIV style="float:left;"><textarea wicket:id="jenkinsConfigXML" cols="75" id="jenkinsConfigXML" rows="12" wrap="soft"></textarea></DIV>
-                <div style="float:right; margin-left: 20px;"><a class="btn btn-primary" id="checkJob" style="margin-bottom:10px;">Check Job</a></div>
+                <div style="float:right; margin-left: 20px;"><a class="btn btn-primary" id="checkJob" wicket:id="checkJob" style="margin-bottom:10px;">Check Job</a></div>
                 <div style="margin-top: 8px; float: left;">
                   <div>Besides normal Jenkins variables, more PVT variables can be used in the script.</div>
-                  <div>See the <a style="cursor: pointer;"  onclick="showVariables();">list of available pvt variables</a></div>
+                  <div>See the <a style="cursor: pointer;" wicket:id="varLink">list of available pvt variables</a></div>
                 </div>
               </div>
             </td>
@@ -54,26 +54,25 @@
 	  });
 </script>
 <script>
-$().ready(function(){
-  $("#checkJob").click(function(){
-      $("#ajaxFeekBack").html("");
-      $("#archiverInfo").html("");
-      $("#stringParamsPanel").html("");
-      $.ajax({
-          type: "POST",
-          url: "/pvt/rest/jenkinsInfo/content/xml",
-          data: {jobContent: $("#jenkinsConfigXML").val()},
-          success: function(data, textStatus){
-              $("#ajaxFeekBack").html(data.feedback);
-              $("#archiverInfo").html(data.archiver);
-              $("#stringParamsPanel").html(data.stringparams);
-          },
-          error: function() {
-        	  $("#ajaxFeekBack").html("Error to check Jenkins Job format.");
-          }
-      });
-  });
-});
+
+function checkJenkinsJob(ctxPath) {
+    $("#ajaxFeekBack").html("");
+    $("#archiverInfo").html("");
+    $("#stringParamsPanel").html("");
+    $.ajax({
+        type: "POST",
+        url: ctxPath + "/rest/jenkinsInfo/content/xml",
+        data: {jobContent: $("#jenkinsConfigXML").val()},
+        success: function(data, textStatus){
+            $("#ajaxFeekBack").html(data.feedback);
+            $("#archiverInfo").html(data.archiver);
+            $("#stringParamsPanel").html(data.stringparams);
+        },
+        error: function() {
+      	  $("#ajaxFeekBack").html("Error to check Jenkins Job format.");
+        }
+    });
+}
 </script>
 </wicket:extend>
 

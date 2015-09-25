@@ -2,7 +2,9 @@ package org.jboss.pnc.pvt.wicket;
 
 import java.io.IOException;
 
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.validation.IValidatable;
@@ -65,6 +67,18 @@ public class SimpleJenkinsVerifyToolNewPage extends AbstractVerifyToolPage {
 
         });
         form.add(jobIdTxtField);
+        form.add(new Link<String>("checkJob") {
+
+            @Override
+            protected void onComponentTag(ComponentTag tag) {
+                String ctxPath = PVTApplication.get().getServletContext().getContextPath();
+                tag.put("onclick", "checkJenkinsJob('" + ctxPath + "');");
+            }
+
+            @Override
+            public void onClick() {
+            }
+        });
     }
 
     @Override

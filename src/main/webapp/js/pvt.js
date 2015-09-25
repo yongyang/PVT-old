@@ -1,12 +1,12 @@
 
-function showVariables() {
+function showVariables(ctxPath) {
 	$("#dialog").dialog({
 		dialogClass: "helpVarCls",
 		position: { my: "right top", at: "right top", of: $("#form-tool") }
 	});
     $.ajax({
         type: "GET",
-        url: "/pvt/rest/env/variables",
+        url: ctxPath + "/rest/env/variables",
         success: function(data, textStatus){
             $("#dialogContent").html(data);
         },
