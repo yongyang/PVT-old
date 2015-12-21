@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>PVT - REST API Test</title>
+  <link href="errata/transitional.css" media="screen" rel="stylesheet" type="text/css">
+  <link href="errata/et-shim.css" media="screen" rel="stylesheet" type="text/css">
+  <!--<link rel="icon" href="https://errata.devel.redhat.com/images/erratatool.ico">-->
+
+  <script src="js/jquery-1.11.3.min.js" type="text/javascript"></script>
+  <script src="js/jquery-ui.js" type="text/javascript"></script>
+
+  <link href="errata/panels.css" media="screen" rel="stylesheet" type="text/css">
+  <link href="errata/eso-theme.css" media="screen" rel="stylesheet" type="text/css">
+  <link href="errata/bootstrap-scroll-modal.css" media="screen" rel="stylesheet" type="text/css">
+  <script src="errata/bootstrap.min.js" type="text/javascript"></script>
+
+  <link href="errata/master.css" media="screen" rel="stylesheet" type="text/css">
+
+  <script src="js/codemirror.js" type="text/javascript"></script>
+  <script src="js/codemirror/mode/shell/shell.js" type="text/javascript"></script>
+  <script src="js/codemirror/addon/edit/matchbrackets.js" type="text/javascript"></script>
+  <script src="js/codemirror/mode/xml/xml.js" type="text/javascript"></script>
+  <script src="js/codemirror/addon/hint/xml-hint.js" type="text/javascript"></script>
+  <link href="styles/codemirror.css" media="screen" rel="stylesheet" type="text/css" />
+
+  <link href="styles/pvt.css" media="screen" rel="stylesheet" type="text/css" />
+  <link type="text/css" rel="stylesheet" href="styles/jquery-ui.css" />
+
+  <script src="js/pvt.js" type="text/javascript"></script>
+
+</head>
+
+<body class="eso-color-red ">
+
+<div id="eso-topbar">
+  <div class="eso-inner">
+
+    <div class="topbar-left">
+      <img src="images/icon.png"/><a style="font-size: x-large">PVT</a><a class="appname">-&nbsp;&nbsp;&nbsp;&nbsp;Productization Verification Tool</a>
+    </div>
+
+    <div class="topbar-right">
+
+      <ul class="quick-menu unstyled">
+        <li class="dropdown header-help">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+            guest<b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Preferences</a></li>
+
+          </ul>
+        </li>
+        <li class="dropdown header-help">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+            Help<b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a target="_blank" href="#">About</a></li>
+            <li><a target="_blank" href="#">User Guide</a></li>
+            <li><a target="_blank" href="#">Release Notes</a></li>
+          </ul>
+        </li>
+      </ul>
+
+    </div>
+
+  </div>
+</div>
+
+<div id="eso-topnav">
+  <div class="eso-inner">
+    <ul>
+      <li></li>
+    </ul>
+  </div>
+</div>
+
+<div id="eso-shadow"></div>
+
+
+<div id="eso-content">
+  <div class="eso-inner">
+      <table id="verifyTab" border="1">
+      	<caption><strong>Fill the form to start a PVT process</strong></caption>
+        <tr>
+          <td><p>REST Base URL:</p></td>
+          <td colspan="3"><input id="baseURL" value="http://127.0.0.1:8080/pvt/rest/release/verify" size="200" style="width: 600px;"/></td>
+        </tr>
+        <tr>
+          <td><p>Product Name:</p></td>
+          <td><input name="productName" id="productName" value="EAP" /></td>
+          <td><p>Release Name:</p></td>
+          <td><input name="releaseName" id="releaseName" value="6.4" /></td>
+        </tr>
+        <tr>
+          <td><p>Maven Repo URL:</p></td>
+          <td colspan="3"><input id="repoUrl" value="http://10.66.79.92/jboss-brms-6.1.0.GA-maven-repository.zip" size="200" style="width: 600px;"/></td>
+        </tr>
+        <tr id="zipUrlRow">
+          <td><p>Distribute ZIP URL:</p></td>
+          <td colspan="3">
+            <input class="zipUrlCls" name="zipUrl" id="zipUrl" value="http://10.66.79.92/jboss-eap-6.4.2-full-build.zip" size="200" style="width: 600px;"/>
+            <input class="zipUrlCls" name="zipUrl" id="zipUrl" value="http://10.66.79.92/jboss-eap-6.4.3-full-build.zip" size="200" style="width: 600px;"/>
+          </td>
+        </tr>
+        <tr id="toolIdRow">
+          <td><p>Tool ID:</p></td>
+          <td><div>
+            <p><input class="toolCls" type="checkbox" name="toolId" checked value="7bd1865f-21fd-4ef3-abc9-7dd271667efa" />Test_TemplateJenkinsJob</p>
+            <p><input class="toolCls" type="checkbox" name="toolId" value="e44990e5-454b-49c2-870e-963c4015d384" />Test_ScriptJenkinsJob</p>
+          </div></td>
+          <td><p>Execute properties:</p></td>
+          <td>
+            <textarea id="props" rows="8">props[OK].value=okValue&props[Go].value=GoValue</textarea>
+          </td>
+        </tr>
+        <tr>
+          <td><p>Callback URL:</p></td>
+          <td colspan="3"><input id=callback value="http://127.0.0.1:8080/pvt/rest/pvtStatus" size="200" style="width: 600px;"/></td>
+        </tr>
+        <tr>
+          <td colspan="3"><p></p></td>
+          <td><div>
+              <p><input type="button" id="pvtBtn" value="Start PVT" /></p>
+              <p><input type="button" id="disConnBtn" value="Disconnect WebSocket" /></p>
+          </div></td>
+        </tr>
+      </table>
+  </div>
+
+<hr />
+  <div id="compseURL" style="border:1px;"></div>
+<hr />
+
+  <div class="eso-inner">
+  	<div id="resultPanel">
+  	</div>
+  </div>
+
+</div>
+<script>
+$(document).ready(function() {
+
+	var wsUri = "ws://127.0.0.1:8080/pvt/pvtStatus";
+	var ws = new WebSocket(wsUri);
+	ws.onopen = function(){
+		$("#resultPanel").html("OK, Listen on the pvt status...");
+	};
+
+	ws.onClose = function() {
+		$("#resultPanel").html("Closed!");
+	};
+
+	ws.onmessage = function(message){
+		$("#resultPanel").html("Got Message: <br />" + message.data);
+	};
+
+    $("#pvtBtn").click(function() {
+    	var verifyUrl = getVerifyURL();
+    	var data = composeData();
+        $.ajax({
+            type: "post",
+            url: verifyUrl,
+            data: data,
+            success: function(data, textStatus){
+                $("#resultPanel").html("Waiting for status...");
+            },
+            error: function() {
+          	  $("#resultPanel").html("Error to execute.");
+            }
+        });
+    });
+
+    $("#disConnBtn").click(function() {
+    	ws.close();
+    	$("#disConnBtn").attr("disabled", "true");
+    });
+
+    $("textarea").keyup(function() {
+    	$("#compseURL").html("curl -X POST -d \"" + composeData() + "\" " + getVerifyURL());
+    });
+
+    $("input").keyup(function() {
+    	$("#compseURL").html("curl -X POST -d \"" + composeData() + "\" " + getVerifyURL());
+    });
+
+    $(":input[type=checkbox]").change(function() {
+    	$("#compseURL").html("curl -X POST -d \"" + composeData() + "\" " + getVerifyURL());
+    });
+
+    function getVerifyURL() {
+    	return $("#baseURL").val() + "/" + $("#productName").val() + "/" + $("#releaseName").val();
+    }
+
+    function composeData() {
+    	var data = "repoUrl=" + $("#repoUrl").val() + "&callback=" + $("#callback").val() + "&" + $("#props").val()
+    	var zipUrlsData = "";
+    	$(".zipUrlCls").each(function() {
+    		if ($(this).val() != "") {
+    			zipUrlsData += "&zipUrl=" + $(this).val();
+    		}
+    	});
+    	var toolIdsData = "";
+    	$(":input[type=checkbox]").each(function() {
+    		if ($(this).prop('checked')) {
+    			toolIdsData += "&toolId=" + $(this).val();
+    		}
+    	});
+    	data = data + zipUrlsData + toolIdsData;
+    	return data;
+    }
+
+    $("#compseURL").html("curl -X POST -d \"" + composeData() + "\" " + getVerifyURL());
+
+});
+
+</script>
+
+<div id="eso-footer"><div class="eso-inner">
+  <div class="footer-left">
+    Version 0.0.1.
+
+    <a target="_blank" href="mailto:jbossas-prod@redhat.com"> Report an Issue</a>.
+
+    <br>
+    Copyright © 20015 Red Hat, Inc. All rights reserved.<br>INTERNAL USE ONLY
+  </div>
+</div></div>
+
+</body></html>

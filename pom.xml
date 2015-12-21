@@ -37,7 +37,7 @@
       <version.jboss.logging>3.2.1.Final</version.jboss.logging>
       <version.junit>4.12</version.junit>
       <version.osgi>4.2.0</version.osgi>
-      <version.resteasy>2.3.7.Final</version.resteasy>
+      <version.resteasy>3.0.8.Final</version.resteasy>
       <version.swagger>1.5.3-M1</version.swagger>
 
       <wicket.version>6.19.0</wicket.version>
@@ -108,6 +108,11 @@
         <scope>provided</scope>
       </dependency>
 
+      <dependency>
+         <groupId>org.jboss.resteasy</groupId>
+         <artifactId>resteasy-client</artifactId>
+         <version>${version.resteasy}</version>
+      </dependency>
       <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-core</artifactId>
@@ -226,6 +231,11 @@
     <dependency>
       <groupId>org.jboss.resteasy</groupId>
       <artifactId>jaxrs-api</artifactId>
+    </dependency>
+
+    <dependency>
+       <groupId>org.jboss.resteasy</groupId>
+       <artifactId>resteasy-client</artifactId>
     </dependency>
 
     <dependency>
