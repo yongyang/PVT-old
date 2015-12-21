@@ -24,7 +24,7 @@ public class ToolsEndPoint {
     @GET
     public Response toolsList() {
         PVTModel pvtModel = PVTApplication.getDAO().getPvtModel();
-        return Response.ok(pvtModel.getToolsList().stream().map(t -> new ToolMeta(t.getId(), t.getName())).collect(Collectors.toList())).build();
+        return Response.ok(pvtModel.getToolsList().stream().map(t -> new ToolMeta().setId(t.getId()).setName(t.getName())).collect(Collectors.toList())).build();
     }
 
 }
