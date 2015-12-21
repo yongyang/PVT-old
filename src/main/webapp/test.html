@@ -87,7 +87,7 @@
       	<caption><strong>Fill the form to start a PVT process</strong></caption>
         <tr>
           <td><p>REST Base URL:</p></td>
-          <td colspan="3"><input id="baseURL" value="http://127.0.0.1:8080/pvt/rest/release/verify" size="200" style="width: 600px;"/></td>
+          <td colspan="3"><input id="baseURL" size="200" style="width: 600px;"/></td>
         </tr>
         <tr>
           <td><p>Product Name:</p></td>
@@ -119,7 +119,7 @@
         </tr>
         <tr>
           <td><p>Callback URL:</p></td>
-          <td colspan="3"><input id=callback value="http://127.0.0.1:8080/pvt/rest/pvtStatus" size="200" style="width: 600px;"/></td>
+          <td colspan="3"><input id=callback size="200" style="width: 600px;"/></td>
         </tr>
         <tr>
           <td colspan="3"><p></p></td>
@@ -144,8 +144,14 @@
 <script>
 $(document).ready(function() {
 
-	var wsUri = "ws://127.0.0.1:8080/pvt/pvtStatus";
-	var ws = new WebSocket(wsUri);
+        var pathurl = $(location).attr('href');
+        pathurl = pathurl.substring(0, pathurl.lastIndexOf('/'))
+
+        $("#baseURL").val(pathurl + "/rest/release/verify");
+        $("#callback").val(pathurl + "/rest/pvtStatus");
+
+        var wsURI = "ws://" + pathurl.substring(pathurl.indexOf("://") + 3) + "/pvtStatus";
+	var ws = new WebSocket(wsURI);
 	ws.onopen = function(){
 		$("#resultPanel").html("OK, Listen on the pvt status...");
 	};
