@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.jboss.pnc.pvt.rest.endpoints;
+package org.jboss.pnc.pvt.rest.endpoints.demo;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -37,12 +37,12 @@ import org.jboss.logging.Logger;
  *
  */
 @WebServlet("/echo")
-public class TestSerlet extends HttpServlet {
+public class EchoServlet extends HttpServlet {
 
 
     private static final long serialVersionUID = 1L;
 
-    private static final Logger logger = Logger.getLogger(TestSerlet.class);
+    private static final Logger logger = Logger.getLogger(EchoServlet.class);
 
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -229,7 +229,7 @@ public class ReleasesPage extends TemplatePage{
 
         for(Map.Entry<String, String> entry : release.getToolsMap().entrySet()) {
             if(entry.getValue() == null) { // not run yet
-               runVerify(entry.getKey(), release);
+               runVerify(entry.getKey(), release, null);
 
             }
             else { // has run before, detect if the Tool need to run again
@@ -237,7 +237,7 @@ public class ReleasesPage extends TemplatePage{
                 Verification existedVerification = pvtModel.getVerificationById(verificationId);
                 if(existedVerification == null || release.getUpdateTime() > existedVerification.getStartTime() || existedVerification.getStatus().equals(Verification.Status.NOT_PASSED)) { //need to run again
 //                    existedVerifications.remove(toolId);
-                    runVerify(entry.getKey(), release);
+                    runVerify(entry.getKey(), release, null);
                 }
             }
         }
@@ -245,14 +245,14 @@ public class ReleasesPage extends TemplatePage{
         PVTApplication.getDAO().persist();
     }
 
-    public static Verification runVerify(String toolId, Release release){
+    public static Verification runVerify(String toolId, Release release, Properties verifyProps){
         PVTModel pvtModel = PVTApplication.getDAO().getPvtModel();
         VerifyTool tool = pvtModel.getVerifyToolById(toolId);
         // start verification and link to Release
-        Verification verification = tool.verify(
-                new VerifyParameter(tool.getId(),
-                        (release.getReferenceReleaseId() == null || release.getReferenceReleaseId().trim().isEmpty()) ? null : pvtModel.getReleasebyId(release.getReferenceReleaseId()),
-                        release));
+        VerifyParameter verifyParam = new VerifyParameter(tool.getId(),
+                (release.getReferenceReleaseId() == null || release.getReferenceReleaseId().trim().isEmpty()) ? null : pvtModel.getReleasebyId(release.getReferenceReleaseId()),
+                release, verifyProps);
+        Verification verification = tool.verify(verifyParam);
 //        verification.setStatus(Verification.Status.IN_PROGRESS);
         release.addVerification(verification.getToolId(), verification.getId());
         release.setStatus(Release.Status.VERIFYING);
