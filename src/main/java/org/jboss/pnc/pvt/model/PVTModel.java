@@ -70,6 +70,31 @@ public class PVTModel implements Serializable {
     	return null;
     }
 
+	/**
+	 *
+	 * @param releaseId
+	 * @return if a release has linked tools, return the linked tools, else return the product default linked tools
+	 */
+	public List<String> getToolsOfRelease(String releaseId){
+		if(releaseId == null) {
+			return Collections.emptyList();
+		}
+		Release release = getReleasebyId(releaseId);
+		if(release == null) {
+			return Collections.emptyList();
+		}
+
+		List<String> releaseTools = release.getTools();
+		if(!releaseTools.isEmpty()) {
+			return releaseTools;
+		}
+		else {
+			return getProductById(getReleasebyId(releaseId).getProductId()).getTools();
+		}
+	}
+
+
+
     public List<Product> getProducts() {
         return products;
     }

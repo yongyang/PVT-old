@@ -5,6 +5,9 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.jboss.pnc.pvt.dao.PVTDataAccessObject;
 import org.jboss.pnc.pvt.model.Product;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 /**
  * @author <a href="mailto:huwang@redhat.com">Hui Wang</a>
  *
@@ -45,6 +48,7 @@ public class ProductEditPage extends ProductNewPage {
     public void doSubmit() {
         PVTDataAccessObject dao = PVTApplication.getDAO();
         dao.getPvtModel().updateProduct(product);
+        product.setTools(toolCheckBoxMultipleChoice.getInputAsArray() != null ? Arrays.asList(toolCheckBoxMultipleChoice.getInputAsArray()) : Collections.emptyList());
         dao.persist();
         setInfo("Product: " + product.getName() + " is Updated.");
     }

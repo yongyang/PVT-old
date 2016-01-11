@@ -109,6 +109,7 @@ public class ReleaseNewPage extends TemplatePage {
                 String productId = newSelection.getId();
                 previousReleaseIdDropDownChoice.setModel(Model.of());
                 previousReleaseIdDropDownChoice.setChoices(Model.ofList(dao.getPvtModel().getReleasesByProduct(productId)));
+                toolCheckBoxMultipleChoice.setModelObject(dao.getPvtModel().getVerifyTools(dao.getPvtModel().getProductById(productId).getTools()));
             }
         };
         productDropDownChoice.setRequired(true);
@@ -134,7 +135,7 @@ public class ReleaseNewPage extends TemplatePage {
 
         toolCheckBoxMultipleChoice = new CheckBoxMultipleChoice<VerifyTool>(
                 "tools",
-                new ListModel<VerifyTool>(dao.getPvtModel().getVerifyTools(release.getTools())),
+                new ListModel<VerifyTool>(dao.getPvtModel().getVerifyTools(dao.getPvtModel().getToolsOfRelease(release.getId()))),
                 dao.getPvtModel().getToolsList(),
                 new IChoiceRenderer<VerifyTool>() {
                     @Override

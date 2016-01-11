@@ -6,7 +6,8 @@
     "maintainer" : "maintainer1@redhat.com",
     "developer" : "developer1@redhat.com",
     "qe" : "qe1@redhat.com",
-    "description" : "product1 description"
+    "description" : "product1 description",
+    "tools" : ["7bd1865f-21fd-4ef3-abc9-7dd271667efa"]
   }, {
     "id" : "df7a423b-0b4d-40f3-860c-85d178c12cf1",
     "name" : "BRMS",

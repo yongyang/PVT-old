@@ -23,7 +23,8 @@
             <element id="library" level="project" name="Maven: javax.validation:validation-api:1.1.0.Final" />
             <element id="library" level="project" name="Maven: jaxen:jaxen:1.1.6" />
             <element id="library" level="project" name="Maven: org.jboss.logging:jboss-logging:3.2.1.Final" />
-            <element id="library" level="project" name="Maven: org.jboss.resteasy:jaxrs-api:2.3.7.Final" />
+            <element id="library" level="project" name="Maven: org.jboss.resteasy:jaxrs-api:3.0.8.Final" />
+            <element id="library" level="project" name="Maven: org.jboss.resteasy:resteasy-client:3.0.8.Final" />
             <element id="library" level="project" name="Maven: com.offbytwo.jenkins:jenkins-client:0.3.1" />
             <element id="library" level="project" name="Maven: dom4j:dom4j:1.6.1" />
             <element id="library" level="project" name="Maven: xml-apis:xml-apis:1.0.b2" />
@@ -67,10 +68,8 @@
             <element id="library" level="project" name="Maven: org.apache.wicket:wicket-util:6.19.0" />
             <element id="library" level="project" name="Maven: org.apache.wicket:wicket-request:6.19.0" />
             <element id="library" level="project" name="Maven: org.apache.wicket:wicket-extensions:6.19.0" />
-            <element id="library" level="project" name="Maven: org.jboss.resteasy:resteasy-jaxrs:2.3.7.Final" />
-            <element id="library" level="project" name="Maven: org.scannotation:scannotation:1.0.3" />
-            <element id="library" level="project" name="Maven: javassist:javassist:3.12.1.GA" />
-            <element id="library" level="project" name="Maven: javax.annotation:jsr250-api:1.0" />
+            <element id="library" level="project" name="Maven: org.jboss.resteasy:resteasy-jaxrs:3.0.8.Final" />
+            <element id="library" level="project" name="Maven: org.jboss.spec.javax.annotation:jboss-annotations-api_1.1_spec:1.0.1.Final" />
             <element id="library" level="project" name="Maven: javax.activation:activation:1.1" />
             <element id="library" level="project" name="Maven: net.jcip:jcip-annotations:1.0" />
           </element>
@@ -530,17 +529,6 @@
         <root url="jar://$MAVEN_REPOSITORY$/dom4j/dom4j/1.6.1/dom4j-1.6.1-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: javassist:javassist:3.12.1.GA">
-      <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/javassist/javassist/3.12.1.GA/javassist-3.12.1.GA.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/javassist/javassist/3.12.1.GA/javassist-3.12.1.GA-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/javassist/javassist/3.12.1.GA/javassist-3.12.1.GA-sources.jar!/" />
-      </SOURCES>
-    </library>
     <library name="Maven: javax.activation:activation:1.1">
       <CLASSES>
         <root url="jar://$MAVEN_REPOSITORY$/javax/activation/activation/1.1/activation-1.1.jar!/" />
@@ -550,17 +538,6 @@
       </JAVADOC>
       <SOURCES>
         <root url="jar://$MAVEN_REPOSITORY$/javax/activation/activation/1.1/activation-1.1-sources.jar!/" />
-      </SOURCES>
-    </library>
-    <library name="Maven: javax.annotation:jsr250-api:1.0">
-      <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/javax/annotation/jsr250-api/1.0/jsr250-api-1.0.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/javax/annotation/jsr250-api/1.0/jsr250-api-1.0-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/javax/annotation/jsr250-api/1.0/jsr250-api-1.0-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="Maven: javax.el:javax.el-api:3.0.0">
@@ -827,26 +804,48 @@
         <root url="jar://$MAVEN_REPOSITORY$/org/jboss/logging/jboss-logging/3.2.1.Final/jboss-logging-3.2.1.Final-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jboss.resteasy:jaxrs-api:2.3.7.Final">
+    <library name="Maven: org.jboss.resteasy:jaxrs-api:3.0.8.Final">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jboss/resteasy/jaxrs-api/2.3.7.Final/jaxrs-api-2.3.7.Final.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jboss/resteasy/jaxrs-api/3.0.8.Final/jaxrs-api-3.0.8.Final.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jboss/resteasy/jaxrs-api/2.3.7.Final/jaxrs-api-2.3.7.Final-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jboss/resteasy/jaxrs-api/3.0.8.Final/jaxrs-api-3.0.8.Final-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jboss/resteasy/jaxrs-api/2.3.7.Final/jaxrs-api-2.3.7.Final-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jboss/resteasy/jaxrs-api/3.0.8.Final/jaxrs-api-3.0.8.Final-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jboss.resteasy:resteasy-jaxrs:2.3.7.Final">
+    <library name="Maven: org.jboss.resteasy:resteasy-client:3.0.8.Final">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jboss/resteasy/resteasy-jaxrs/2.3.7.Final/resteasy-jaxrs-2.3.7.Final.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jboss/resteasy/resteasy-client/3.0.8.Final/resteasy-client-3.0.8.Final.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jboss/resteasy/resteasy-jaxrs/2.3.7.Final/resteasy-jaxrs-2.3.7.Final-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jboss/resteasy/resteasy-client/3.0.8.Final/resteasy-client-3.0.8.Final-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jboss/resteasy/resteasy-jaxrs/2.3.7.Final/resteasy-jaxrs-2.3.7.Final-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jboss/resteasy/resteasy-client/3.0.8.Final/resteasy-client-3.0.8.Final-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.jboss.resteasy:resteasy-jaxrs:3.0.8.Final">
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/jboss/resteasy/resteasy-jaxrs/3.0.8.Final/resteasy-jaxrs-3.0.8.Final.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/jboss/resteasy/resteasy-jaxrs/3.0.8.Final/resteasy-jaxrs-3.0.8.Final-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/jboss/resteasy/resteasy-jaxrs/3.0.8.Final/resteasy-jaxrs-3.0.8.Final-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.jboss.spec.javax.annotation:jboss-annotations-api_1.1_spec:1.0.1.Final">
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/jboss/spec/javax/annotation/jboss-annotations-api_1.1_spec/1.0.1.Final/jboss-annotations-api_1.1_spec-1.0.1.Final.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/jboss/spec/javax/annotation/jboss-annotations-api_1.1_spec/1.0.1.Final/jboss-annotations-api_1.1_spec-1.0.1.Final-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/jboss/spec/javax/annotation/jboss-annotations-api_1.1_spec/1.0.1.Final/jboss-annotations-api_1.1_spec-1.0.1.Final-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="Maven: org.jboss.spec.javax.servlet:jboss-servlet-api_3.0_spec:1.0.2.Final">
@@ -902,17 +901,6 @@
       </JAVADOC>
       <SOURCES>
         <root url="jar://$MAVEN_REPOSITORY$/org/reflections/reflections/0.9.9/reflections-0.9.9-sources.jar!/" />
-      </SOURCES>
-    </library>
-    <library name="Maven: org.scannotation:scannotation:1.0.3">
-      <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/scannotation/scannotation/1.0.3/scannotation-1.0.3.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/scannotation/scannotation/1.0.3/scannotation-1.0.3-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/scannotation/scannotation/1.0.3/scannotation-1.0.3-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="Maven: org.slf4j:slf4j-api:1.7.2">

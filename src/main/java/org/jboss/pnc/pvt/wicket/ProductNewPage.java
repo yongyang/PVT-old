@@ -1,12 +1,10 @@
 package org.jboss.pnc.pvt.wicket;
 
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextArea;
-import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
@@ -14,6 +12,7 @@ import org.apache.wicket.validation.ValidationError;
 import org.jboss.pnc.pvt.dao.PVTDataAccessObject;
 import org.jboss.pnc.pvt.model.Product;
 import org.jboss.pnc.pvt.model.Release;
+import org.jboss.pnc.pvt.model.VerifyTool;
 
 /**
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
@@ -28,6 +27,7 @@ public class ProductNewPage extends TemplatePage {
 	protected Button resetButton;
     protected Button backButton;
     protected Button removeButton;
+    protected CheckBoxMultipleChoice toolCheckBoxMultipleChoice;
     
     public ProductNewPage(PageParameters pp) {
         this(pp, "PVT prodcut to be created.");
@@ -35,7 +35,8 @@ public class ProductNewPage extends TemplatePage {
     
     public ProductNewPage(PageParameters pp, String info) {
     	super(pp, info);
-    	
+        PVTDataAccessObject dao = PVTApplication.getDAO();
+
         setActiveMenu(Menu.PRODUCTS);
         product = getProduct(pp);
         add(feedBackPanel);
@@ -76,7 +77,25 @@ public class ProductNewPage extends TemplatePage {
             }
         };
         productForm.add(resetButton);
-        
+
+        toolCheckBoxMultipleChoice = new CheckBoxMultipleChoice<VerifyTool>(
+                "tools",
+                new ListModel<VerifyTool>(dao.getPvtModel().getVerifyTools(product.getTools())),
+                dao.getPvtModel().getToolsList(),
+                new IChoiceRenderer<VerifyTool>() {
+                    @Override
+                    public Object getDisplayValue(VerifyTool object) {
+                        return object;
+                    }
+
+                    @Override
+                    public String getIdValue(VerifyTool object, int index) {
+                        return object == null ? null : object.getId();
+                    }
+                });
+        productForm.add(toolCheckBoxMultipleChoice);
+
+
         removeButton = new Button("remove") {
             @Override
             public void onSubmit() {

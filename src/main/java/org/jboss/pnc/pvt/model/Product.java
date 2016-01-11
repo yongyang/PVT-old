@@ -58,6 +58,8 @@ public class Product implements Serializable {
 
 //    private List<Release> releases = new ArrayList<>();
 
+    private List<String> tools = new ArrayList<>();
+
 
     public Product() {
     }
@@ -143,9 +145,17 @@ public class Product implements Serializable {
         this.qe = qe;
     }
 
+    public List<String> getTools() {
+        return tools;
+    }
+
+    public void setTools(List<String> tools) {
+        this.tools = tools;
+    }
+
     /* (non-Javadoc)
-             * @see java.lang.Object#hashCode()
-             */
+                 * @see java.lang.Object#hashCode()
+                 */
     @Override
     public int hashCode() {
         return id.hashCode();
